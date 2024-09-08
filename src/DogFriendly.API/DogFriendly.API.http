@@ -1,0 +1,6 @@
+@DogFriendly.API_HostAddress = http://localhost:5107
+
+GET {{DogFriendly.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
