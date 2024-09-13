@@ -22,6 +22,15 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "DogFriendly API V1");
     c.RoutePrefix = string.Empty;
 });
+
+app.UseCors(o =>
+{
+    o.AllowCredentials();
+    o.AllowAnyHeader();
+    o.AllowAnyMethod();
+    o.AllowAnyOrigin();
+});
+
 app.UseAuthorization();
 
 app.MapControllers();

@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogFriendly.Web", "src\DogFriendly.Web\DogFriendly.Web.csproj", "{1121D0CD-2EBB-40EA-A5E2-DF53AAB0A716}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogFriendly.API", "src\DogFriendly.API\DogFriendly.API.csproj", "{0942AAFB-17DF-4BFA-B8EC-0F604EECFEF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogFriendly.API", "src\DogFriendly.API\DogFriendly.API.csproj", "{0942AAFB-17DF-4BFA-B8EC-0F604EECFEF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogFriendly.Application", "src\DogFriendly.Application\DogFriendly.Application.csproj", "{D141DFDC-7CE5-45A2-8001-A6977DC07C2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogFriendly.Application", "src\DogFriendly.Application\DogFriendly.Application.csproj", "{D141DFDC-7CE5-45A2-8001-A6977DC07C2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogFriendly.Domain", "src\DogFriendly.Domain\DogFriendly.Domain.csproj", "{CA17C628-9EDD-4763-BF3F-31373D0CB1C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogFriendly.Domain", "src\DogFriendly.Domain\DogFriendly.Domain.csproj", "{CA17C628-9EDD-4763-BF3F-31373D0CB1C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogFriendly.Infrastructure", "src\DogFriendly.Infrastructure\DogFriendly.Infrastructure.csproj", "{04276B6C-7384-4DE0-B0AE-ECA4181F3CF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogFriendly.Infrastructure", "src\DogFriendly.Infrastructure\DogFriendly.Infrastructure.csproj", "{04276B6C-7384-4DE0-B0AE-ECA4181F3CF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogFriendly.Web.Client", "src\DogFriendly.Web.Client\DogFriendly.Web.Client.csproj", "{1DCEA1D6-75E6-4830-9A48-F5F2D0606CA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogFriendly.Web", "src\DogFriendly.Web\DogFriendly.Web.csproj", "{212C8D2D-EFE1-4913-8622-854A62A1F018}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1121D0CD-2EBB-40EA-A5E2-DF53AAB0A716}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1121D0CD-2EBB-40EA-A5E2-DF53AAB0A716}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1121D0CD-2EBB-40EA-A5E2-DF53AAB0A716}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1121D0CD-2EBB-40EA-A5E2-DF53AAB0A716}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0942AAFB-17DF-4BFA-B8EC-0F604EECFEF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0942AAFB-17DF-4BFA-B8EC-0F604EECFEF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0942AAFB-17DF-4BFA-B8EC-0F604EECFEF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +37,14 @@ Global
 		{04276B6C-7384-4DE0-B0AE-ECA4181F3CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04276B6C-7384-4DE0-B0AE-ECA4181F3CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04276B6C-7384-4DE0-B0AE-ECA4181F3CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DCEA1D6-75E6-4830-9A48-F5F2D0606CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DCEA1D6-75E6-4830-9A48-F5F2D0606CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DCEA1D6-75E6-4830-9A48-F5F2D0606CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DCEA1D6-75E6-4830-9A48-F5F2D0606CA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{212C8D2D-EFE1-4913-8622-854A62A1F018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{212C8D2D-EFE1-4913-8622-854A62A1F018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{212C8D2D-EFE1-4913-8622-854A62A1F018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{212C8D2D-EFE1-4913-8622-854A62A1F018}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
