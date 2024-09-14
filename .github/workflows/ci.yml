@@ -2,6 +2,7 @@ name: Build Docker Images
 
 on:
   pull_request:
+    types: [opened, synchronize]
     branches:
       - develop
       - main
