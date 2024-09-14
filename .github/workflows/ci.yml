@@ -1,0 +1,28 @@
+name: Build Docker Images
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Front-End Docker image
+      run: |
+        docker build -f Front.Dockerfile -t dogfriendly-client .
+
+    - name: Build Back-End Docker image
+      run: |
+        docker build -f Back.Dockerfile -t dogfriendly-api .
