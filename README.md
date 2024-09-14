@@ -60,6 +60,10 @@ This project is responsible for hosting the **DogFriendly.Web.Client** with **se
 1. Enable automatic builds in Sliplane so that each push to GitHub triggers a new deployment.
 2. This ensures that any updates to `develop` or `main` branches are automatically compiled, built, and deployed.
 
+## GitFlow and CI/CD Pipeline
+
+This project follows the **GitFlow** workflow for source control management. In the CI/CD pipeline, GitHub Actions are configured to build and compile Docker images automatically for every **pull request**. This ensures that code is thoroughly tested and images are ready for deployment after review.
+
 ## How to Run the Test Project DogFriendly.Tests
 
 1. Navigate to the **DogFriendly.Tests** project:
