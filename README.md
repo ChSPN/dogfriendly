@@ -3,45 +3,62 @@
 ## Description of the Project Structure
 
 ### DogFriendly.API
-This project manages the **API** layer built with **ASP.NET Core**, which handles HTTP requests and connects to the data layer in **DogFriendly.Infrastructure**. It provides services and endpoints for client communication.
+Handles the **API** logic built with **ASP.NET Core**. It processes HTTP requests and connects to the data layer via **DogFriendly.Infrastructure**.
 
 ### DogFriendly.Application
-Contains the core business logic and services. It interacts between the **API** and **Infrastructure** layers, implementing the application's functional requirements.
+Contains core business logic and services between the **API** and **Infrastructure**.
 
 ### DogFriendly.Infrastructure
-This layer handles data access using **Entity Framework**. It manages the database context, migrations, and repository patterns for the application.
+Manages data access using **Entity Framework**.
 
 ### DogFriendly.Domain
-Defines the core business models and domain entities that represent the application's key data objects.
+Defines core business models and domain entities.
 
 ### DogFriendly.Web.Client
-The front-end project, built with **Blazor**, provides an interactive user interface and communicates with the **DogFriendly.API** to display data related to dog-friendly locations and user information.
+A **Blazor** front-end project that interacts with **DogFriendly.API**.
+
+### DogFriendly.Web
+This project is responsible for hosting the **DogFriendly.Web.Client** with **server-side prerendering**. It delivers a faster initial page load by rendering the front-end on the server and then passing control to the client-side **Blazor** application.
 
 ## How to Build and Run Docker Containers
 
-### Front-End (DogFriendly.Web.Client)
-
-1. Ensure you're in the project root where the `Front.Dockerfile` is located.
-2. Build the Docker image for the front-end:
+### Front-End (DogFriendly.Web)
+1. Build the Docker image:
     ```bash
     docker build -f Front.Dockerfile -t dogfriendly-client .
     ```
-3. Run the front-end container:
+2. Run the container:
     ```bash
-    docker run -d -p 8080:80 dogfriendly-client
+    docker run -d -p 8080:8080 dogfriendly-client
     ```
 
 ### Back-End (DogFriendly.API)
-
-1. Ensure you're in the project root where the `Back.Dockerfile` is located.
-2. Build the Docker image for the back-end:
+1. Build the Docker image:
     ```bash
     docker build -f Back.Dockerfile -t dogfriendly-api .
     ```
-3. Run the back-end container:
+2. Run the container:
     ```bash
-    docker run -d -p 5000:80 dogfriendly-api
+    docker run -d -p 8181:8181 dogfriendly-api
     ```
+
+## How to Deploy on Sliplane
+
+### Step 1: Set up the Project on Sliplane
+1. Sign up on [Sliplane](https://sliplane.io) and create a new project.
+2. Connect your GitHub repository to Sliplane, allowing access to the **DogFriendly** repo.
+
+### Step 2: Configure Docker Deployment
+1. In Sliplane, navigate to the **Deployments** section and create a new deployment.
+2. For the front-end, choose `Front.Dockerfile`. For the back-end, select `Back.Dockerfile`. For **DogFriendly.Web**, select `Web.Dockerfile`.
+
+### Step 3: Automated Build and Deploy
+1. Sliplane will automatically build your Docker images from the provided Dockerfiles.
+2. After building, Sliplane will deploy the containers, handling scaling and monitoring automatically.
+
+### Step 4: Continuous Deployment (CI/CD)
+1. Enable automatic builds in Sliplane so that each push to GitHub triggers a new deployment.
+2. This ensures that any updates to `develop` or `main` branches are automatically compiled, built, and deployed.
 
 ## How to Run the Test Project DogFriendly.Tests
 
