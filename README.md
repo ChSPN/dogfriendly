@@ -70,3 +70,7 @@ This project is responsible for hosting the **DogFriendly.Web.Client** with **se
     ```bash
     dotnet test
     ```
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICENSE) file for details.
