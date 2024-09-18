@@ -1,0 +1,95 @@
+﻿@page "/place/{placeId?}"
+@page "/search/{placeTypeId?}"
+
+<!-- Main Content -->
+<main class="container py-4">
+    <div class="row">
+        <!-- Sidebar with Results -->
+        <aside class="col-sm-12 col-md-6 col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Je cherche un restaurant">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button">Filtres</button>
+                            <button class="btn btn-outline-secondary" type="button">Note</button>
+                        </div>
+                    </div>
+                    <div class="result-list overflow-auto">
+                        <!-- Example of a result item -->
+                        <div class="media mb-3">
+                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
+                            <div class="media-body">
+                                <h5 class="mt-0">Nom du restaurant</h5>
+                                <p>★★★★☆</p>
+                                <p class="text-muted">Description du restaurant.</p>
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
+                            <div class="media-body">
+                                <h5 class="mt-0">Nom du restaurant</h5>
+                                <p>★★★★☆</p>
+                                <p class="text-muted">Description du restaurant.</p>
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
+                            <div class="media-body">
+                                <h5 class="mt-0">Nom du restaurant</h5>
+                                <p>★★★★☆</p>
+                                <p class="text-muted">Description du restaurant.</p>
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
+                            <div class="media-body">
+                                <h5 class="mt-0">Nom du restaurant</h5>
+                                <p>★★★★☆</p>
+                                <p class="text-muted">Description du restaurant.</p>
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
+                            <div class="media-body">
+                                <h5 class="mt-0">Nom du restaurant</h5>
+                                <p>★★★★☆</p>
+                                <p class="text-muted">Description du restaurant.</p>
+                            </div>
+                        </div>
+                        <!-- Repeat for more items -->
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Detailed Information -->
+        <section class="col-sm-12 col-md-6 col-lg-4">
+            <div class="card result-details">
+                <img src="img/news-image-1.jpg" class="card-img-top" alt="Restaurant Image">
+                <div class="card-body">
+                    <h2 class="card-title">Gros titre</h2>
+                    <p class="card-text">★★★★★ (35 reviews)</p>
+                    <p class="card-text">Description du restaurant. Lorem ipsum dolor sit amet.</p>
+                    <ul class="list-unstyled">
+                        <li>✔ Gamelle d'eau sur demande</li>
+                        <li>✔ Espace autour des tables</li>
+                    </ul>
+                    <p>📍 1234 Rue de la Rue, 75000 Paris</p>
+                    <p>📞 03 00 00 00 00</p>
+                    <p>🌐 <a href="#">Site web</a></p>
+                    <p>🕒 Horaires: 09:00 - 23:00</p>
+                    <p class="card-text">Donnez votre avis :</p>
+                    <p class="card-text">
+                        ☆☆☆☆☆
+                    </p>
+                    <p class="card-text">
+                        <textarea class="form-control" rows="3" placeholder="Commentaire"></textarea>
+                    </p>
+                    <p class="card-text d-flex justify-content-end">
+                        <button class="btn btn-primary mb-3">Envoyez</button>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
