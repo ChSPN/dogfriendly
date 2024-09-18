@@ -1,51 +1,149 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+/* Style de la scrollbar */
+::-webkit-scrollbar {
+    width: 8px; /* Largeur de la scrollbar */
+    height: 12px; /* Hauteur de la scrollbar */
 }
 
-a, .btn-link {
-    color: #006bb7;
+/* Style de la piste de la scrollbar */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Couleur de fond de la piste */
+    border-radius: 10px; /* Arrondir les coins */
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+/* Style du pouce de la scrollbar */
+::-webkit-scrollbar-thumb {
+    background: #888; /* Couleur du pouce */
+    border-radius: 10px; /* Arrondir les coins */
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-.content {
-    padding-top: 1.1rem;
-}
-
-h1:focus {
-    outline: none;
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
-.invalid {
-    outline: 1px solid #e50000;
-}
-
-.validation-message {
-    color: #e50000;
-}
-
-.blazor-error-boundary {
-    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
-    padding: 1rem 1rem 1rem 3.7rem;
-    color: white;
-}
-
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
+    /* Style du pouce de la scrollbar au survol */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Couleur du pouce au survol */
     }
 
-.darker-border-checkbox.form-check-input {
-    border-color: #929292;
+@-moz-document url-prefix() {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #c1c1c1 #f1f1f1;
+    }
 }
+
+.blazor-error-ui {
+    display: none;
+}
+
+/* Assurez-vous que la carte couvre tout l'arrière-plan */
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.map-section {
+    background-image: url('img/map-image.jpg'); /* à remplacer par Mapbox */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 120vh;
+    left: 0;
+    width: 100%;
+}
+
+.search {
+    padding-bottom: 0 !important;
+}
+
+/* Styles uniformes pour tous les boutons */
+.button-overlay .btn {
+    background-color: #fff; /* Couleur de fond uniforme */
+    color: #000; /* Couleur du texte uniforme */
+    border: 1px solid #000; /* Couleur du cadre uniforme */
+    border-radius: 5px;
+    text-transform: uppercase; /* Texte en majuscule */
+    margin: 0 10px;
+}
+
+    .button-overlay .btn:hover {
+        color: #fff;
+        background-color: #343a40;
+        border-color: #343a40;
+    }
+
+.button-overlay input {
+    border: black 1px solid;
+}
+
+.result-image {
+    background-color: #ddd;
+}
+
+.result-list {
+    height: 610px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.result-details {
+    height: 705px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.card-title {
+    font-size: 1.5rem;
+}
+
+.card-text {
+    font-size: 1rem;
+}
+
+.review-item {
+    height: 200px;
+    max-height: 200px;
+    overflow-y: hidden;
+}
+
+.favorite-item {
+    height: 150px;
+    max-height: 150px;
+    width: 350px;
+    max-width: 350px;
+    overflow: hidden;
+}
+
+.favorite-container {
+    padding-left: 15px;
+}
+
+.favorite-place {
+    padding-left: 15px;
+}
+
+.review-details {
+    height: 200px;
+    max-height: 200px;
+    overflow-y: hidden;
+}
+
+/* La section News est maintenant transparente et superposée à la carte */
+.news-section {
+    background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent pour que la carte reste visible */
+    z-index: 2;
+}
+
+    .news-section .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+.newsletter label {
+    padding-bottom: 10px;
+}
+
+footer {
+    background-color: #f8f9fa; /* Couleur de fond du footer */
+    padding: 20px 0;
+}
+
+    footer p, footer a {
+        color: #6c757d;
+    }
