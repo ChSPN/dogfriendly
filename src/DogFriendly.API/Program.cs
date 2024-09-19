@@ -1,10 +1,20 @@
+using DogFriendly.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add configurations.
+builder.Configuration.AddUserSecrets<Program>();
 
+
+// Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddDbContext<DogFriendlyContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DogFriendlyContext"));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
