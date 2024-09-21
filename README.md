@@ -20,6 +20,23 @@ A **Blazor** front-end project that interacts with **DogFriendly.API**.
 ### DogFriendly.Web
 This project is responsible for hosting the **DogFriendly.Web.Client** with **server-side prerendering**. It delivers a faster initial page load by rendering the front-end on the server and then passing control to the client-side **Blazor** application.
 
+### Add a Migration to **DogFriendly.Infrastructure** project
+
+1. **Define the Connection String**:
+   Make sure the connection string for your database is correctly configured in the `appsettings.json` file or your `DbContext` constructor.
+
+2. **Add a Migration**:
+   Open the **Package Manager Console** or a terminal and navigate to the **Infrastructure** project directory. Run the following command to add a migration:
+   ```bash
+   Add-Migration <MigrationName> -Project DogFriendly.Infrastructure -StartupProject DogFriendly.API
+   ```
+
+3. **Update the Database**:
+   After creating the migration, apply the changes to the database with the following command:
+   ```bash
+   Update-Database -Project DogFriendly.Infrastructure -StartupProject DogFriendly.API
+   ```
+
 ## How to Build and Run Docker Containers
 
 ### Front-End (DogFriendly.Web)
