@@ -26,6 +26,13 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// Apply migrations at startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DogFriendlyContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
 app.UseSwagger(); 
 app.UseSwaggerUI(c =>
 {
