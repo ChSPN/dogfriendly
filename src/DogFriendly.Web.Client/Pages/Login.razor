@@ -6,10 +6,14 @@
 <main class="container py-3">
     <div class="row">
         <section class="col-sm-12 col-md-6 col-lg-4 mx-auto">
-            <div class="card user-details">
+            <div class="card user-login">
                 <div class="card-body">
                     <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
+                    <p data-userName>Bonjour, <strong></strong>.</p>
                     <div id="firebaseui-auth-container"></div>
+                    <button class="btn btn-outline-dark logout" onclick="logoutFirebaseAuth()">
+                        Se deconnecter
+                    </button>
                 </div>
             </div>
         </section>
