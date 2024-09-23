@@ -39,7 +39,7 @@ body, html {
 }
 
 .map-section {
-    background-image: url('img/map-image.jpg'); /* à remplacer par Mapbox */
+    background-image: url('../img/map-image.jpg'); /* à remplacer par Mapbox */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -75,6 +75,14 @@ body, html {
 .result-image {
     background-color: #ddd;
 }
+
+[data-isUserAuth] {
+    display: none;
+}
+
+[data-userName] {
+    display: block;
+}]
 
 .result-list {
     height: 610px;
@@ -122,6 +130,10 @@ body, html {
     height: 200px;
     max-height: 200px;
     overflow-y: hidden;
+}
+
+.user-login {
+    text-align: center;
 }
 
 /* La section News est maintenant transparente et superposée à la carte */

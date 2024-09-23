@@ -3,6 +3,10 @@ using DogFriendly.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add configurations.
+builder.Configuration.AddUserSecrets<Program>();
+
+
 // Add services to the container.
 builder.Services
     .AddRazorComponents()

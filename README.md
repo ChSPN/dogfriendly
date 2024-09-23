@@ -37,6 +37,60 @@ This project is responsible for hosting the **DogFriendly.Web.Client** with **se
    Update-Database -Project DogFriendly.Infrastructure -StartupProject DogFriendly.API
    ```
 
+### Firebase Configuration
+
+To use Firebase in the **DogFriendly.API** and **DogFriendly.Web** projects, you need to add the Firebase configurations in the `appsettings.json` files of both projects. Follow these steps:
+
+#### Step 1: Retrieve Your Firebase Keys
+
+1. Go to the Firebase console at the following address: [https://console.firebase.google.com/](https://console.firebase.google.com/).
+2. Select your project or create a new one.
+3. Go to the **project settings** in Firebase, and find the following information in the **Firebase SDK** section:
+   - **ApiKey**
+   - **AuthDomain**
+   - **ProjectId**
+   - **AppId**
+
+#### Step 2: Add the Configuration to `appsettings.json`
+
+In the **DogFriendly.API** and **DogFriendly.Web** projects, open the `appsettings.json` file and add the following section with your own Firebase values.
+
+##### Section to Add in `appsettings.json`:
+
+```json
+"Firebase": {
+  "ApiKey": "YOUR_API_KEY",
+  "AuthDomain": "YOUR_AUTH_DOMAIN",
+  "ProjectId": "YOUR_PROJECT_ID",
+  "AppId": "YOUR_APP_ID"
+}
+```
+
+##### Example:
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "Firebase": {
+    "ApiKey": "AIzaSyD...1234",
+    "AuthDomain": "myapp.firebaseapp.com",
+    "ProjectId": "myapp",
+    "AppId": "1:1234567890:web:abcdef123456"
+  }
+}
+```
+
+#### Step 3: Use in Your Application
+
+In both projects (**DogFriendly.API** and **DogFriendly.Web**), the Firebase configuration will be automatically retrieved from the `appsettings.json` file.
+Ensure that the Firebase service is properly set up to use these parameters in your application's code.
+
 ## How to Build and Run Docker Containers
 
 ### Front-End (DogFriendly.Web)
