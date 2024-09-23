@@ -11,6 +11,10 @@ window.getFirebaseAuthToken = async function () {
     return null;
 };
 
+window.isFirebaseUserAuth = async function () {
+    return (await window.getFirebaseAuthToken()) !== null;
+}
+
 window.updateFirebaseAuth = function () {
     try {
         firebase.initializeApp(firebaseConfig);

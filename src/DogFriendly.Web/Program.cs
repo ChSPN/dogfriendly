@@ -1,4 +1,5 @@
 using DogFriendly.Web.Client.Pages;
+using DogFriendly.Web.Client.Services;
 using DogFriendly.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Configuration.AddUserSecrets<Program>();
 
 
 // Add services to the container.
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
