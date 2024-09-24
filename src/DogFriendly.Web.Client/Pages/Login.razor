@@ -9,11 +9,17 @@
             <div class="card user-login">
                 <div class="card-body">
                     <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
-                    <p data-userName>Bonjour, <strong></strong>.</p>
-                    <div id="firebaseui-auth-container"></div>
-                    <button class="btn btn-outline-dark logout" onclick="logoutFirebaseAuth()">
-                        Se deconnecter
-                    </button>
+                    @if (!string.IsNullOrEmpty(UserName))
+                    {
+                        <p>Bonjour, <strong>@UserName</strong>.</p>
+                        <button class="btn btn-outline-dark" onclick="logoutFirebaseAuth()">
+                            Se deconnecter
+                        </button>
+                    }
+                    else
+                    {
+                        <div id="firebaseui-auth-container"></div>
+                    }
                 </div>
             </div>
         </section>

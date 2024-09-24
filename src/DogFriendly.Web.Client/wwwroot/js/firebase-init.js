@@ -1,9 +1,10 @@
-window.getFirebaseAuthToken = async function () {
-    try {
-        firebase.initializeApp(firebaseConfig);
-    } catch { }
+var fb;
 
-    const user = firebase.auth().currentUser;
+window.getFirebaseAuthToken = async function () {
+    if (fb == null)
+        fb = firebase.initializeApp(firebaseConfig);
+
+    const user = fb.auth().currentUser;
     if (user) {
         return await user.getIdToken();
     }
@@ -15,35 +16,27 @@ window.isFirebaseUserAuth = async function () {
     return (await window.getFirebaseAuthToken()) !== null;
 }
 
-window.updateFirebaseAuth = function () {
-    try {
-        firebase.initializeApp(firebaseConfig);
-        firebase.auth().onAuthStateChanged(function (user) {
+window.updateFirebaseAuth = async function () {
+    if (fb == null) {
+        fb = firebase.initializeApp(firebaseConfig);
+        fb.auth().onAuthStateChanged(async function (user) {
             if (user) {
-                $('[data-isUserAuth="true"]').show();
-                $('[data-isUserAuth="false"]').hide();
-                $('.logout').show();
-                $('#firebaseui-auth-container').hide();
-                $('[data-userName]').show();
-                $('[data-userName] strong').text(user.displayName);
+                var token = await user.getIdToken();
+                await DotNet.invokeMethodAsync('DogFriendly.Web.Client', 'SetJwtToken', token);
             } else {
-                $('[data-isUserAuth="false"]').show();
-                $('[data-isUserAuth="true"]').hide();
-                $('.logout').hide();
-                $('#firebaseui-auth-container').show();
-                $('[data-userName]').hide();
+                await DotNet.invokeMethodAsync('DogFriendly.Web.Client', 'SetJwtToken', null);
             }
         }, function (error) {
             console.error(error);
         });
-    } catch { }
+    }
 };
 
-window.initFirebaseUi = function () {
-    if ($('#firebaseui-auth-container').length > 0) {
+window.initFirebaseUi = async function () {
+    await window.updateFirebaseAuth();
+    if ($('#firebaseui-auth-container').length > 0
+        && !(await window.isFirebaseUserAuth())) {
         try {
-            $('.logout').hide();
-            window.updateFirebaseAuth();
             var uiConfig = {
                 signInFlow: 'popup',
                 signInSuccessUrl: window.location.href,
@@ -61,22 +54,16 @@ window.initFirebaseUi = function () {
                     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
                 ],
                 tosUrl: window.location.href,
-                privacyPolicyUrl: window.location.href,
-                language: 'fr'
+                privacyPolicyUrl: window.location.href
             };
-            new firebaseui.auth.AuthUI(firebase.auth()).start('#firebaseui-auth-container', uiConfig);
+            new firebaseui.auth.AuthUI(fb.auth()).start('#firebaseui-auth-container', uiConfig);
         } catch { }
     }
 }
 
-window.logoutFirebaseAuth = function () {
-    try {
-        firebase.initializeApp(firebaseConfig);
-    } catch { }
-
-    firebase.auth().signOut();
-    window.updateFirebaseAuth();
+window.logoutFirebaseAuth = async function () {
+    if (fb != null) {
+        fb.auth().signOut();
+        setTimeout(window.initFirebaseUi, 500);
+    }
 }
-
-window.updateFirebaseAuth();
-window.initFirebaseUi();

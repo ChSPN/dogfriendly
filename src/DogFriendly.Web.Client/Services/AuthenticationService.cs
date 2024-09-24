@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace DogFriendly.Web.Client.Services
 {
@@ -7,6 +8,16 @@ namespace DogFriendly.Web.Client.Services
     /// </summary>
     public class AuthenticationService
     {
+        /// <summary>
+        /// The user changed.
+        /// </summary>
+        public static EventHandler<JwtSecurityToken> OnUserChanged;
+
+        /// <summary>
+        /// The token JWT.
+        /// </summary>
+        private static JwtSecurityToken? JwtToken;
+
         private readonly IJSRuntime _jsRuntime;
 
         /// <summary>
@@ -17,6 +28,34 @@ namespace DogFriendly.Web.Client.Services
         {
             _jsRuntime = jsRuntime;
         }
+
+        /// <summary>
+        /// Sets the token JWT.
+        /// </summary>
+        /// <param name="jwt">The JWT.</param>
+        /// <returns></returns>
+        [JSInvokable]
+        public static Task SetJwtToken(string jwt)
+        {
+            if (jwt != null)
+            {
+                var handler = new JwtSecurityTokenHandler();
+                JwtToken = handler.ReadToken(jwt) as JwtSecurityToken;
+            }
+            else
+            {
+                JwtToken = null;
+            }
+
+            OnUserChanged?.Invoke(null, JwtToken);
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Gets the token JWT.
+        /// </summary>
+        /// <returns></returns>
+        public JwtSecurityToken? GetJwtToken() => JwtToken;
 
         /// <summary>
         /// Determines whether is user authenticated.

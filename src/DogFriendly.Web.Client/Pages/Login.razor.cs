@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using DogFriendly.Web.Client.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace DogFriendly.Web.Client.Pages
 {
@@ -7,7 +9,7 @@ namespace DogFriendly.Web.Client.Pages
     /// Login component.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
-    public partial class Login : ComponentBase
+    public partial class Login : ComponentBase, IDisposable
     {
         /// <summary>
         /// Gets or sets the js runtime.
@@ -18,6 +20,20 @@ namespace DogFriendly.Web.Client.Pages
         [Inject]
         public required IJSRuntime JsRuntime { get; set; }
 
+        /// <summary>
+        /// Gets the name of the user.
+        /// </summary>
+        /// <value>
+        /// The name of the user.
+        /// </value>
+        public string? UserName { get; set; }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            AuthenticationService.OnUserChanged -= SetUserName;
+        }
+
         /// <inheritdoc />
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -27,6 +43,25 @@ namespace DogFriendly.Web.Client.Pages
             }
 
             await base.OnAfterRenderAsync(firstRender);
+        }
+
+        /// <inheritdoc />
+        protected override void OnInitialized()
+        {
+            AuthenticationService.OnUserChanged += SetUserName;
+            base.OnInitialized();
+        }
+
+        /// <summary>
+        /// Sets the name of the user.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
+        private void SetUserName(object sender, JwtSecurityToken token)
+        {
+            UserName = token?.Claims?.FirstOrDefault(c => c.Type == "name")?.Value;
+            StateHasChanged();
         }
     }
 }
