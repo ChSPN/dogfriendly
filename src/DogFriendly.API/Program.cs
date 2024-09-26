@@ -1,12 +1,16 @@
+using DogFriendly.API.Filters;
+using DogFriendly.Application.Queries.Users;
+using DogFriendly.Domain.Enums;
 using DogFriendly.Infrastructure.Context;
+using EntityFrameworkCore.Repository;
+using EntityFrameworkCore.Repository.Interfaces;
+using EntityFrameworkCore.UnitOfWork.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using System.Reflection;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +35,20 @@ builder.Services
 builder.Services.AddAuthorization();
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DogFriendlyContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DogFriendlyContext"));
+});
+builder.Services.AddScoped<DbContext>(s => s.GetRequiredService<DogFriendlyContext>());
+builder.Services.AddUnitOfWork<DogFriendlyContext>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddMediatR(o =>
+{
+    o.Lifetime = ServiceLifetime.Scoped;
+    o.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    o.RegisterServicesFromAssembly(typeof(NewsType).Assembly);
+    o.RegisterServicesFromAssembly(typeof(UserExistQuery).Assembly);
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -55,7 +69,6 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -103,6 +116,7 @@ app.UseCors(o =>
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAntiforgery();
 app.MapControllers();
 
 app.Run();

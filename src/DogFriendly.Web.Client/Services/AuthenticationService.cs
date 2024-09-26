@@ -16,7 +16,7 @@ namespace DogFriendly.Web.Client.Services
         /// <summary>
         /// The token JWT.
         /// </summary>
-        private static JwtSecurityToken? JwtToken;
+        public static JwtSecurityToken? JwtToken { get; private set; }
 
         private readonly IJSRuntime _jsRuntime;
 
