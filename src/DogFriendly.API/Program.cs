@@ -1,21 +1,25 @@
-using DogFriendly.API.Filters;
 using DogFriendly.Application.Queries.Users;
 using DogFriendly.Domain.Enums;
+using DogFriendly.Domain.Options;
+using DogFriendly.Domain.Repositories;
 using DogFriendly.Infrastructure.Context;
+using DogFriendly.Infrastructure.Repositories;
 using EntityFrameworkCore.Repository;
 using EntityFrameworkCore.Repository.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
+// Create a new app builder.
 var builder = WebApplication.CreateBuilder(args);
 
-// Add configurations.
+// Add the configurations.
 builder.Configuration.AddUserSecrets<Program>();
+builder.Services
+    .Configure<FileStorageOption>(builder.Configuration.GetSection("FileStorage"));
 
 // Add the Firebase JWT Bearer authentication.
 builder.Services
@@ -42,16 +46,18 @@ builder.Services.AddDbContext<DogFriendlyContext>(options =>
 });
 builder.Services.AddScoped<DbContext>(s => s.GetRequiredService<DogFriendlyContext>());
 builder.Services.AddUnitOfWork<DogFriendlyContext>();
+builder.Services.AddUnitOfWork();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IFileStorageRepository, CloudflareStorageRepository>();
 builder.Services.AddMediatR(o =>
 {
     o.Lifetime = ServiceLifetime.Scoped;
     o.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
     o.RegisterServicesFromAssembly(typeof(NewsType).Assembly);
-    o.RegisterServicesFromAssembly(typeof(UserExistQuery).Assembly);
+    o.RegisterServicesFromAssembly(typeof(UserEmailExistQueryHandler).Assembly);
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add configuring Swagger/OpenAPI.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -85,6 +91,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Build the app.
 var app = builder.Build();
 
 // Apply migrations at startup
@@ -94,6 +101,14 @@ using (var scope = app.Services.CreateScope())
     await dbContext.Database.MigrateAsync();
 }
 
+// Add middleware to the pipeline.
+app.UseCors(o =>
+{
+    o.AllowAnyHeader();
+    o.AllowAnyMethod();
+    o.AllowAnyOrigin();
+});
+app.UseStaticFiles();
 app.UseSwagger(); 
 app.UseSwaggerUI(c =>
 {
@@ -107,16 +122,12 @@ app.UseSwaggerUI(c =>
     c.InjectJavascript("https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.js");
     c.InjectJavascript("/FireBaseAuth.js");
 });
-app.UseCors(o =>
-{
-    o.AllowAnyHeader();
-    o.AllowAnyMethod();
-    o.AllowAnyOrigin();
-});
-app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
+
+// Map controllers.
 app.MapControllers();
 
+// Run the app.
 app.Run();

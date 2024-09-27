@@ -17,8 +17,4 @@
 	<ProjectReference Include="..\DogFriendly.Domain\DogFriendly.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-	<Folder Include="Command\" />
-  </ItemGroup>
-
 </Project>

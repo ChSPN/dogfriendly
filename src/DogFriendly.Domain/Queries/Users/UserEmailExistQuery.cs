@@ -1,11 +1,11 @@
 ﻿using MediatR;
 
-namespace DogFriendly.Application.Queries.Users
+namespace DogFriendly.Domain.Queries.Users
 {
     /// <summary>
     /// Query to check if user exists.
     /// </summary>
-    public class UserExistQuery : IRequest<bool>
+    public class UserEmailExistQuery : IRequest<bool>
     {
         /// <summary>
         /// Gets or sets the email.

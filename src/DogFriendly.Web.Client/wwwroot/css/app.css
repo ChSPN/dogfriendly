@@ -136,6 +136,17 @@ body, html {
     text-align: center;
 }
 
+.user-reset-picture {
+    left: 123px;
+    position: relative;
+    top: 28px;
+    background-color: white;
+}
+
+.invalid {
+    border-color: red!important;
+}
+
 /* La section News est maintenant transparente et superposée à la carte */
 .news-section {
     background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent pour que la carte reste visible */

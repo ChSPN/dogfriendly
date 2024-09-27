@@ -91,6 +91,20 @@ In the **DogFriendly.API** and **DogFriendly.Web** projects, open the `appsettin
 In both projects (**DogFriendly.API** and **DogFriendly.Web**), the Firebase configuration will be automatically retrieved from the `appsettings.json` file.
 Ensure that the Firebase service is properly set up to use these parameters in your application's code.
 
+### FileStorage Configuration for Cloudflare R2
+
+The `FileStorage` section in the `appsettings.json` is designed to configure the connection to Cloudflare R2 storage using the AWS S3 SDK. Each setting is crucial for secure access and proper functionality. Below is a breakdown of the key properties:
+
+- **AccountId**: Your Cloudflare account identifier. It uniquely identifies your Cloudflare account for all API interactions.
+- **AccessKey**: The access key provided by Cloudflare, which acts as the public credential for authenticating API requests.
+- **SecretKey**: The corresponding secret key, used together with the access key to securely authenticate with Cloudflare R2.
+- **DomainUri**: The base URL for accessing the R2 storage domain, usually formatted as `https://<account_id>.r2.cloudflarestorage.com/`.
+- **UsersUri**: The URI for accessing the users’ storage bucket or endpoint, which may hold profile images or user-specific files.
+- **PlacesUri**: The URI for accessing place-related files, such as images and media associated with locations in your application.
+- **NewsUri**: The URI used to store or retrieve files related to news content in your application.
+- **AmenitiesUri**: The URI for storing files related to amenities, such as images or additional media associated with your entities.
+- **BucketName**: The name of the bucket where your application’s files are stored within the R2 service.
+
 ## How to Build and Run Docker Containers
 
 ### Front-End (DogFriendly.Web)

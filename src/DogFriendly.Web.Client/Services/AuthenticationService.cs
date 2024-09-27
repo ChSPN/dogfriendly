@@ -1,4 +1,6 @@
-﻿using Microsoft.JSInterop;
+﻿using DogFriendly.Domain.Resources;
+using DogFriendly.Domain.ViewModels.Users;
+using Microsoft.JSInterop;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace DogFriendly.Web.Client.Services
@@ -13,21 +15,29 @@ namespace DogFriendly.Web.Client.Services
         /// </summary>
         public static EventHandler<JwtSecurityToken> OnUserChanged;
 
+        private readonly IServiceProvider _provider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
+        /// </summary>
+        /// <param name="provider">The service provider.</param>
+        public AuthenticationService(IServiceProvider provider)
+        {
+            _provider = provider;
+        }
+
         /// <summary>
         /// The token JWT.
         /// </summary>
         public static JwtSecurityToken? JwtToken { get; private set; }
 
-        private readonly IJSRuntime _jsRuntime;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
+        /// Gets the user profil.
         /// </summary>
-        /// <param name="jsRuntime">The js runtime.</param>
-        public AuthenticationService(IJSRuntime jsRuntime)
-        {
-            _jsRuntime = jsRuntime;
-        }
+        /// <value>
+        /// The user profil.
+        /// </value>
+        private UserProfilViewModel? _userProfil;
 
         /// <summary>
         /// Sets the token JWT.
@@ -58,6 +68,22 @@ namespace DogFriendly.Web.Client.Services
         public JwtSecurityToken? GetJwtToken() => JwtToken;
 
         /// <summary>
+        /// Gets the user profil.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<UserProfilViewModel?> GetUserProfil()
+        {
+            if (_userProfil == null && JwtToken != null)
+            {
+                _userProfil = await _provider
+                    .GetRequiredService<IUserResource>()
+                    .GetProfil();
+            }
+
+            return _userProfil;
+        }
+
+        /// <summary>
         /// Determines whether is user authenticated.
         /// </summary>
         /// <returns>
@@ -65,15 +91,20 @@ namespace DogFriendly.Web.Client.Services
         /// </returns>
         public async Task<bool> IsUserAuthenticated()
         {
-            return await _jsRuntime.InvokeAsync<bool>("isFirebaseUserAuth");
+            return await _provider
+                .GetRequiredService<IJSRuntime>()
+                .InvokeAsync<bool>("isFirebaseUserAuth");
         }
 
         /// <summary>
         /// Represents an event that is raised when the sign-out operation is complete.
         /// </summary>
-        public async Task SignOut()
+        public async Task Logout()
         {
-            await _jsRuntime.InvokeVoidAsync("logoutFirebaseAuth");
+            _userProfil = null;
+            await _provider
+                .GetRequiredService<IJSRuntime>()
+                .InvokeVoidAsync("logoutFirebaseAuth");
         }
     }
 }

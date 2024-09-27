@@ -1,6 +1,6 @@
-﻿using DogFriendly.Web.Client.Services;
+﻿using DogFriendly.Domain.Resources;
+using DogFriendly.Web.Client.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace DogFriendly.Web.Client.Layout
@@ -11,6 +11,17 @@ namespace DogFriendly.Web.Client.Layout
     /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
     public partial class NavMenu : ComponentBase, IDisposable
     {
+        private EventHandler<JwtSecurityToken> OnUserChanged;
+
+        /// <summary>
+        /// Gets or sets the provider.
+        /// </summary>
+        /// <value>
+        /// The provider.
+        /// </value>
+        [Inject]
+        protected IServiceProvider Provider { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance is authenticated.
         /// </summary>
@@ -19,38 +30,36 @@ namespace DogFriendly.Web.Client.Layout
         /// </value>
         public bool IsAuthenticated { get; set; }
 
-        /// <summary>
-        /// Gets or sets the js runtime.
-        /// </summary>
-        /// <value>
-        /// The js runtime.
-        /// </value>
-        [Inject]
-        public required IJSRuntime JsRuntime { get; set; }
-
         /// <inheritdoc />
         public void Dispose()
         {
-            AuthenticationService.OnUserChanged -= SetIsAuthenticated;
+            AuthenticationService.OnUserChanged -= OnUserChanged;
         }
 
         /// <inheritdoc />
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            AuthenticationService.OnUserChanged += SetIsAuthenticated;
+            OnUserChanged = async (sender, e) => await SetIsAuthenticated(e);
+            await SetIsAuthenticated(AuthenticationService.JwtToken);
+            AuthenticationService.OnUserChanged += OnUserChanged;
             base.OnInitialized();
         }
 
         /// <summary>
         /// Sets the is authenticated.
         /// </summary>
-        /// <param name="sender">The sender.</param>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        private void SetIsAuthenticated(object sender, JwtSecurityToken token)
+        private async Task SetIsAuthenticated(JwtSecurityToken? token)
         {
-            IsAuthenticated = token != null;
-            StateHasChanged();
+            if (token != null)
+            {
+                var profil = await Provider
+                    .GetRequiredService<IUserResource>()
+                    .GetProfil();
+                IsAuthenticated = profil?.UserName != null;
+                StateHasChanged();
+            }
         }
     }
 }

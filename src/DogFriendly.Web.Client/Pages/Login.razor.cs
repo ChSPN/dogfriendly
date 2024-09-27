@@ -1,4 +1,6 @@
-﻿using DogFriendly.Web.Client.Services;
+﻿using DogFriendly.Domain.Resources;
+using DogFriendly.Domain.ViewModels.Users;
+using DogFriendly.Web.Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,64 +13,96 @@ namespace DogFriendly.Web.Client.Pages
     /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
     public partial class Login : ComponentBase, IDisposable
     {
+        private EventHandler<JwtSecurityToken> OnUserChanged;
+
         /// <summary>
-        /// Gets or sets the js runtime.
+        /// Gets or sets the navigation manager.
         /// </summary>
         /// <value>
-        /// The js runtime.
+        /// The navigation manager.
         /// </value>
         [Inject]
-        public required IJSRuntime JsRuntime { get; set; }
-
+        public required NavigationManager NavigationManager { get; set; }
 
         /// <summary>
-        /// Gets the name of the user.
+        /// Gets or sets the service provider.
         /// </summary>
         /// <value>
-        /// The name of the user.
+        /// The service provider.
         /// </value>
-        public string? UserName { get; set; }
+        [Inject]
+        public required IServiceProvider ServiceProvider { get; set; }
+
+        /// <summary>
+        /// Gets the name of the user profil.
+        /// </summary>
+        /// <value>
+        /// The name of the user profil.
+        /// </value>
+        public UserProfilViewModel? UserProfil { get; set; }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            AuthenticationService.OnUserChanged -= SetUserName;
+            AuthenticationService.OnUserChanged -= OnUserChanged;
+
         }
 
-        /// <inheritdoc />
-        protected override Task OnInitializedAsync()
+        /// <summary>
+        /// Logouts this instance.
+        /// </summary>
+        /// <returns></returns>
+        protected async Task Logout()
         {
-            if (AuthenticationService.JwtToken is JwtSecurityToken token)
-            {
-                SetUserName(this, token);
-            }
-
-            return base.OnInitializedAsync();
+            await ServiceProvider
+                .GetRequiredService<AuthenticationService>()
+                .Logout();
         }
 
         /// <inheritdoc />
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await JsRuntime.InvokeVoidAsync("initFirebaseUi");
+            await ServiceProvider
+                .GetRequiredService<IJSRuntime>()
+                .InvokeVoidAsync("initFirebaseUi");
             await base.OnAfterRenderAsync(firstRender);
         }
 
         /// <inheritdoc />
-        protected override void OnInitialized()
+        protected async override Task OnInitializedAsync()
         {
-            AuthenticationService.OnUserChanged += SetUserName;
-            base.OnInitialized();
+            OnUserChanged = async (sender, e) => await UserChanged(e);
+            AuthenticationService.OnUserChanged += OnUserChanged;
+            if (AuthenticationService.JwtToken is JwtSecurityToken token)
+            {
+                await UserChanged(token);
+            }
+
+            await base.OnInitializedAsync();
         }
 
         /// <summary>
-        /// Sets the name of the user.
+        /// Users the changed.
         /// </summary>
-        /// <param name="sender">The sender.</param>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        private void SetUserName(object sender, JwtSecurityToken token)
+        private async Task UserChanged(JwtSecurityToken? token)
         {
-            UserName = token?.Claims?.FirstOrDefault(c => c.Type == "name")?.Value;
+            if (token != null)
+            {
+                var userExist = await ServiceProvider
+                    .GetRequiredService<IUserResource>()
+                    .IsExist();
+                if (!userExist)
+                {
+                    NavigationManager.NavigateTo("/register");
+                    return;
+                }
+            }
+
+            UserProfil = await ServiceProvider
+                .GetRequiredService<AuthenticationService>()
+                .GetUserProfil();
             StateHasChanged();
         }
     }
