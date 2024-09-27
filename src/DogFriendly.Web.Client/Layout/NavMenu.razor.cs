@@ -35,17 +35,6 @@ namespace DogFriendly.Web.Client.Layout
         }
 
         /// <inheritdoc />
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
-            {
-                await JsRuntime.InvokeVoidAsync("updateFirebaseAuth");
-            }
-
-            await base.OnAfterRenderAsync(firstRender);
-        }
-
-        /// <inheritdoc />
         protected override void OnInitialized()
         {
             AuthenticationService.OnUserChanged += SetIsAuthenticated;

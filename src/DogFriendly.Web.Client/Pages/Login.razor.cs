@@ -20,6 +20,7 @@ namespace DogFriendly.Web.Client.Pages
         [Inject]
         public required IJSRuntime JsRuntime { get; set; }
 
+
         /// <summary>
         /// Gets the name of the user.
         /// </summary>
@@ -35,13 +36,20 @@ namespace DogFriendly.Web.Client.Pages
         }
 
         /// <inheritdoc />
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override Task OnInitializedAsync()
         {
-            if (firstRender)
+            if (AuthenticationService.JwtToken is JwtSecurityToken token)
             {
-                await JsRuntime.InvokeVoidAsync("initFirebaseUi");
+                SetUserName(this, token);
             }
 
+            return base.OnInitializedAsync();
+        }
+
+        /// <inheritdoc />
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("initFirebaseUi");
             await base.OnAfterRenderAsync(firstRender);
         }
 

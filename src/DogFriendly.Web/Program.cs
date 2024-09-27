@@ -1,5 +1,6 @@
 using DogFriendly.Web.Client.Services;
 using DogFriendly.Web.Components;
+using Microsoft.JSInterop;
 using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,15 +10,10 @@ builder.Configuration.AddUserSecrets<Program>();
 
 
 // Add services to the container.
-builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddHttpClient("DogFriendly", async (c) =>
+builder.Services.AddHttpClient("DogFriendly", async (s, c) =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiUrl"]);
     c.DefaultRequestHeaders.Add("Accept", "application/json");
-    if (AuthenticationService.JwtToken is JwtSecurityToken token)
-    {
-        c.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.RawData}");
-    }
 });
 builder.Services
     .AddRazorComponents()
