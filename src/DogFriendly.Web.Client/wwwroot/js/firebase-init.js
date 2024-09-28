@@ -20,11 +20,13 @@ window.updateFirebaseAuth = async function () {
     if (fb == null) {
         fb = firebase.initializeApp(firebaseConfig);
         fb.auth().onAuthStateChanged(async function (user) {
-            if (user) {
+            if (user == null) return;
+
+            if (!user.emailVerified) {
+                await user.sendEmailVerification();
+            } else {
                 var token = await user.getIdToken();
                 await DotNet.invokeMethodAsync('DogFriendly.Web.Client', 'SetJwtToken', token);
-            } else {
-                await DotNet.invokeMethodAsync('DogFriendly.Web.Client', 'SetJwtToken', null);
             }
         }, function (error) {
             console.error(error);

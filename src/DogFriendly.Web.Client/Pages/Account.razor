@@ -9,12 +9,10 @@
             <div class="card user-details">
                 <div class="card-body">
                     <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
-                    <p class="card-text">Ne partez plus en vacances sans votre meilleur ami!</p>
-                    <p class="card-text">Première connexion</p>
-                    <p class="card-text">Bouton Email</p>
-                    <p class="card-text">Bouton Facebook</p>
-                    <p class="card-text">Bouton Google</p>
-                    <p class="card-text">Bouton Microsoft</p>
+                    <UserAccount ButtonSubmit="Modifier mon compte"
+                                 ViewModel="@ViewModel"
+                                 ErrorMessage="@ErrorMessage"
+                                 OnSubmit="UpdateUser" />
                 </div>
             </div>
         </section>
