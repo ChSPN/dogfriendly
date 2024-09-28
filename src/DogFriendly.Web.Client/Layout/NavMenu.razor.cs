@@ -54,12 +54,23 @@ namespace DogFriendly.Web.Client.Layout
         {
             if (token != null)
             {
-                var profil = await Provider
-                    .GetRequiredService<IUserResource>()
-                    .GetProfil();
-                IsAuthenticated = profil?.UserName != null;
-                StateHasChanged();
+                try
+                {
+                    var service = Provider.GetRequiredService<IUserResource>();
+                    var profil = await service.GetProfil();
+                    IsAuthenticated = !string.IsNullOrEmpty(profil?.UserName);
+                }
+                catch
+                {
+                    IsAuthenticated = false;
+                }
             }
+            else
+            {
+                IsAuthenticated = false;
+            }
+
+            StateHasChanged();
         }
     }
 }

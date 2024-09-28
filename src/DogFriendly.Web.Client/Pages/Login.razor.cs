@@ -57,6 +57,8 @@ namespace DogFriendly.Web.Client.Pages
             await ServiceProvider
                 .GetRequiredService<AuthenticationService>()
                 .Logout();
+            await UserChanged(null);
+            StateHasChanged();
         }
 
         /// <inheritdoc />
@@ -90,12 +92,19 @@ namespace DogFriendly.Web.Client.Pages
         {
             if (token != null)
             {
-                var userExist = await ServiceProvider
-                    .GetRequiredService<IUserResource>()
-                    .IsExist();
-                if (!userExist)
+                try
                 {
-                    NavigationManager.NavigateTo("/register");
+                    var userExist = await ServiceProvider
+                        .GetRequiredService<IUserResource>()
+                        .IsExist();
+                    if (!userExist)
+                    {
+                        NavigationManager.NavigateTo("/register");
+                        return;
+                    }
+                }
+                catch 
+                {
                     return;
                 }
             }

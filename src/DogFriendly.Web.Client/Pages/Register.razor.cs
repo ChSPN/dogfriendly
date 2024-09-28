@@ -14,11 +14,6 @@ namespace DogFriendly.Web.Client.Pages
     public partial class Register : ComponentBase
     {
         /// <summary>
-        /// The maximum file size.
-        /// </summary>
-        private const long MaxFileSize = 5 * 1024 * 1024;
-
-        /// <summary>
         /// Gets or sets the error message.
         /// </summary>
         /// <value>
@@ -52,32 +47,6 @@ namespace DogFriendly.Web.Client.Pages
         /// </value>
         protected UserProfilViewModel ViewModel { get; set; }
 
-        /// <summary>
-        /// Handles the file selected.
-        /// </summary>
-        /// <param name="e">The <see cref="InputFileChangeEventArgs"/> instance containing the event data.</param>
-        protected async Task HandleFileSelected(InputFileChangeEventArgs e)
-        {
-            var file = e.File;
-
-            if (file.Size > MaxFileSize)
-            {
-                ErrorMessage = "La taille du fichier dépasse la limite de 5 Mo.";
-                return;
-            }
-
-            ErrorMessage = string.Empty;
-            using var stream = file.OpenReadStream(maxAllowedSize: MaxFileSize);
-            using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream);
-
-            ViewModel.PictureContent = memoryStream.ToArray();
-            ViewModel.PictureName = file.Name;
-            ViewModel.UserPicture = $"data:{file.ContentType};base64,{Convert.ToBase64String(ViewModel.PictureContent)}";
-
-            StateHasChanged();
-        }
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -108,6 +77,10 @@ namespace DogFriendly.Web.Client.Pages
                     .FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Picture)?
                     .Value;
             }
+            else
+            {
+                NavigationManager.NavigateTo("/login");
+            }
 
             await base.OnInitializedAsync();
         }
@@ -115,14 +88,14 @@ namespace DogFriendly.Web.Client.Pages
         /// <summary>
         /// Registers the user.
         /// </summary>
-        protected async Task RegisterUser()
+        protected async Task RegisterUser(UserProfilViewModel? model)
         {
-            if (ViewModel.PictureContent != null)
+            if (model.PictureContent != null)
             {
-                ViewModel.UserPicture = null;
+                model.UserPicture = null;
             }
 
-            var response = await UserResource.Register(ViewModel);
+            var response = await UserResource.Register(model);
             if (response.IsSuccess)
             {
                 NavigationManager.NavigateTo("/login");
@@ -132,22 +105,6 @@ namespace DogFriendly.Web.Client.Pages
             {
                 ErrorMessage = response.Message;
                 StateHasChanged();
-            }
-        }
-
-        /// <summary>
-        /// Resets the picture.
-        /// </summary>
-        protected void ResetPicture()
-        {
-            if (AuthenticationService.JwtToken != null)
-            {
-                ViewModel.PictureContent = null;
-                ViewModel.PictureName = null;
-                ViewModel.UserPicture = AuthenticationService.JwtToken
-                    .Claims
-                    .FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Picture)?
-                    .Value;
             }
         }
     }

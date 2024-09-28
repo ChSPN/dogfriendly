@@ -1,4 +1,5 @@
 using DogFriendly.Domain.Resources;
+using DogFriendly.Web.Client.Services;
 using DogFriendly.Web.Components;
 using Refit;
 
@@ -16,6 +17,7 @@ var apiConfig = new Action<HttpClient>((c) =>
 
 // Add services to the container.
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services
     .AddRefitClient<IUserResource>()
     .ConfigureHttpClient(apiConfig);

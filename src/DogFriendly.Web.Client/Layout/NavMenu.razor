@@ -1,4 +1,10 @@
 ﻿<nav>
+    @if (IsAuthenticated)
+    {
+        <a class="btn btn-outline-dark me-1" href="/account">
+            <span>Mon compte</span>
+        </a>
+    }
     <a class="btn btn-outline-dark" href="/login">
         @if (IsAuthenticated)
         {

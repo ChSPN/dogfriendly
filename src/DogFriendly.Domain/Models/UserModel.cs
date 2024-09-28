@@ -132,7 +132,57 @@ namespace DogFriendly.Domain.Models
                 IsSuccess = isSuccess,
                 Message = isSuccess 
                 ? string.Empty 
-                : "Une erreur est survenue lors de votre création de compte."
+                : "Une erreur est survenue lors de la création de compte."
+            };
+        }
+
+        /// <summary>
+        /// Updates this instance.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ResponseViewModel> Update()
+        {
+            // Load user.
+            var user = await _mediator.Send(new UserLoadQuery
+            {
+                Email = Email
+            });
+            if (user.Name != Name)
+            {
+                // Check if user name is exist.
+                var isExist = await _mediator.Send(new UserNameExistQuery
+                {
+                    Name = Name
+                });
+                if (isExist)
+                {
+                    return new ResponseViewModel
+                    {
+                        IsSuccess = false,
+                        Message = "Ce pseudo est déjà utilisé."
+                    };
+                }
+            }
+
+            // Upload user picture.
+            PictureUri = await _mediator.Send(new UserPictureUploadCommand
+            {
+                User = this
+            });
+
+            // Update user.
+            var isSuccess = await _mediator.Send(new UserUpdateCommand
+            {
+                User = this
+            });
+
+            // Return response.
+            return new ResponseViewModel
+            {
+                IsSuccess = isSuccess,
+                Message = isSuccess
+                    ? PictureUri
+                    : "Une erreur est survenue lors de la modification de compte."
             };
         }
     }

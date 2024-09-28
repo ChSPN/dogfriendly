@@ -18,6 +18,14 @@ namespace DogFriendly.Web.Client.Services
         private readonly IServiceProvider _provider;
 
         /// <summary>
+        /// Gets the user profil.
+        /// </summary>
+        /// <value>
+        /// The user profil.
+        /// </value>
+        private UserProfilViewModel? _userProfil;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
         /// </summary>
         /// <param name="provider">The service provider.</param>
@@ -30,15 +38,6 @@ namespace DogFriendly.Web.Client.Services
         /// The token JWT.
         /// </summary>
         public static JwtSecurityToken? JwtToken { get; private set; }
-
-        /// <summary>
-        /// Gets the user profil.
-        /// </summary>
-        /// <value>
-        /// The user profil.
-        /// </value>
-        private UserProfilViewModel? _userProfil;
-
         /// <summary>
         /// Sets the token JWT.
         /// </summary>
@@ -102,9 +101,20 @@ namespace DogFriendly.Web.Client.Services
         public async Task Logout()
         {
             _userProfil = null;
+            JwtToken = null;
             await _provider
                 .GetRequiredService<IJSRuntime>()
                 .InvokeVoidAsync("logoutFirebaseAuth");
+            OnUserChanged?.Invoke(null, null);
+        }
+
+        /// <summary>
+        /// Sets the user profil.
+        /// </summary>
+        /// <param name="userProfil">The user profil.</param>
+        public void SetUserProfil(UserProfilViewModel userProfil)
+        {
+            _userProfil = userProfil;
         }
     }
 }

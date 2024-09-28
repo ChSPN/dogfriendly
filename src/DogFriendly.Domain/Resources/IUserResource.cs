@@ -28,7 +28,15 @@ namespace DogFriendly.Domain.Resources
         /// </summary>
         /// <param name="registerUserModel">The register user.</param>
         /// <returns>Response of register user.</returns>
-        [Post("/api/user/register")]
+        [Post("/api/user")]
         Task<ResponseViewModel> Register([Body] UserProfilViewModel registerUserModel);
+
+        /// <summary>
+        /// Updates the specified register user model.
+        /// </summary>
+        /// <param name="registerUserModel">The register user model.</param>
+        /// <returns></returns>
+        [Put("/api/user")]
+        Task<ResponseViewModel> Update([Body] UserProfilViewModel registerUserModel);
     }
 }
