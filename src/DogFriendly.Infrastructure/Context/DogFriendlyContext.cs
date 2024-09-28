@@ -95,6 +95,14 @@ namespace DogFriendly.Infrastructure.Context
             modelBuilder.Entity<ReviewEntity>().ToTable("reviews");
             modelBuilder.Entity<UserEntity>().ToTable("users");
 
+            // Define unique indexes for UserEntity
+            modelBuilder.Entity<UserEntity>()
+                .HasIndex(u => u.Name)
+                .IsUnique();
+            modelBuilder.Entity<UserEntity>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
             // Use snake case for column names.
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {

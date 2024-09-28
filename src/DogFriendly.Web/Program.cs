@@ -1,15 +1,24 @@
-using DogFriendly.Web.Client.Pages;
-using DogFriendly.Web.Client.Services;
+using DogFriendly.Domain.Resources;
 using DogFriendly.Web.Components;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add configurations.
 builder.Configuration.AddUserSecrets<Program>();
 
+// Configurations for the API.
+var apiConfig = new Action<HttpClient>((c) =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["ApiUrl"]);
+    c.DefaultRequestHeaders.Add("Accept", "application/json");
+});
 
 // Add services to the container.
-builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddHttpClient("DogFriendly", apiConfig);
+builder.Services
+    .AddRefitClient<IUserResource>()
+    .ConfigureHttpClient(apiConfig);
 builder.Services
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
@@ -33,4 +42,5 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(DogFriendly.Web.Client._Imports).Assembly);
 
+// Run the application.
 app.Run();

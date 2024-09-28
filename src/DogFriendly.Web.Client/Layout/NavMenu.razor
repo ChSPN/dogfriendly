@@ -1,6 +1,12 @@
 ﻿<nav>
     <a class="btn btn-outline-dark" href="/login">
-        <span data-isUserAuth="false">Se connecter</span>
-        <span data-isUserAuth="true">Se deconnecter</span>
+        @if (IsAuthenticated)
+        {
+            <span>Se deconnecter</span>
+        }
+        else
+        {
+            <span>Se connecter</span>
+        }
     </a>
 </nav>

@@ -8,7 +8,9 @@
     <base href="/" />
     <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(true)" />
     <script>
-        const apiUrl = '@Configuration["ApiUrl"]';
+        window.getApiUrl = function () {
+            return '@Configuration["ApiUrl"]';
+        };
         const firebaseConfig = {
             apiKey: '@Configuration["Firebase:ApiKey"]',
             authDomain: '@Configuration["Firebase:AuthDomain"]',
