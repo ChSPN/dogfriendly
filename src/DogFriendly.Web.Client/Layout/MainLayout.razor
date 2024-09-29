@@ -1,17 +1,12 @@
 ﻿@inherits LayoutComponentBase
 
-<HeadContent>
-    <link rel="icon" type="image/png" href="img/logo.png" />
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.css" />
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app.css" />
-</HeadContent>
-
 <!-- Header -->
 <header class="bg-light py-2">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-            <img src="img/logo.png" alt="Dog Friendly Logo" class="mr-3" style="height: 60px;">
+            <a title="Accueil" href="/">
+                <img src="img/logo.png" alt="Dog Friendly Logo" class="mr-3" style="height: 60px;">
+            </a>
             <h1 class="h5 mb-0">Ne partez plus en vacances sans votre meilleur ami!</h1>
         </div>
         <NavMenu />
@@ -20,7 +15,7 @@
 
 <!-- Main Map Section -->
 <section class="map-section">
-    <div class="map" id="map"></div>
+    <SearchPlace />
     @Body
 </section>
 
@@ -43,8 +38,5 @@
 </footer>
 
 <!-- Dependencies -->
-<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth__fr.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/firebase-init.js"></script>
+<script src="js/map-component.js"></script>

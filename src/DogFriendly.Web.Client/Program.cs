@@ -3,6 +3,7 @@ using DogFriendly.Web.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using Refit;
+using ServiceCollectionExtensions;
 using System.IdentityModel.Tokens.Jwt;
 
 // Configurations for the API.
@@ -20,11 +21,20 @@ var apiConfig = new Action<HttpClient>((c) =>
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 // Add services to the container.
+builder.Services.AddGeolocationService();
+builder.Services.AddNominatimGeocoderService();
+builder.Services.AddLeafletServices();
 builder.Services.AddSingleton<AuthenticationService>();
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
 builder.Services
     .AddRefitClient<IUserResource>()
     .ConfigureHttpClient(apiConfig);
+builder.Services
+    .AddRefitClient<INominatimResource>()
+    .ConfigureHttpClient((c) =>
+    {
+        c.BaseAddress = new Uri("https://nominatim.openstreetmap.org");
+    });
 
 var app = builder.Build();
 

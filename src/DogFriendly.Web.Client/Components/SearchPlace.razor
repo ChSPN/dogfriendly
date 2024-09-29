@@ -1,10 +1,27 @@
-﻿<!-- Superposition des boutons sur la carte -->
+﻿<div class="map" id="map">
+    <Map ZoomLevel=15 @ref="Map" />
+</div>
+<!-- Superposition des boutons sur la carte -->
 <div class="button-overlay">
     <!-- Search Bar and Navigation -->
     <section class="py-3 search">
         <div class="container">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Je recherche ...">
+                <InputText class="form-control" placeholder="Je recherche ..."
+                           @bind-Value="SearchQuery" 
+                           @onkeypress="OnSearchKeyPress"
+                           @oninput="OnSearchChanged" />
+                @if (Suggestions.Any())
+                {
+                    <ul class="suggestions">
+                        @foreach (var suggestion in Suggestions)
+                        {
+                            <li @onclick="() => SelectSuggestion(suggestion)">
+                                @suggestion.DisplayName
+                            </li>
+                        }
+                    </ul>
+                }
             </div>
         </div>
     </section>

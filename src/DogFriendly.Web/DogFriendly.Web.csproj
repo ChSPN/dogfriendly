@@ -8,11 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\charl\.nuget\packages\leafletforblazor\2.2.0.4\contentFiles\any\net7.0\map_color.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DogFriendly.Domain\DogFriendly.Domain.csproj" />
     <ProjectReference Include="..\DogFriendly.Web.Client\DogFriendly.Web.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.2" />
+    <PackageReference Include="Persilsoft.GeolocationMap.Blazor" Version="1.0.5" />
     <PackageReference Include="Refit" Version="7.2.1" />
     <PackageReference Include="Refit.HttpClientFactory" Version="7.2.1" />
+    <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
