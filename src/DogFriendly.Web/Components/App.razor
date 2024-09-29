@@ -6,6 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
+    <link rel="icon" type="image/png" href="img/logo.png" />
+    <link rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.css" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
     <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(true)" />
     <script>
         window.getApiUrl = function () {
@@ -21,6 +25,10 @@
 </head>
 
 <body>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth__fr.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <Routes @rendermode="new InteractiveWebAssemblyRenderMode(true)" />
     <script src="_framework/blazor.web.js"></script>
 </body>

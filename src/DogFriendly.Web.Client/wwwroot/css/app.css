@@ -48,6 +48,13 @@ body, html {
     width: 100%;
 }
 
+.map {
+    height: 120%;
+    width: 100%;
+    position: absolute;
+    z-index: 0;
+}
+
 .search {
     padding-bottom: 0 !important;
 }
@@ -60,6 +67,8 @@ body, html {
     border-radius: 5px;
     text-transform: uppercase; /* Texte en majuscule */
     margin: 0 10px;
+    position: relative;
+    z-index: 1000;
 }
 
     .button-overlay .btn:hover {
@@ -146,6 +155,30 @@ body, html {
 .invalid {
     border-color: red!important;
 }
+
+.suggestions {
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    z-index: 6000;
+    position: absolute;
+    margin-top: 37px;
+}
+
+    .suggestions li {
+        padding: 8px;
+        cursor: pointer;
+    }
+
+        .suggestions li:hover {
+            background-color: #f0f0f0;
+        }
 
 /* La section News est maintenant transparente et superposée à la carte */
 .news-section {

@@ -2,6 +2,7 @@ using DogFriendly.Domain.Resources;
 using DogFriendly.Web.Client.Services;
 using DogFriendly.Web.Components;
 using Refit;
+using ServiceCollectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +17,20 @@ var apiConfig = new Action<HttpClient>((c) =>
 });
 
 // Add services to the container.
+builder.Services.AddGeolocationService();
+builder.Services.AddNominatimGeocoderService();
+builder.Services.AddLeafletServices();
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services
     .AddRefitClient<IUserResource>()
     .ConfigureHttpClient(apiConfig);
+builder.Services
+    .AddRefitClient<INominatimResource>()
+    .ConfigureHttpClient((c) =>
+    {
+        c.BaseAddress = new Uri("https://nominatim.openstreetmap.org");
+    });
 builder.Services
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
