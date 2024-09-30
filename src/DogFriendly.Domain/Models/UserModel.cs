@@ -95,10 +95,10 @@ namespace DogFriendly.Domain.Models
         }
 
         /// <summary>
-        /// Registers this user.
+        /// Create this user.
         /// </summary>
         /// <returns></returns>
-        public async Task<ResponseViewModel> Register()
+        public async Task<ResponseViewModel> Create()
         {
             // Check if user name is exist.
             var isExist = await _mediator.Send(new UserNameExistQuery

@@ -22,15 +22,13 @@ builder.Services.AddNominatimGeocoderService();
 builder.Services.AddLeafletServices();
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services
-    .AddRefitClient<IUserResource>()
-    .ConfigureHttpClient(apiConfig);
-builder.Services
-    .AddRefitClient<INominatimResource>()
+builder.Services.AddRefitClient<INominatimResource>()
     .ConfigureHttpClient((c) =>
     {
         c.BaseAddress = new Uri("https://nominatim.openstreetmap.org");
     });
+builder.Services.AddRefitClient<IPlaceTypeResource>().ConfigureHttpClient(apiConfig);
+builder.Services.AddRefitClient<IUserResource>().ConfigureHttpClient(apiConfig);
 builder.Services
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();

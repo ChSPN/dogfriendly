@@ -81,6 +81,10 @@ body, html {
     border: black 1px solid;
 }
 
+.button-background {
+    background-color: var(--button-color);
+}
+
 .result-image {
     background-color: #ddd;
 }

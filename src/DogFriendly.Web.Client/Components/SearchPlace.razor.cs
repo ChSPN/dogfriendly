@@ -1,4 +1,5 @@
 ﻿using DogFriendly.Domain.Resources;
+using DogFriendly.Domain.ViewModels.Places;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -52,6 +53,23 @@ namespace DogFriendly.Web.Client.Components
         protected INominatimResource Nominatim { get; set; }
 
         /// <summary>
+        /// Gets or sets the place type resource.
+        /// </summary>
+        /// <value>
+        /// The place type resource.
+        /// </value>
+        [Inject]
+        protected IPlaceTypeResource PlaceTypeResource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the place types.
+        /// </summary>
+        /// <value>
+        /// The place types.
+        /// </value>
+        protected List<PlaceTypeViewModel> PlaceTypes { get; set; } = new List<PlaceTypeViewModel>();
+
+        /// <summary>
         /// Gets or sets the search query.
         /// </summary>
         /// <value>
@@ -96,6 +114,13 @@ namespace DogFriendly.Web.Client.Components
             }
 
             await base.OnAfterRenderAsync(firstRender);
+        }
+
+        /// <inheritdoc />
+        protected override async Task OnInitializedAsync()
+        {
+            PlaceTypes = await PlaceTypeResource.GetViewAll();
+            await base.OnInitializedAsync();
         }
 
         /// <summary>

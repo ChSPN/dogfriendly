@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
+using System.Net;
 using System.Security.Claims;
 
 namespace DogFriendly.API.Controllers
@@ -51,6 +52,7 @@ namespace DogFriendly.API.Controllers
 
             // Load the user.
             await userModel.Load();
+
             return Ok(new UserProfilViewModel
             {
                 UserEmail = userModel.Email,
@@ -92,6 +94,7 @@ namespace DogFriendly.API.Controllers
 
             // Check if the user exists.
             var isExist = await userModel.IsExist();
+
             return Ok(isExist);
         }
 
@@ -101,7 +104,7 @@ namespace DogFriendly.API.Controllers
         /// <param name="userRegister">The register user model.</param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult<ResponseViewModel>> Register([FromBody] UserProfilViewModel userRegister)
         {
             // Retrieve the user's email from the claims.
@@ -127,44 +130,11 @@ namespace DogFriendly.API.Controllers
             };
 
             // Register the user.
-            var response = await userModel.Register();
-            return this.Ok(response);
-        }
+            var response = await userModel.Create();
 
-        /// <summary>
-        /// Updates the specified user register.
-        /// </summary>
-        /// <param name="userRegister">The user register.</param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPut]
-        public async Task<ActionResult<ResponseViewModel>> Update([FromBody] UserProfilViewModel userRegister)
-        {
-            // Retrieve the user's email from the claims.
-            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
-            if (emailClaim == null)
-            {
-                return BadRequest(new ResponseViewModel
-                {
-                    IsSuccess = false,
-                    Message = "Adresse e-mail introuvable."
-                });
-            }
-
-            // Get the email from the claim.
-            var email = emailClaim.Value;
-
-            // Create a new user model.
-            var userModel = new UserModel(_mediator, email, userRegister.UserName)
-            {
-                PictureContent = userRegister.PictureContent,
-                PictureName = userRegister.PictureName,
-                PictureUri = userRegister.UserPicture
-            };
-
-            // Register the user.
-            var response = await userModel.Update();
-            return this.Ok(response);
+            return this.StatusCode(
+                (int)(response.IsSuccess ? HttpStatusCode.OK : HttpStatusCode.BadRequest), 
+                response);
         }
     }
 }
