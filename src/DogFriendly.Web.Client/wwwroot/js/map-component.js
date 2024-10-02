@@ -24,3 +24,8 @@ window.removeMapEventListener = function () {
     document.removeEventListener('click', window.mapClickEvent);
     document.removeEventListener('keydown', window.mapEscapeEvent);
 };
+
+setInterval(() => {
+    var height = $('.map-section').height();
+    $('#map').height(height);
+}, 1000);

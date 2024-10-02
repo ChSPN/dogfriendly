@@ -95,13 +95,23 @@ namespace DogFriendly.Infrastructure.Context
             modelBuilder.Entity<ReviewEntity>().ToTable("reviews");
             modelBuilder.Entity<UserEntity>().ToTable("users");
 
-            // Define unique indexes for UserEntity
+            // Define unique indexes.
             modelBuilder.Entity<UserEntity>()
                 .HasIndex(u => u.Name)
                 .IsUnique();
             modelBuilder.Entity<UserEntity>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            // Define indexes.
+            modelBuilder.Entity<PlaceEntity>()
+                .HasIndex(u => u.Longitude);
+            modelBuilder.Entity<PlaceEntity>()
+                .HasIndex(u => u.Latitude);
+
+            // Define specific column.
+            modelBuilder.Entity<PlaceEntity>()
+                .Ignore(p => p.Kilometers);
 
             // Use snake case for column names.
             foreach (var entity in modelBuilder.Model.GetEntityTypes())

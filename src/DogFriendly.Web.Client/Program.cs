@@ -23,7 +23,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 // Add services to the container.
 builder.Services.AddGeolocationService();
 builder.Services.AddNominatimGeocoderService();
-builder.Services.AddLeafletServices();
 builder.Services.AddSingleton<AuthenticationService>();
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
 builder.Services.AddRefitClient<INominatimResource>()

@@ -1,5 +1,9 @@
 ﻿<div class="map" id="map">
-    <Map ZoomLevel=15 @ref="Map" />
+    <RealTimeMap Parameters="@Parameters" height="300%" width="100%" @ref="Map"
+                 OnMouseUpMap="OnMouseUpMap" 
+                 OnZoomLevelEndChange="OnZoomLevelEndChange"
+                 OnAfterMapLoaded="OnAfterMapLoaded">
+    </RealTimeMap>
 </div>
 <!-- Superposition des boutons sur la carte -->
 <div class="button-overlay">

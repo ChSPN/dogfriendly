@@ -1,10 +1,11 @@
 ﻿using DogFriendly.Domain.Resources;
 using DogFriendly.Domain.ViewModels.Places;
+using LeafletForBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Persilsoft.Leaflet.Blazor;
 using Persilsoft.Nominatim.Geolocation.Blazor;
+using static LeafletForBlazor.RealTimeMap;
 
 namespace DogFriendly.Web.Client.Components
 {
@@ -15,6 +16,19 @@ namespace DogFriendly.Web.Client.Components
     /// <seealso cref="System.IDisposable" />
     public partial class SearchPlace : ComponentBase, IDisposable
     {
+        /// <summary>
+        /// The parameters.
+        /// </summary>
+        protected LoadParameters Parameters = new LoadParameters
+        {
+            location = new Location
+            {
+                latitude = 48.8575,
+                longitude = 2.3514,
+            },
+            zoomLevel = 13
+        };
+
         private Timer? _searchTimer;
 
         /// <summary>
@@ -41,7 +55,7 @@ namespace DogFriendly.Web.Client.Components
         /// <value>
         /// The map.
         /// </value>
-        protected Map Map { get; set; }
+        protected RealTimeMap Map { get; set; }
 
         /// <summary>
         /// Gets or sets the nominatim.
@@ -84,7 +98,7 @@ namespace DogFriendly.Web.Client.Components
         /// The suggestions.
         /// </value>
         protected List<NominatimResponse> Suggestions { get; set; } = new List<NominatimResponse>();
-
+        
         /// <inheritdoc />
         public void Dispose()
         {
@@ -101,6 +115,18 @@ namespace DogFriendly.Web.Client.Components
             StateHasChanged();
         }
 
+        protected async Task OnAfterMapLoaded(MapEventArgs args)
+        {
+            var position = await Geolocation.GetPosition();
+            var adjusted = AdjustCenter(position.Latitude, position.Longitude);
+            this.Map.View.setCenter = new Location
+            {
+                latitude = adjusted.Latitude,
+                longitude = adjusted.Longitude
+            };
+            this.Map.View.setZoomLevel = 13;
+        }
+
         /// <inheritdoc />
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -108,19 +134,24 @@ namespace DogFriendly.Web.Client.Components
             {
                 DotNetObjectReference<SearchPlace> objRef = DotNetObjectReference.Create(this);
                 await JS.InvokeVoidAsync("addMapEventListener", objRef);
-                var position = await Geolocation.GetPosition();
-                await Map.SetView(new LeafletLatLong(position.Latitude, position.Longitude), 15);
-                StateHasChanged();
+                await Geolocation.GetPosition();
             }
 
             await base.OnAfterRenderAsync(firstRender);
         }
-
         /// <inheritdoc />
         protected override async Task OnInitializedAsync()
         {
             PlaceTypes = await PlaceTypeResource.GetViewAll();
             await base.OnInitializedAsync();
+        }
+
+        /// <summary>
+        /// Called when mouse up map.
+        /// </summary>
+        /// <param name="args">The <see cref="ClicksMapArgs"/> instance containing the event data.</param>
+        protected async Task OnMouseUpMap(ClicksMapArgs args)
+        {
         }
 
         /// <summary>
@@ -152,17 +183,43 @@ namespace DogFriendly.Web.Client.Components
         }
 
         /// <summary>
+        /// Called when zoom level end change.
+        /// </summary>
+        /// <param name="args">The <see cref="MapZoomEventArgs"/> instance containing the event data.</param>
+        protected async Task OnZoomLevelEndChange(MapZoomEventArgs args)
+        {
+            // 
+        }
+
+        /// <summary>
         /// Selects the suggestion.
         /// </summary>
         /// <param name="suggestion">The suggestion.</param>
-        protected async Task SelectSuggestion(NominatimResponse suggestion)
+        protected void SelectSuggestion(NominatimResponse suggestion)
         {
             SearchQuery = suggestion.DisplayName;
             Suggestions.Clear();
             var lat = double.Parse(suggestion.Latitude, System.Globalization.CultureInfo.InvariantCulture);
             var lon = double.Parse(suggestion.Longitude, System.Globalization.CultureInfo.InvariantCulture);
-            await Map.SetView(new LeafletLatLong(lat, lon), 15);
-            StateHasChanged();
+            var adjusted = AdjustCenter(lat, lon);
+            this.Map.View.setCenter = new Location
+            {
+                latitude = adjusted.Latitude,
+                longitude = adjusted.Longitude
+            };
+            this.Map.View.setZoomLevel = 13;
+        }
+
+        /// <summary>
+        /// Adjusts the center to top 5km.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <returns></returns>
+        private (double Latitude, double Longitude) AdjustCenter(double latitude, double longitude)
+        {
+            double newLatitude = latitude - 0.08;
+            return (newLatitude, longitude);
         }
 
         /// <summary>
@@ -178,14 +235,18 @@ namespace DogFriendly.Web.Client.Components
                     var location = response.First();
                     var lat = double.Parse(location.Latitude, System.Globalization.CultureInfo.InvariantCulture);
                     var lon = double.Parse(location.Longitude, System.Globalization.CultureInfo.InvariantCulture);
-                    await Map.SetView(new LeafletLatLong(lat, lon), 15);
-                    StateHasChanged();
+                    var adjusted = AdjustCenter(lat, lon); 
+                    this.Map.View.setCenter = new Location
+                    {
+                        latitude = adjusted.Latitude,
+                        longitude = adjusted.Longitude
+                    };
+                    this.Map.View.setZoomLevel = 13;
                 }
             }
             else
             {
                 Suggestions.Clear();
-                StateHasChanged();
             }
         }
 
@@ -208,6 +269,32 @@ namespace DogFriendly.Web.Client.Components
             }
 
             StateHasChanged();
+        }
+
+        /// <summary>
+        /// Zoom to km.
+        /// </summary>
+        /// <param name="zoomLevel">The zoom level.</param>
+        /// <returns>Boundingbox in kilometers.</returns>
+        private double ZoomToKm(int zoomLevel)
+        {
+            switch (zoomLevel)
+            {
+                case 19: return 0.10;
+                case 18: return 0.20;
+                case 17: return 0.40;
+                case 16: return 0.80;
+                case 15: return 1.6;
+                case 14: return 3.2;
+                case 13: return 6.4;
+                case 12: return 12.8;
+                case 11: return 25.6;
+                case 10: return 51.2;
+                case 9: return 102.4;
+                case 8: return 204.8;
+                case 7: return 409.6;
+                default: return 409.6;
+            }
         }
     }
 }

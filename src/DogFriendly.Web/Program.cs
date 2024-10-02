@@ -19,7 +19,6 @@ var apiConfig = new Action<HttpClient>((c) =>
 // Add services to the container.
 builder.Services.AddGeolocationService();
 builder.Services.AddNominatimGeocoderService();
-builder.Services.AddLeafletServices();
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddRefitClient<INominatimResource>()

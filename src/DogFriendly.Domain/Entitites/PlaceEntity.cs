@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DogFriendly.Domain.Entitites
 {
@@ -51,6 +47,14 @@ namespace DogFriendly.Domain.Entitites
         /// The email.
         /// </value>
         public string? Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kilometers.
+        /// </summary>
+        /// <value>
+        /// The kilometers.
+        /// </value>
+        public double Kilometers { get; set; }
 
         /// <summary>
         /// Gets or sets the latitude.
@@ -125,19 +129,19 @@ namespace DogFriendly.Domain.Entitites
         public PlaceTypeEntity? PlaceType { get; set; }
 
         /// <summary>
+        /// Gets or sets the place type identifier.
+        /// </summary>
+        /// <value>
+        /// The type identifier.
+        /// </value>
+        public int PlaceTypeId { get; set; }
+
+        /// <summary>
         /// Gets or sets the postal code.
         /// </summary>
         /// <value>
         /// The postal code.
         /// </value>
         public required string PostalCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type identifier.
-        /// </summary>
-        /// <value>
-        /// The type identifier.
-        /// </value>
-        public int TypeId { get; set; }
     }
 }
