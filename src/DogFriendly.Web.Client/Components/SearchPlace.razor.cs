@@ -1,5 +1,6 @@
 ﻿using DogFriendly.Domain.Resources;
 using DogFriendly.Domain.ViewModels.Places;
+using DogFriendly.Web.Client.Services;
 using LeafletForBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -30,6 +31,14 @@ namespace DogFriendly.Web.Client.Components
         };
 
         private Timer? _searchTimer;
+        private EventHandler<List<PlaceListViewModel>> OnPlacesChanged;
+        private EventHandler OnViewChanged;
+
+        /// <summary>
+        /// Gets or sets the configuration.
+        /// </summary>
+        [Inject]
+        protected IConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Gets or sets the geolocation.
@@ -89,7 +98,13 @@ namespace DogFriendly.Web.Client.Components
         /// <value>
         /// The search query.
         /// </value>
-        protected string SearchQuery { get; set; }
+        protected string? SearchQuery { get; set; }
+
+        /// <summary>
+        /// Gets or sets the search service.
+        /// </summary>
+        [Inject]
+        protected SearchService SearchService { get; set; }
 
         /// <summary>
         /// Gets or sets the suggestions.
@@ -102,6 +117,8 @@ namespace DogFriendly.Web.Client.Components
         /// <inheritdoc />
         public void Dispose()
         {
+            SearchService.OnPlacesChanged -= OnPlacesChanged;
+            SearchService.OnViewChanged -= OnViewChanged;
             JS.InvokeVoidAsync("removeMapEventListener");
         }
 
@@ -125,6 +142,27 @@ namespace DogFriendly.Web.Client.Components
                 longitude = adjusted.Longitude
             };
             this.Map.View.setZoomLevel = 13;
+            SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 13);
+            this.Map.Geometric.Points.AppearanceOnType((item) => item.type == "place").pattern = new PointIcon
+            {
+                iconUrl = "/img/point.png",
+                iconSize = new int[] { 30, 50 },
+            };
+            this.Map.Geometric.Points.Appearance(item => item.type == "place").pattern = new PointTooltip
+            {
+                permanent = false,
+                content = @"<div class='result-list'>
+                    <div class='media mb-3'>
+                        <div class='result-image bg-secondary mr-3' style='width: 60px; height: 60px;'>
+                            <img href='" + Configuration["PhotoUrl"] + @"width=60,height=60.,quality=75,fit=cover${value.photo}' class='img-fluid' alt='${value.name}' />
+                        </div>
+                        <div class='media-body'>
+                            <h5 class='mt-0'>${value.name}</h5>
+                            <p class='text-muted'>${value.description}</p>
+                        </div>
+                    </div>
+                </div>"
+            };
         }
 
         /// <inheritdoc />
@@ -142,6 +180,10 @@ namespace DogFriendly.Web.Client.Components
         /// <inheritdoc />
         protected override async Task OnInitializedAsync()
         {
+            OnPlacesChanged = async (sender, e) => await PlacesChanged(e);
+            SearchService.OnPlacesChanged += OnPlacesChanged;
+            OnViewChanged = (sender, e) => ViewChanged();
+            SearchService.OnViewChanged += OnViewChanged;
             PlaceTypes = await PlaceTypeResource.GetViewAll();
             await base.OnInitializedAsync();
         }
@@ -150,8 +192,10 @@ namespace DogFriendly.Web.Client.Components
         /// Called when mouse up map.
         /// </summary>
         /// <param name="args">The <see cref="ClicksMapArgs"/> instance containing the event data.</param>
-        protected async Task OnMouseUpMap(ClicksMapArgs args)
+        protected void OnMouseUpMap(ClicksMapArgs args)
         {
+            SearchService.Latitude = args.location.latitude;
+            SearchService.Longitude = args.location.longitude;
         }
 
         /// <summary>
@@ -186,9 +230,9 @@ namespace DogFriendly.Web.Client.Components
         /// Called when zoom level end change.
         /// </summary>
         /// <param name="args">The <see cref="MapZoomEventArgs"/> instance containing the event data.</param>
-        protected async Task OnZoomLevelEndChange(MapZoomEventArgs args)
+        protected void OnZoomLevelEndChange(MapZoomEventArgs args)
         {
-            // 
+            SearchService.ZoomLevel = args.zoomLevel;
         }
 
         /// <summary>
@@ -208,6 +252,7 @@ namespace DogFriendly.Web.Client.Components
                 longitude = adjusted.Longitude
             };
             this.Map.View.setZoomLevel = 13;
+            SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 13);
         }
 
         /// <summary>
@@ -223,6 +268,25 @@ namespace DogFriendly.Web.Client.Components
         }
 
         /// <summary>
+        /// Places the changed.
+        /// </summary>
+        /// <param name="places">The places.</param>
+        private async Task PlacesChanged(List<PlaceListViewModel> places)
+        {
+            await this.Map.Geometric.Points.delete();
+            await this.Map.Geometric.Points.upload(places
+                .Select(p => new StreamPoint
+                {
+                    guid = Guid.NewGuid(),
+                    latitude = p.Latitude,
+                    longitude = p.Longitude,
+                    type = "place",
+                    value = p
+                })
+                .ToList());
+        }
+
+        /// <summary>
         /// Searches the address.
         /// </summary>
         private async Task SearchAddress()
@@ -235,13 +299,14 @@ namespace DogFriendly.Web.Client.Components
                     var location = response.First();
                     var lat = double.Parse(location.Latitude, System.Globalization.CultureInfo.InvariantCulture);
                     var lon = double.Parse(location.Longitude, System.Globalization.CultureInfo.InvariantCulture);
-                    var adjusted = AdjustCenter(lat, lon); 
+                    var adjusted = AdjustCenter(lat, lon);
                     this.Map.View.setCenter = new Location
                     {
                         latitude = adjusted.Latitude,
                         longitude = adjusted.Longitude
                     };
                     this.Map.View.setZoomLevel = 13;
+                    SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 13);
                 }
             }
             else
@@ -272,29 +337,17 @@ namespace DogFriendly.Web.Client.Components
         }
 
         /// <summary>
-        /// Zoom to km.
+        /// Views the changed.
         /// </summary>
-        /// <param name="zoomLevel">The zoom level.</param>
-        /// <returns>Boundingbox in kilometers.</returns>
-        private double ZoomToKm(int zoomLevel)
+        private async void ViewChanged()
         {
-            switch (zoomLevel)
+            this.Map.View.setZoomLevel = SearchService.ZoomLevel;
+            await Task.Delay(200);
+            this.Map.View.setCenter = new Location
             {
-                case 19: return 0.10;
-                case 18: return 0.20;
-                case 17: return 0.40;
-                case 16: return 0.80;
-                case 15: return 1.6;
-                case 14: return 3.2;
-                case 13: return 6.4;
-                case 12: return 12.8;
-                case 11: return 25.6;
-                case 10: return 51.2;
-                case 9: return 102.4;
-                case 8: return 204.8;
-                case 7: return 409.6;
-                default: return 409.6;
-            }
+                latitude = SearchService.Latitude,
+                longitude = SearchService.Longitude
+            };
         }
     }
 }

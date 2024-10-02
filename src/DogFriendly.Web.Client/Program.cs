@@ -1,3 +1,6 @@
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
 using DogFriendly.Domain.Resources;
 using DogFriendly.Web.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -6,7 +9,7 @@ using Refit;
 using ServiceCollectionExtensions;
 using System.IdentityModel.Tokens.Jwt;
 
-// Configurations for the API.
+// Configurations appsetings.
 string apiUrl = string.Empty;
 var apiConfig = new Action<HttpClient>((c) =>
 {
@@ -18,12 +21,26 @@ var apiConfig = new Action<HttpClient>((c) =>
     }
 });
 
+// Create the builder.
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+// Add options to the builder.
+builder.Configuration.AddInMemoryCollection();
+
+// Add Blazorise and Bootstrap.
+builder.Services
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    })
+    .AddBootstrap5Providers()
+    .AddFontAwesomeIcons();
 
 // Add services to the container.
 builder.Services.AddGeolocationService();
 builder.Services.AddNominatimGeocoderService();
 builder.Services.AddSingleton<AuthenticationService>();
+builder.Services.AddSingleton<SearchService>();
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
 builder.Services.AddRefitClient<INominatimResource>()
     .ConfigureHttpClient((c) =>
@@ -32,12 +49,17 @@ builder.Services.AddRefitClient<INominatimResource>()
     });
 builder.Services.AddRefitClient<IPlaceTypeResource>().ConfigureHttpClient(apiConfig);
 builder.Services.AddRefitClient<IUserResource>().ConfigureHttpClient(apiConfig);
+builder.Services.AddRefitClient<IPlaceResource>().ConfigureHttpClient(apiConfig);
 
+// Build the app.
 var app = builder.Build();
 
-// Get the API URL and update the Firebase Auth.
+// Get the appsettings.
 var jsRuntime = app.Services.GetRequiredService<IJSRuntime>();
 apiUrl = await jsRuntime.InvokeAsync<string>("getApiUrl");
+app.Configuration["PhotoUrl"] = await jsRuntime.InvokeAsync<string>("getPhotoUrl");
+
+// Update the Firebase Auth.
 await jsRuntime.InvokeVoidAsync("updateFirebaseAuth");
 
 // Run the application.

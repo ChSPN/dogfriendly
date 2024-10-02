@@ -54,6 +54,22 @@
         public required string Name { get; set; }
 
         /// <summary>
+        /// Gets the photo.
+        /// </summary>
+        /// <value>
+        /// The photo.
+        /// </value>
+        public string? Photo { get => Photos?.FirstOrDefault(); }
+
+        /// <summary>
+        /// Gets or sets the photos.
+        /// </summary>
+        /// <value>
+        /// The photos.
+        /// </value>
+        public List<string>? Photos { get; set; }
+
+        /// <summary>
         /// Gets or sets the place type identifier.
         /// </summary>
         /// <value>

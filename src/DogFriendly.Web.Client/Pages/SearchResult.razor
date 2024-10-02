@@ -1,70 +1,55 @@
-﻿@page "/place/{placeId?}"
-@page "/search/{placeTypeId?}"
+﻿@page "/place/{PlaceId:int?}"
+@page "/search/{PlaceTypeId:int?}"
 
 <!-- Main Content -->
 <main class="container py-4">
     <div class="row">
         <!-- Sidebar with Results -->
-        <aside class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Je cherche un restaurant">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Filtres</button>
-                            <button class="btn btn-outline-secondary" type="button">Note</button>
-                        </div>
-                    </div>
-                    <div class="result-list overflow-auto">
-                        <!-- Example of a result item -->
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
+        @if (PlaceTypeId.HasValue)
+        {
+            <aside class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <InputText class="form-control" placeholder="Je recherche ..."
+                                       @bind-Value="SearchQuery"
+                                       @onkeypress="OnSearchKeyPress"
+                                       @oninput="OnSearchText" />
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button">Filtres</button>
+                                <button class="btn btn-outline-secondary" type="button">Note</button>
                             </div>
                         </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
+                        <div class="result-list overflow-auto">
+                            @foreach (var place in Places)
+                            {
+                                <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
+                                    <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
+                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60.,quality=75,fit=cover@(place.Photo)" class="img-fluid" alt="@place.Name" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="mt-0">
+                                            @place.Name
+                                        </h5>
+                                        <p>
+                                            <Rating Value="place.Rating" />
+                                        </p>
+                                        <p class="text-muted">
+                                            @place.Description
+                                        </p>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <!-- Repeat for more items -->
                     </div>
                 </div>
-            </div>
-        </aside>
+            </aside>
+        }
         <!-- Detailed Information -->
-        <section class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card result-details">
+        @if (PlaceId.HasValue)
+        {
+            <section class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card result-details">
                 <img src="img/news-image-1.jpg" class="card-img-top" alt="Restaurant Image">
                 <div class="card-body">
                     <h2 class="card-title">Gros titre</h2>
@@ -91,5 +76,6 @@
                 </div>
             </div>
         </section>
+        }
     </div>
 </main>

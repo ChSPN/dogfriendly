@@ -1,20 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using DogFriendly.Domain.Queries.Places;
+using DogFriendly.Domain.ViewModels.Places;
+using MediatR;
 
-namespace DogFriendly.Domain.Entitites
+namespace DogFriendly.Domain.Models
 {
     /// <summary>
-    /// Place entity.
+    /// Model for place.
     /// </summary>
-    /// <seealso cref="DogFriendly.Domain.Entitites.EntityBase" />
-    public class PlaceEntity : EntityBase
+    /// <seealso cref="DogFriendly.Domain.Models.ModelBase" />
+    public class PlaceModel : ModelBase
     {
+        private readonly IMediator _mediator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaceModel"/> class.
+        /// </summary>
+        /// <param name="mediator">The mediator.</param>
+        public PlaceModel(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         /// <summary>
         /// Gets or sets the address.
         /// </summary>
         /// <value>
         /// The address.
         /// </value>
-        public required string Address { get; set; }
+        public string Address { get; set; }
 
         /// <summary>
         /// Gets or sets the city.
@@ -22,7 +35,7 @@ namespace DogFriendly.Domain.Entitites
         /// <value>
         /// The city.
         /// </value>
-        public required string City { get; set; }
+        public string City { get; set; }
 
         /// <summary>
         /// Gets or sets the country.
@@ -30,7 +43,7 @@ namespace DogFriendly.Domain.Entitites
         /// <value>
         /// The country.
         /// </value>
-        public required string Country { get; set; }
+        public string Country { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
@@ -38,7 +51,7 @@ namespace DogFriendly.Domain.Entitites
         /// <value>
         /// The description.
         /// </value>
-        public required string Description { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the email.
@@ -78,7 +91,7 @@ namespace DogFriendly.Domain.Entitites
         /// <value>
         /// The name.
         /// </value>
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the phone.
@@ -97,38 +110,6 @@ namespace DogFriendly.Domain.Entitites
         public List<string> Photos { get; set; } = [];
 
         /// <summary>
-        /// Gets or sets the place amenities.
-        /// </summary>
-        /// <value>
-        /// The place amenities.
-        /// </value>
-        public ICollection<PlaceAmenityEntity>? PlaceAmenities { get; set; }
-
-        /// <summary>
-        /// Gets or sets the place favorites.
-        /// </summary>
-        /// <value>
-        /// The place favorites.
-        /// </value>
-        public ICollection<PlaceFavoriteEntity>? PlaceFavorites { get; set; }
-
-        /// <summary>
-        /// Gets or sets the place news.
-        /// </summary>
-        /// <value>
-        /// The place news.
-        /// </value>
-        public ICollection<PlaceNewsEntity>? PlaceNews { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type of the place.
-        /// </summary>
-        /// <value>
-        /// The type of the place.
-        /// </value>
-        public PlaceTypeEntity? PlaceType { get; set; }
-
-        /// <summary>
         /// Gets or sets the place type identifier.
         /// </summary>
         /// <value>
@@ -142,14 +123,16 @@ namespace DogFriendly.Domain.Entitites
         /// <value>
         /// The postal code.
         /// </value>
-        public required string PostalCode { get; set; }
+        public string PostalCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the reviews.
+        /// Searches the specified places.
         /// </summary>
-        /// <value>
-        /// The reviews.
-        /// </value>
-        public ICollection<ReviewEntity>? Reviews { get; set; }
+        /// <param name="mediator">The mediator.</param>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        public static async Task<List<PlaceListViewModel>> Search(IMediator mediator,
+            PlaceListViewQuery request)
+            => await mediator.Send(request);
     }
 }

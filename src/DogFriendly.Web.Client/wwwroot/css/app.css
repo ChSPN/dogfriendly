@@ -60,6 +60,10 @@ body, html {
     padding-bottom: 0 !important;
 }
 
+.pointer {
+    cursor: pointer !important;
+}
+
 /* Styles uniformes pour tous les boutons */
 .button-overlay .btn {
     background-color: #fff; /* Couleur de fond uniforme */
