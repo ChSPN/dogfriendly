@@ -10,6 +10,14 @@ namespace DogFriendly.Domain.Resources
     public interface IPlaceResource
     {
         /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [Get("/api/place/view/{id}")]
+        Task<PlaceViewModel> GetViewModel(int id);
+
+        /// <summary>
         /// Searches the specified places.
         /// </summary>
         /// <param name="request">The request.</param>

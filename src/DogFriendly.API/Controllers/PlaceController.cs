@@ -26,6 +26,15 @@ namespace DogFriendly.API.Controllers
         }
 
         /// <summary>
+        /// Gets the view model.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpGet("view/{id:int}")]
+        public async Task<ActionResult<PlaceViewModel>> GetViewModel(int id)
+            => Ok(await PlaceModel.LoadViewModel(_mediator, id));
+
+        /// <summary>
         /// Searches the specified place.
         /// </summary>
         /// <param name="request">The request.</param>

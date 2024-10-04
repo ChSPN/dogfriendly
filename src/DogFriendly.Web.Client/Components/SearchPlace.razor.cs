@@ -339,10 +339,9 @@ namespace DogFriendly.Web.Client.Components
         /// <summary>
         /// Views the changed.
         /// </summary>
-        private async void ViewChanged()
+        private void ViewChanged()
         {
             this.Map.View.setZoomLevel = SearchService.ZoomLevel;
-            await Task.Delay(200);
             this.Map.View.setCenter = new Location
             {
                 latitude = SearchService.Latitude,

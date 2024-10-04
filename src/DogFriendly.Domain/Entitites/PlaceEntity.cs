@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace DogFriendly.Domain.Entitites
+﻿namespace DogFriendly.Domain.Entitites
 {
     /// <summary>
     /// Place entity.
@@ -81,6 +79,14 @@ namespace DogFriendly.Domain.Entitites
         public required string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the opening hours.
+        /// </summary>
+        /// <value>
+        /// The opening hours.
+        /// </value>
+        public string? OpeningHours { get; set; }
+
+        /// <summary>
         /// Gets or sets the phone.
         /// </summary>
         /// <value>
@@ -151,5 +157,13 @@ namespace DogFriendly.Domain.Entitites
         /// The reviews.
         /// </value>
         public ICollection<ReviewEntity>? Reviews { get; set; }
+
+        /// <summary>
+        /// Gets or sets the website.
+        /// </summary>
+        /// <value>
+        /// The website.
+        /// </value>
+        public string? Website { get; set; }
     }
 }

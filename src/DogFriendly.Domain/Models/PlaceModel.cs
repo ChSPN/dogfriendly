@@ -94,6 +94,14 @@ namespace DogFriendly.Domain.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the opening hours.
+        /// </summary>
+        /// <value>
+        /// The opening hours.
+        /// </value>
+        public string? OpeningHours { get; set; }
+
+        /// <summary>
         /// Gets or sets the phone.
         /// </summary>
         /// <value>
@@ -124,6 +132,24 @@ namespace DogFriendly.Domain.Models
         /// The postal code.
         /// </value>
         public string PostalCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the website.
+        /// </summary>
+        /// <value>
+        /// The website.
+        /// </value>
+        public string? Website { get; set; }
+
+        /// <summary>
+        /// Loads the view model.
+        /// </summary>
+        /// <param name="mediator">The mediator.</param>
+        /// <param name="placeId">The place identifier.</param>
+        /// <returns></returns>
+        public static async Task<PlaceViewModel> LoadViewModel(IMediator mediator,
+            int placeId)
+            => await mediator.Send(new PlaceViewQuery { PlaceId = placeId });
 
         /// <summary>
         /// Searches the specified places.

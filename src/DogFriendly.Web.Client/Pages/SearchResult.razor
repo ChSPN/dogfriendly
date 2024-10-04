@@ -25,7 +25,7 @@
                             {
                                 <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
                                     <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
-                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60.,quality=75,fit=cover@(place.Photo)" class="img-fluid" alt="@place.Name" />
+                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover@(place.Photo)" class="img-fluid" alt="@place.Name" />
                                     </div>
                                     <div class="media-body">
                                         <h5 class="mt-0">
@@ -35,7 +35,12 @@
                                             <Rating Value="place.Rating" />
                                         </p>
                                         <p class="text-muted">
-                                            @place.Description
+                                            @(place.Description)
+                                        </p>
+                                        <p class="text-muted">
+                                            <a href="/place/@(place.Id)" @onclick:preventDefault="true" @onclick="() => OnPlaceClicked(place)">
+                                                Voir la fiche
+                                            </a>
                                         </p>
                                     </div>
                                 </div>
@@ -46,36 +51,70 @@
             </aside>
         }
         <!-- Detailed Information -->
-        @if (PlaceId.HasValue)
+        @if (PlaceId.HasValue && Place != null)
         {
             <section class="col-sm-12 col-md-6 col-lg-4">
                 <div class="card result-details">
-                <img src="img/news-image-1.jpg" class="card-img-top" alt="Restaurant Image">
-                <div class="card-body">
-                    <h2 class="card-title">Gros titre</h2>
-                    <p class="card-text">★★★★★ (35 reviews)</p>
-                    <p class="card-text">Description du restaurant. Lorem ipsum dolor sit amet.</p>
-                    <ul class="list-unstyled">
-                        <li>✔ Gamelle d'eau sur demande</li>
-                        <li>✔ Espace autour des tables</li>
-                    </ul>
-                    <p>📍 1234 Rue de la Rue, 75000 Paris</p>
-                    <p>📞 03 00 00 00 00</p>
-                    <p>🌐 <a href="#">Site web</a></p>
-                    <p>🕒 Horaires: 09:00 - 23:00</p>
-                    <p class="card-text">Donnez votre avis :</p>
-                    <p class="card-text">
-                        ☆☆☆☆☆
-                    </p>
-                    <p class="card-text">
-                        <textarea class="form-control" rows="3" placeholder="Commentaire"></textarea>
-                    </p>
-                    <p class="card-text d-flex justify-content-end">
-                        <button class="btn btn-primary mb-3">Envoyez</button>
-                    </p>
+                    <i class="fa fa-times position-absolute popin-close" @onclick="ClosePlace" />
+                    <Blazorise.Carousel Autoplay="false">
+                        @foreach (var photo in Place.Photos)
+                        {
+                            <Blazorise.CarouselSlide Name="@photo">
+                                <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover@(photo)" class="d-block w-100" alt="@Place.Name" />
+                            </Blazorise.CarouselSlide>
+                        }
+                    </Blazorise.Carousel>
+                    <div class="card-body">
+                        <h2 class="card-title">@Place.Name</h2>
+                        <p class="card-text">
+                            <Rating Value="Place.Rating" />
+                            @if (Place.ReviewsCount > 0)
+                            {
+                                <span>(@Place.ReviewsCount review@(Place.ReviewsCount > 1 ? "s" : string.Empty))</span>
+                            }
+                        </p>
+                        <p class="card-text">
+                            @Place.Description
+                        </p>
+                        @if (Place.Amenities != null)
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var amenity in Place.Amenities)
+                                {
+                                    <li><i class="@amenity.Value" /> @amenity.Key</li>
+                                }
+                            </ul>
+                        }
+                        <p><i class="fa fa-map-pin" /> @Place.Address, @Place.PostalCode @Place.City</p>
+                        @if (!string.IsNullOrEmpty(Place.Phone))
+                        {
+                            <p><i class="fa fa-phone" /> @Place.Phone</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Place.Email))
+                        {
+                            <p><i class="fa fa-envelope" /> <a href="mailto:@Place.Email">@Place.Email</a></p>
+                        }
+                        @if (!string.IsNullOrEmpty(Place.Website))
+                        {
+                            <p><i class="fa fa-globe" /> <a href="@Place.Website">Site web</a></p>
+                        }
+                        @if (Place.OpeningHours != null)
+                        {
+                            <p><i class="fa fa-clock" /> Horaires: @Place.OpeningHours</p>
+                        }
+                        <!--p class="card-text">Donnez votre avis :</p>
+                        <p class="card-text">
+                            ☆☆☆☆☆
+                        </p>
+                        <p class="card-text">
+                            <textarea class="form-control" rows="3" placeholder="Commentaire"></textarea>
+                        </p>
+                        <p class="card-text d-flex justify-content-end">
+                            <button class="btn btn-primary mb-3">Envoyez</button>
+                        </p-->
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
         }
     </div>
 </main>
