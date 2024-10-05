@@ -16,5 +16,13 @@ namespace DogFriendly.Domain.Queries.Places
         /// The place identifier.
         /// </value>
         public int PlaceId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user email.
+        /// </summary>
+        /// <value>
+        /// The user email.
+        /// </value>
+        public string? UserEmail { get; set; }
     }
 }

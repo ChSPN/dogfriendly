@@ -49,6 +49,9 @@ namespace DogFriendly.Application.Queries.Places
                     PlaceTypeId = p.PlaceTypeId,
                     OpeningHours = p.OpeningHours,
                     Website = p.Website,
+                    HasUserReviewed = p.Reviews.Any()
+                        ? p.Reviews.Any(r => r.User.Email == request.UserEmail)
+                        : false,
                     Amenities = p.PlaceAmenities.Any()
                         ? p.PlaceAmenities
                             .Select(pa => new KeyValuePair<string, string?>

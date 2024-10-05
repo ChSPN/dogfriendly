@@ -1,10 +1,14 @@
-﻿namespace DogFriendly.Domain.Entitites
+﻿using DogFriendly.Domain.Entitites;
+using MediatR;
+using System.ComponentModel.DataAnnotations;
+
+namespace DogFriendly.Domain.Command.Reviews
 {
     /// <summary>
-    /// Review entity.
+    /// Add place review command.
     /// </summary>
-    /// <seealso cref="DogFriendly.Domain.Entitites.EntityBase" />
-    public class ReviewEntity : EntityBase
+    /// <seealso cref="MediatR.IRequest&lt;DogFriendly.Domain.Entitites.ReviewEntity&gt;" />
+    public class AddPlaceReviewCommand : IRequest<ReviewEntity>
     {
         /// <summary>
         /// Gets or sets the comment.
@@ -13,14 +17,6 @@
         /// The comment.
         /// </value>
         public string? Comment { get; set; }
-
-        /// <summary>
-        /// Gets or sets the place.
-        /// </summary>
-        /// <value>
-        /// The place.
-        /// </value>
-        public PlaceEntity? Place { get; set; }
 
         /// <summary>
         /// Gets or sets the place identifier.
@@ -39,19 +35,11 @@
         public int Rating { get; set; }
 
         /// <summary>
-        /// Gets or sets the user identifier.
+        /// Gets or sets the user email.
         /// </summary>
         /// <value>
-        /// The user identifier.
+        /// The user email.
         /// </value>
-        public int UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user.
-        /// </summary>
-        /// <value>
-        /// The user.
-        /// </value>
-        public UserEntity? User { get; set; }
+        public string? UserEmail { get; set; }
     }
 }

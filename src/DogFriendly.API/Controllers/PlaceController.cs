@@ -1,8 +1,12 @@
-﻿using DogFriendly.Domain.Models;
+﻿using DogFriendly.Domain.Command.Reviews;
+using DogFriendly.Domain.Models;
 using DogFriendly.Domain.Queries.Places;
 using DogFriendly.Domain.ViewModels.Places;
+using DogFriendly.Domain.ViewModels.Reviews;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace DogFriendly.API.Controllers
 {
@@ -26,13 +30,44 @@ namespace DogFriendly.API.Controllers
         }
 
         /// <summary>
+        /// Adds the review.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost("review")]
+        public async Task<ActionResult<List<PlaceReviewViewModel>>> AddReview(
+            [FromBody] AddPlaceReviewCommand request)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            request.UserEmail = emailClaim?.Value;
+            var place = new PlaceModel(_mediator, request.PlaceId);
+            await place.AddReview(request);
+            return await place.GetPlaceReviews();
+        }
+
+        /// <summary>
+        /// Gets the reviews.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpGet("reviews/{id:int}")]
+        public async Task<ActionResult<List<PlaceReviewViewModel>>> GetReviews(int id)
+        {
+            var place = new PlaceModel(_mediator, id);
+            return await place.GetPlaceReviews();
+        }
+
+        /// <summary>
         /// Gets the view model.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         [HttpGet("view/{id:int}")]
         public async Task<ActionResult<PlaceViewModel>> GetViewModel(int id)
-            => Ok(await PlaceModel.LoadViewModel(_mediator, id));
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            return Ok(await PlaceModel.LoadViewModel(_mediator, id, emailClaim?.Value));
+        }
 
         /// <summary>
         /// Searches the specified place.
@@ -40,7 +75,8 @@ namespace DogFriendly.API.Controllers
         /// <param name="request">The request.</param>
         /// <returns></returns>
         [HttpPost("search")]
-        public async Task<ActionResult<List<PlaceListViewModel>>> Search(PlaceListViewQuery request)
+        public async Task<ActionResult<List<PlaceListViewModel>>> Search(
+            PlaceListViewQuery request)
             => Ok(await PlaceModel.Search(_mediator, request));
     }
 }

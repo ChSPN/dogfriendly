@@ -1,10 +1,7 @@
-﻿namespace DogFriendly.Domain.Entitites
+﻿
+namespace DogFriendly.Domain.ViewModels.Reviews
 {
-    /// <summary>
-    /// Review entity.
-    /// </summary>
-    /// <seealso cref="DogFriendly.Domain.Entitites.EntityBase" />
-    public class ReviewEntity : EntityBase
+    public class PlaceReviewViewModel
     {
         /// <summary>
         /// Gets or sets the comment.
@@ -15,12 +12,20 @@
         public string? Comment { get; set; }
 
         /// <summary>
-        /// Gets or sets the place.
+        /// Gets or sets the created at.
         /// </summary>
         /// <value>
-        /// The place.
+        /// The created at.
         /// </value>
-        public PlaceEntity? Place { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the place identifier.
@@ -39,19 +44,19 @@
         public int Rating { get; set; }
 
         /// <summary>
-        /// Gets or sets the user identifier.
+        /// Gets or sets the name of the user.
         /// </summary>
         /// <value>
-        /// The user identifier.
+        /// The name of the user.
         /// </value>
-        public int UserId { get; set; }
+        public string UserName { get; set; }
 
         /// <summary>
-        /// Gets or sets the user.
+        /// Gets or sets the picture URI.
         /// </summary>
         /// <value>
-        /// The user.
+        /// The picture URI.
         /// </value>
-        public UserEntity? User { get; set; }
+        public string? UserPictureUri { get; set; }
     }
 }

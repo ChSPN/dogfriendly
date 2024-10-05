@@ -1,5 +1,7 @@
-﻿using DogFriendly.Domain.Queries.Places;
+﻿using DogFriendly.Domain.Command.Reviews;
+using DogFriendly.Domain.Queries.Places;
 using DogFriendly.Domain.ViewModels.Places;
+using DogFriendly.Domain.ViewModels.Reviews;
 using Refit;
 
 namespace DogFriendly.Domain.Resources
@@ -9,6 +11,22 @@ namespace DogFriendly.Domain.Resources
     /// </summary>
     public interface IPlaceResource
     {
+        /// <summary>
+        /// Adds the review.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [Post("/api/place/review")]
+        Task<List<PlaceReviewViewModel>> AddReview([Body] AddPlaceReviewCommand request);
+
+        /// <summary>
+        /// Gets the place reviews.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [Get("/api/place/reviews/{id}")]
+        Task<List<PlaceReviewViewModel>> GetPlaceReviews(int id);
+
         /// <summary>
         /// Gets the view model.
         /// </summary>

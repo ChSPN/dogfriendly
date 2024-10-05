@@ -1,6 +1,10 @@
-﻿using DogFriendly.Domain.Queries.Places;
+﻿using DogFriendly.Domain.Command.Reviews;
+using DogFriendly.Domain.Queries.Places;
+using DogFriendly.Domain.Queries.Reviews;
 using DogFriendly.Domain.ViewModels.Places;
+using DogFriendly.Domain.ViewModels.Reviews;
 using MediatR;
+using System.Collections.Immutable;
 
 namespace DogFriendly.Domain.Models
 {
@@ -16,9 +20,11 @@ namespace DogFriendly.Domain.Models
         /// Initializes a new instance of the <see cref="PlaceModel"/> class.
         /// </summary>
         /// <param name="mediator">The mediator.</param>
-        public PlaceModel(IMediator mediator)
+        /// <param name="placeId">The place identifier.</param>
+        public PlaceModel(IMediator mediator, int placeId = 0)
         {
             _mediator = mediator;
+            Id = placeId;
         }
 
         /// <summary>
@@ -134,6 +140,14 @@ namespace DogFriendly.Domain.Models
         public string PostalCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the reviews.
+        /// </summary>
+        /// <value>
+        /// The reviews.
+        /// </value>
+        public ImmutableList<ReviewModel> Reviews { get; private set; } = [];
+
+        /// <summary>
         /// Gets or sets the website.
         /// </summary>
         /// <value>
@@ -146,10 +160,15 @@ namespace DogFriendly.Domain.Models
         /// </summary>
         /// <param name="mediator">The mediator.</param>
         /// <param name="placeId">The place identifier.</param>
+        /// <param name="userEmail">The user email.</param>
         /// <returns></returns>
         public static async Task<PlaceViewModel> LoadViewModel(IMediator mediator,
-            int placeId)
-            => await mediator.Send(new PlaceViewQuery { PlaceId = placeId });
+            int placeId, string? userEmail = null)
+            => await mediator.Send(new PlaceViewQuery 
+            { 
+                PlaceId = placeId,
+                UserEmail = userEmail
+            });
 
         /// <summary>
         /// Searches the specified places.
@@ -160,5 +179,88 @@ namespace DogFriendly.Domain.Models
         public static async Task<List<PlaceListViewModel>> Search(IMediator mediator,
             PlaceListViewQuery request)
             => await mediator.Send(request);
+
+        /// <summary>
+        /// Add the review.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        public async Task AddReview(AddPlaceReviewCommand request)
+        {
+            if (!Reviews.Any())
+            {
+                await LoadReviews();
+            }
+
+            if (Reviews.Any(r => r.User?.Email == request.UserEmail))
+                throw new InvalidOperationException("User already reviewed this place.");
+
+            request.PlaceId = Id;
+            var review = await _mediator.Send(request);
+
+            Reviews = Reviews.Insert(0, new ReviewModel(_mediator, review.Id, review.CreatedAt)
+            {
+                Comment = review.Comment,
+                PlaceId = review.PlaceId,
+                Rating = review.Rating,
+                UserId = review.UserId,
+                User = new UserModel(_mediator,
+                    review.User?.Email,
+                    review.User?.Name,
+                    review.UserId)
+                {
+                    PictureUri = review.User?.PhotoUri
+                }
+            });
+        }
+
+        /// <summary>
+        /// Gets the place reviews.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<PlaceReviewViewModel>> GetPlaceReviews()
+        {
+            if (!Reviews.Any())
+            {
+                await LoadReviews();
+            }
+
+            return Reviews
+                .Select(r => new PlaceReviewViewModel
+                {
+                    Id = r.Id,
+                    PlaceId = r.PlaceId,
+                    CreatedAt = r.CreatedAt,
+                    Comment = r.Comment,
+                    Rating = r.Rating,
+                    UserPictureUri = r.User?.PictureUri,
+                    UserName = r.User?.Name
+                })
+                .ToList();
+        }
+
+        /// <summary>
+        /// Loads the reviews.
+        /// </summary>
+        public async Task LoadReviews()
+        {
+            var reviews = await _mediator.Send(new GetPlaceReviewQuery { PlaceId = Id });
+            Reviews = reviews
+                .Select(r => new ReviewModel(_mediator, r.Id, r.CreatedAt)
+                {
+                    Comment = r.Comment,
+                    PlaceId = r.PlaceId,
+                    Rating = r.Rating,
+                    UserId = r.UserId,
+                    User = new UserModel(_mediator,
+                        r.User?.Email, 
+                        r.User?.Name,
+                        r.UserId)
+                    {
+                        PictureUri = r.User?.PhotoUri
+                    }
+                })
+                .ToImmutableList();
+        }
     }
 }

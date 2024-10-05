@@ -30,9 +30,9 @@ namespace DogFriendly.Web.Client.Components
             zoomLevel = 13
         };
 
+        private EventHandler<List<PlaceListViewModel>> _onPlacesChanged;
+        private EventHandler _onViewChanged;
         private Timer? _searchTimer;
-        private EventHandler<List<PlaceListViewModel>> OnPlacesChanged;
-        private EventHandler OnViewChanged;
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -117,8 +117,8 @@ namespace DogFriendly.Web.Client.Components
         /// <inheritdoc />
         public void Dispose()
         {
-            SearchService.OnPlacesChanged -= OnPlacesChanged;
-            SearchService.OnViewChanged -= OnViewChanged;
+            SearchService.OnPlacesChanged -= _onPlacesChanged;
+            SearchService.OnViewChanged -= _onViewChanged;
             JS.InvokeVoidAsync("removeMapEventListener");
         }
 
@@ -180,10 +180,10 @@ namespace DogFriendly.Web.Client.Components
         /// <inheritdoc />
         protected override async Task OnInitializedAsync()
         {
-            OnPlacesChanged = async (sender, e) => await PlacesChanged(e);
-            SearchService.OnPlacesChanged += OnPlacesChanged;
-            OnViewChanged = (sender, e) => ViewChanged();
-            SearchService.OnViewChanged += OnViewChanged;
+            _onPlacesChanged = async (sender, e) => await PlacesChanged(e);
+            SearchService.OnPlacesChanged += _onPlacesChanged;
+            _onViewChanged = (sender, e) => ViewChanged();
+            SearchService.OnViewChanged += _onViewChanged;
             PlaceTypes = await PlaceTypeResource.GetViewAll();
             await base.OnInitializedAsync();
         }

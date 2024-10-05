@@ -46,6 +46,14 @@
         public string? Email { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance has user reviewed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has user reviewed; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasUserReviewed { get; set; }
+
+        /// <summary>
         /// Gets or sets the opening hours.
         /// </summary>
         /// <value>

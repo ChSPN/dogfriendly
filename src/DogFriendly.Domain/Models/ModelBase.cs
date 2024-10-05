@@ -11,7 +11,7 @@
         /// <value>
         /// The created at.
         /// </value>
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; protected set; }
 
         /// <summary>
         /// Gets or sets the created by.
@@ -19,7 +19,7 @@
         /// <value>
         /// The created by.
         /// </value>
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; protected set; }
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -27,7 +27,7 @@
         /// <value>
         /// The identifier.
         /// </value>
-        public int Id { get; set; }
+        public int Id { get; protected set; }
 
         /// <summary>
         /// Gets or sets the updated at.
@@ -35,7 +35,7 @@
         /// <value>
         /// The updated at.
         /// </value>
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; protected set; }
 
         /// <summary>
         /// Gets or sets the updated by.
@@ -43,6 +43,6 @@
         /// <value>
         /// The updated by.
         /// </value>
-        public string? UpdatedBy { get; set; }
+        public string? UpdatedBy { get; protected set; }
     }
 }

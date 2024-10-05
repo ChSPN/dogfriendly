@@ -99,13 +99,13 @@ namespace DogFriendly.API.Controllers
         }
 
         /// <summary>
-        /// Registers the specified user.
+        /// Create the specified user.
         /// </summary>
         /// <param name="userRegister">The register user model.</param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("register")]
-        public async Task<ActionResult<ResponseViewModel>> Register([FromBody] UserProfilViewModel userRegister)
+        [HttpPost]
+        public async Task<ActionResult<ResponseViewModel>> Create([FromBody] UserProfilViewModel userRegister)
         {
             // Retrieve the user's email from the claims.
             var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
@@ -131,10 +131,43 @@ namespace DogFriendly.API.Controllers
 
             // Register the user.
             var response = await userModel.Create();
+            return this.Ok(response);
+        }
 
-            return this.StatusCode(
-                (int)(response.IsSuccess ? HttpStatusCode.OK : HttpStatusCode.BadRequest), 
-                response);
+        /// <summary>
+        /// Updates the specified user register.
+        /// </summary>
+        /// <param name="userRegister">The user register.</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult<ResponseViewModel>> Update([FromBody] UserProfilViewModel userRegister)
+        {
+            // Retrieve the user's email from the claims.
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            if (emailClaim == null)
+            {
+                return BadRequest(new ResponseViewModel
+                {
+                    IsSuccess = false,
+                    Message = "Adresse e-mail introuvable."
+                });
+            }
+
+            // Get the email from the claim.
+            var email = emailClaim.Value;
+
+            // Create a new user model.
+            var userModel = new UserModel(_mediator, email, userRegister.UserName)
+            {
+                PictureContent = userRegister.PictureContent,
+                PictureName = userRegister.PictureName,
+                PictureUri = userRegister.UserPicture
+            };
+
+            // Register the user.
+            var response = await userModel.Update();
+            return this.Ok(response);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using DogFriendly.Domain.Queries.Places;
+﻿using DogFriendly.Domain.Command.Reviews;
+using DogFriendly.Domain.Queries.Places;
 using DogFriendly.Domain.Resources;
 using DogFriendly.Domain.ViewModels.Places;
+using DogFriendly.Domain.ViewModels.Reviews;
 using DogFriendly.Web.Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -14,8 +16,8 @@ namespace DogFriendly.Web.Client.Pages
     /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
     public partial class SearchResult : ComponentBase, IHandleEvent, IDisposable
     {
+        private EventHandler _onSearchChanged;
         private Timer? _searchTimer;
-        private EventHandler OnSearchChanged;
 
         /// <summary>
         /// Gets or sets the place identifier.
@@ -34,6 +36,14 @@ namespace DogFriendly.Web.Client.Pages
         /// </value>
         [Parameter]
         public int? PlaceTypeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the add review.
+        /// </summary>
+        /// <value>
+        /// The add review.
+        /// </value>
+        protected AddPlaceReviewCommand AddReview { get; set; } = new AddPlaceReviewCommand();
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -59,7 +69,7 @@ namespace DogFriendly.Web.Client.Pages
         /// <summary>
         /// Gets or sets the place.
         /// </summary>
-        protected PlaceViewModel Place { get; set; }
+        protected PlaceViewModel? Place { get; set; }
 
         /// <summary>
         /// Gets or sets the place resource.
@@ -79,6 +89,30 @@ namespace DogFriendly.Web.Client.Pages
         protected List<PlaceListViewModel> Places { get; set; } = new List<PlaceListViewModel>();
 
         /// <summary>
+        /// Gets or sets the reviews.
+        /// </summary>
+        /// <value>
+        /// The reviews.
+        /// </value>
+        protected List<PlaceReviewViewModel> Reviews { get; set; } = new List<PlaceReviewViewModel>();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether review send in progress.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if review send in progress; otherwise, <c>false</c>.
+        /// </value>
+        protected bool ReviewSendInProgress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the state of the review send.
+        /// </summary>
+        /// <value>
+        /// The state of the review send.
+        /// </value>
+        protected bool? ReviewSendState { get; set; }
+
+        /// <summary>
         /// Gets or sets the search query.
         /// </summary>
         /// <value>
@@ -91,10 +125,11 @@ namespace DogFriendly.Web.Client.Pages
         /// </summary>
         [Inject]
         protected SearchService SearchService { get; set; }
+
         /// <inheritdoc />
         public void Dispose()
         {
-            SearchService.OnSearchChanged -= OnSearchChanged;
+            SearchService.OnSearchChanged -= _onSearchChanged;
         }
 
         /// <summary>
@@ -103,21 +138,56 @@ namespace DogFriendly.Web.Client.Pages
         protected void ClosePlace()
         {
             PlaceId = null;
-            NavigationManager.NavigateTo($"/search/{Place.PlaceTypeId}");
+
+            if (Place != null)
+            {
+                NavigationManager.NavigateTo($"/search/{Place.PlaceTypeId}");
+            }
+
+            Place = null;
         }
 
         /// <inheritdoc />
         protected override async Task OnInitializedAsync()
         {
-            OnSearchChanged = async (sender, e) => await SearchChanged();
-            SearchService.OnSearchChanged += OnSearchChanged;
+            _onSearchChanged = async (sender, e) => await SearchChanged();
+            SearchService.OnSearchChanged += _onSearchChanged;
             await LoadDatas();
         }
+
         /// <inheritdoc />
         protected override async Task OnParametersSetAsync()
         {
             await LoadDatas();
             await base.OnParametersSetAsync();
+        }
+
+        /// <summary>
+        /// Called when review submit.
+        /// </summary>
+        protected async Task OnReviewSubmit()
+        {
+            ReviewSendInProgress = true;
+            ReviewSendState = null;
+
+            try
+            {
+                AddReview.PlaceId = PlaceId.Value;
+                Reviews = await PlaceResource.AddReview(AddReview);
+                ReviewSendState = true;
+                Place.HasUserReviewed = true;
+            }
+            catch
+            {
+                ReviewSendState = false;
+            }
+            finally
+            {
+                ReviewSendInProgress = false;
+            }
+
+            AddReview = new AddPlaceReviewCommand();
+            StateHasChanged();
         }
 
         /// <summary>
@@ -190,7 +260,7 @@ namespace DogFriendly.Web.Client.Pages
                 PlaceTypeId = Place.PlaceTypeId;
             }
 
-            if (!Places.Any() && PlaceTypeId.HasValue)
+            if (PlaceTypeId.HasValue)
             {
                 await SearchChanged();
             }
@@ -205,6 +275,7 @@ namespace DogFriendly.Web.Client.Pages
         {
             PlaceId = place.Id;
             NavigationManager.NavigateTo($"/place/{PlaceId}");
+            Reviews = await PlaceResource.GetPlaceReviews(PlaceId.Value);
         }
     }
 }
