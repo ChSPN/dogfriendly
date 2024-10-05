@@ -10,13 +10,30 @@
                 <div class="card-body">
                     <div class="input-group mb-3">
                         <InputText class="form-control" placeholder="Je recherche ..."
-                                    @bind-Value="SearchQuery"
-                                    @onkeypress="OnSearchKeyPress"
-                                    @oninput="OnSearchText" />
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Filtres</button>
-                            <button class="btn btn-outline-secondary" type="button">Note</button>
-                        </div>
+                                   @bind-Value="SearchQuery"
+                                   @onkeypress="OnSearchKeyPress"
+                                   @oninput="OnSearchText" />
+                    </div>
+                    <div class="mb-3">
+                        <select id="amenities" multiple>
+                            @foreach (var amenity in Amenities)
+                            {
+                                <option value="@amenity.Id">
+                                    <i class="@amenity.IconUri" />
+                                    @amenity.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <select id="rating" class="form-select">
+                            <option value="">Note</option>
+                            <option value="1">1 étoile</option>
+                            <option value="2">2 étoiles</option>
+                            <option value="3">3 étoiles</option>
+                            <option value="4">4 étoiles</option>
+                            <option value="5">5 étoiles</option>
+                        </select>
                     </div>
                     <div class="result-list overflow-auto">
                         @foreach (var place in Places)

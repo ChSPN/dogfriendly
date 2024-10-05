@@ -42,6 +42,7 @@ builder.Services.AddRefitClient<INominatimResource>()
 builder.Services.AddRefitClient<IPlaceTypeResource>().ConfigureHttpClient(apiConfig);
 builder.Services.AddRefitClient<IUserResource>().ConfigureHttpClient(apiConfig);
 builder.Services.AddRefitClient<IPlaceResource>().ConfigureHttpClient(apiConfig);
+builder.Services.AddRefitClient<IAmenityResource>().ConfigureHttpClient(apiConfig);
 builder.Services
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();

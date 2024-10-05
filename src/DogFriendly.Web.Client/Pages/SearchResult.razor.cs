@@ -1,6 +1,7 @@
 ﻿using DogFriendly.Domain.Command.Reviews;
 using DogFriendly.Domain.Queries.Places;
 using DogFriendly.Domain.Resources;
+using DogFriendly.Domain.ViewModels.Amenities;
 using DogFriendly.Domain.ViewModels.Places;
 using DogFriendly.Domain.ViewModels.Reviews;
 using DogFriendly.Web.Client.Services;
@@ -46,6 +47,23 @@ namespace DogFriendly.Web.Client.Pages
         protected AddPlaceReviewCommand AddReview { get; set; } = new AddPlaceReviewCommand();
 
         /// <summary>
+        /// Gets or sets the amenities.
+        /// </summary>
+        /// <value>
+        /// The amenities.
+        /// </value>
+        protected List<AmenityListViewModel> Amenities { get; set; } = new List<AmenityListViewModel>();
+
+        /// <summary>
+        /// Gets or sets the amenity resource.
+        /// </summary>
+        /// <value>
+        /// The amenity resource.
+        /// </value>
+        [Inject]
+        protected IAmenityResource AmenityResource { get; set; }
+
+        /// <summary>
         /// Gets or sets the configuration.
         /// </summary>
         /// <value>
@@ -59,6 +77,22 @@ namespace DogFriendly.Web.Client.Pages
         /// </summary>
         [Inject]
         protected IJSRuntime JSRuntime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minimum amenities.
+        /// </summary>
+        /// <value>
+        /// The minimum amenities.
+        /// </value>
+        protected List<int> MinAmenities { get; set; } = new List<int>();
+
+        /// <summary>
+        /// Gets or sets the minimum rating.
+        /// </summary>
+        /// <value>
+        /// The minimum rating.
+        /// </value>
+        protected int? MinRating { get; set; }
 
         /// <summary>
         /// Gets or sets the navigation manager.
@@ -133,6 +167,30 @@ namespace DogFriendly.Web.Client.Pages
         }
 
         /// <summary>
+        /// Called when change amenities.
+        /// </summary>
+        /// <param name="amenities">The amenities.</param>
+        [JSInvokable]
+        public async Task OnAmenitiesChange(List<int> amenities)
+        {
+            MinAmenities = amenities;
+            await SearchChanged();
+            StateHasChanged();
+        }
+
+        /// <summary>
+        /// Called when change rating.
+        /// </summary>
+        /// <param name="rating">The rating.</param>
+        [JSInvokable]
+        public async Task OnRatingChange(int? rating)
+        {
+            MinRating = rating;
+            await SearchChanged();
+            StateHasChanged();
+        }
+
+        /// <summary>
         /// Close place.
         /// </summary>
         protected void ClosePlace()
@@ -145,6 +203,35 @@ namespace DogFriendly.Web.Client.Pages
             }
 
             Place = null;
+        }
+
+        /// <inheritdoc />
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                Amenities = await AmenityResource.GetViewAll();
+                DotNetObjectReference<SearchResult> objRef = DotNetObjectReference.Create(this);
+                await JSRuntime.InvokeVoidAsync("searchResultInit", objRef);
+            }
+
+            await base.OnAfterRenderAsync(firstRender);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="ChangeEventArgs" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="ChangeEventArgs"/> instance containing the event data.</param>
+        protected void OnAmenitiesChanged(ChangeEventArgs e)
+        {
+            var selectedOptions = (e.Value as IEnumerable<string>)?.ToList();
+            if (selectedOptions != null)
+            {
+                MinAmenities = selectedOptions
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(int.Parse)
+                    .ToList();
+            }
         }
 
         /// <inheritdoc />
@@ -230,7 +317,9 @@ namespace DogFriendly.Web.Client.Pages
                     Longitude = SearchService.Longitude,
                     ZoomLevel = SearchService.ZoomLevel,
                     PlaceTypeId = PlaceTypeId.Value,
-                    Search = SearchQuery
+                    Search = SearchQuery,
+                    Rating = MinRating,
+                    Amenities = MinAmenities
                 });
                 SearchService.SetPlaces(Places);
                 StateHasChanged();
