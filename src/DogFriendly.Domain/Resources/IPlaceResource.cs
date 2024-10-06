@@ -36,6 +36,35 @@ namespace DogFriendly.Domain.Resources
         Task<PlaceViewModel> GetViewModel(int id);
 
         /// <summary>
+        /// Adds the favorite.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <param name="favoriteName">Name of the favorite.</param>
+        /// <returns></returns>
+        [Multipart]
+        [Post("/api/place/{placeId}/favorite")]
+        Task<int?> PostFavorite(int placeId, [AliasAs("favoriteName")] string favoriteName);
+
+        /// <summary>
+        /// Adds the favorite.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <param name="favoriteId">The favorite identifier.</param>
+        /// <returns></returns>
+        [Multipart]
+        [Put("/api/place/{placeId}/favorite")]
+        Task<int?> PutFavorite(int placeId, [AliasAs("favoriteId")] int favoriteId);
+
+        /// <summary>
+        /// Removes the favorite.
+        /// </summary>
+        /// <param name="placeId">Place identifier.</param>
+        /// <param name="favoriteId">Favorite identifier.</param>
+        /// <returns></returns>
+        [Delete("/api/place/{placeId}/favorite/{favoriteId}")]
+        Task<bool> RemoveFavorite(int placeId, int favoriteId);
+
+        /// <summary>
         /// Searches the specified places.
         /// </summary>
         /// <param name="request">The request.</param>

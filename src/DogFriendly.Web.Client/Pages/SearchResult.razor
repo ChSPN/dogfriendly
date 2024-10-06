@@ -36,29 +36,48 @@
                         </select>
                     </div>
                     <div class="result-list overflow-auto">
-                        @foreach (var place in Places)
+                        @if (Places?.Any() == true)
                         {
-                            <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
-                                <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
-                                    <img href="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover@(place.Photo)" class="img-fluid" alt="@place.Name" />
+                            @foreach (var place in Places)
+                            {
+                                <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
+                                    <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
+                                        @if (place.Favorite == null)
+                                        {
+                                            <Blazorise.Tooltip Text="Ajouter aux favoris">
+                                                <i class="fa-regular fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
+                                            </Blazorise.Tooltip>
+                                        }
+                                        else
+                                        {
+                                            <Blazorise.Tooltip Text="Supprimer des favoris">
+                                                <i class="fa-solid fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
+                                            </Blazorise.Tooltip>
+                                        }
+                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="mt-0">
+                                            @place.Name
+                                        </h5>
+                                        <p>
+                                            <Rating Value="place.Rating" />
+                                        </p>
+                                        <p class="text-muted">
+                                            @(place.Description)
+                                        </p>
+                                        <p class="text-muted">
+                                            <a href="/place/@(place.Id)" @onclick:preventDefault="true" @onclick="() => OnPlaceClicked(place)">
+                                                Voir la fiche
+                                            </a>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="media-body">
-                                    <h5 class="mt-0">
-                                        @place.Name
-                                    </h5>
-                                    <p>
-                                        <Rating Value="place.Rating" />
-                                    </p>
-                                    <p class="text-muted">
-                                        @(place.Description)
-                                    </p>
-                                    <p class="text-muted">
-                                        <a href="/place/@(place.Id)" @onclick:preventDefault="true" @onclick="() => OnPlaceClicked(place)">
-                                            Voir la fiche
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>Aucun résultat.</p>
                         }
                     </div>
                 </div>
@@ -123,8 +142,8 @@
                                 <Blazorise.Rating MaxValue="5" @bind-SelectedValue="@AddReview.Rating" />
                             </p>
                             <p class="card-text">
-                                <InputTextArea class="form-control" rows="3" 
-                                    placeholder="Commentaire ..." @bind-Value="AddReview.Comment" />
+                                <InputTextArea class="form-control" rows="3"
+                                               placeholder="Commentaire ..." @bind-Value="AddReview.Comment" />
                             </p>
                             <p class="card-text d-flex justify-content-end">
                                 <button class="btn btn-primary mb-3" @onclick="OnReviewSubmit">
@@ -175,3 +194,50 @@
         }
     </div>
 </main>
+<!-- Modal add favorite -->
+<Blazorise.Modal @ref="_modal" Closed="PlaceFavoriteClosed">
+    <Blazorise.ModalContent Centered>
+        <Blazorise.ModalHeader>
+            <h4>Ajouter '@PlaceFavorite?.Name' dans vos favoris</h4>
+            <Blazorise.Button CloseButton @onclick="PlaceFavoriteClosed">
+                <i class="fa fa-times"></i>
+            </Blazorise.Button>
+        </Blazorise.ModalHeader>
+        <Blazorise.ModalBody>
+            <div class="result-list">
+                <div class="row">
+                    @if (Favorites?.Any() == true)
+                    {
+                        @foreach (var favorite in Favorites)
+                        {
+                            <div class="col-6 col-md-4 mb-3">
+                                <div class="card pointer" @onclick="() => OnFavoriteClicked(favorite)">
+                                    @if (!string.IsNullOrEmpty(favorite.PhotoUri))
+                                    {
+                                        <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover@(favorite.PhotoUri)" class="card-img-top" alt="@favorite.Name" />
+                                    }
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">@favorite.Name</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Vous n'avez aucun favori.</p>
+                    }
+                </div>
+            </div>
+        </Blazorise.ModalBody>
+        <Blazorise.ModalFooter class="custom-modal-footer">
+            <div class="custom-content-between">
+                <InputText class="form-control" placeholder="Nom du nouveau favori"
+                           @bind-Value="FavoriteName" />
+                <Blazorise.Button Color="Blazorise.Color.Primary" @onclick="() => OnFavoriteClicked()">
+                    Créer le favori
+                </Blazorise.Button>
+            </div>
+        </Blazorise.ModalFooter>
+    </Blazorise.ModalContent>
+</Blazorise.Modal>

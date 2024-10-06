@@ -1,4 +1,5 @@
 ﻿using DogFriendly.Domain.Models;
+using DogFriendly.Domain.ViewModels.Places;
 using DogFriendly.Domain.ViewModels.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace DogFriendly.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("view")]
-        public async Task<ActionResult<UserProfilViewModel>> GetViewAll()
+        public async Task<ActionResult<PlaceTypeViewModel>> GetViewAll()
             => Ok(await PlaceTypeModel.LoadViewModel(_mediator));
     }
 }

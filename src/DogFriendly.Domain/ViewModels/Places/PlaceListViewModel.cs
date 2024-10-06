@@ -1,4 +1,6 @@
-﻿namespace DogFriendly.Domain.ViewModels.Places
+﻿using DogFriendly.Domain.ViewModels.Favorites;
+
+namespace DogFriendly.Domain.ViewModels.Places
 {
     /// <summary>
     /// View model for place list.
@@ -12,6 +14,14 @@
         /// The description.
         /// </value>
         public required string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the favorite.
+        /// </summary>
+        /// <value>
+        /// The favorite.
+        /// </value>
+        public PlaceFavoriteViewModel? Favorite { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.

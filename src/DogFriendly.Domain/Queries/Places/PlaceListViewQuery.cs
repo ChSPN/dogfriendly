@@ -58,6 +58,14 @@ namespace DogFriendly.Domain.Queries.Places
         public string? Search { get; set; }
 
         /// <summary>
+        /// Gets or sets the user email.
+        /// </summary>
+        /// <value>
+        /// The user email.
+        /// </value>
+        public string? UserEmail { get; set; }
+
+        /// <summary>
         /// Gets or sets the zoom level.
         /// </summary>
         /// <value>

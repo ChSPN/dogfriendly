@@ -1,4 +1,5 @@
-﻿using DogFriendly.Domain.Command.Reviews;
+﻿using DogFriendly.Domain.Command.Favorites;
+using DogFriendly.Domain.Command.Reviews;
 using DogFriendly.Domain.Queries.Places;
 using DogFriendly.Domain.Queries.Reviews;
 using DogFriendly.Domain.ViewModels.Places;
@@ -181,6 +182,32 @@ namespace DogFriendly.Domain.Models
             => await mediator.Send(request);
 
         /// <summary>
+        /// Adds the favorite.
+        /// </summary>
+        /// <param name="favoriteId">The favorite identifier.</param>
+        /// <param name="userEmail">The user email.</param>
+        public async Task<int?> AddFavorite(int favoriteId, string userEmail)
+            => await _mediator.Send(new AddPlaceFavoriteCommand
+            {
+                FavoriteId = favoriteId,
+                PlaceId = Id,
+                UserEmail = userEmail
+            });
+
+        /// <summary>
+        /// Adds the favorite.
+        /// </summary>
+        /// <param name="favoriteName">Name of the favorite.</param>
+        /// <param name="userEmail">The user email.</param>
+        public async Task<int?> AddFavorite(string favoriteName, string userEmail)
+            => await _mediator.Send(new AddPlaceFavoriteCommand
+            {
+                FavoriteName = favoriteName,
+                PlaceId = Id,
+                UserEmail = userEmail
+            });
+
+        /// <summary>
         /// Add the review.
         /// </summary>
         /// <param name="request">The request.</param>
@@ -262,5 +289,19 @@ namespace DogFriendly.Domain.Models
                 })
                 .ToImmutableList();
         }
+
+        /// <summary>
+        /// Removes the favorite.
+        /// </summary>
+        /// <param name="favoriteId">The favorite identifier.</param>
+        /// <param name="userEmail">The user email.</param>
+        /// <returns></returns>
+        public async Task<bool> RemoveFavorite(int favoriteId, string userEmail)
+            => await _mediator.Send(new RemovePlaceFavoriteCommand
+            {
+                FavoriteId = favoriteId,
+                PlaceId = Id,
+                UserEmail = userEmail
+            });
     }
 }

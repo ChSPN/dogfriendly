@@ -32,15 +32,33 @@
     display: none;
 }
 
-/* Rendre Select2 plus cohérent avec Bootstrap */
-.select2-container .select2-selection--single {
-    height: calc(2.25rem + 2px); /* Hauteur du champ similaire à un input Bootstrap */
-    padding: 0.375rem 0.75rem; /* Padding similaire à Bootstrap */
-    font-size: 1rem; /* Taille du texte */
-    line-height: 1.5;
-    border: 1px solid #ced4da; /* Bordure similaire aux inputs Bootstrap */
-    border-radius: 0.375rem; /* Coins arrondis */
+.custom-modal-footer {
+    height: 60px;
+    padding: 10px;
 }
+
+.custom-content-between {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+    .custom-content-between input {
+        width: 70%;
+    }
+
+    /* Rendre Select2 plus cohérent avec Bootstrap */
+    .select2-container .select2-selection--single {
+        height: calc(2.25rem + 2px); /* Hauteur du champ similaire à un input Bootstrap */
+        padding: 0.375rem 0.75rem; /* Padding similaire à Bootstrap */
+        font-size: 1rem; /* Taille du texte */
+        line-height: 1.5;
+        border: 1px solid #ced4da; /* Bordure similaire aux inputs Bootstrap */
+        border-radius: 0.375rem; /* Coins arrondis */
+    }
 
 /* Bordure et ombre pour le focus */
 .select2-container--default .select2-selection--single:focus {
@@ -106,6 +124,19 @@ body, html {
     border-radius: 5px;
     background-color: white;
     padding: 5px;
+}
+
+.favorite-place-add {
+    left: 38px;
+    cursor: pointer;
+    position: relative !important;
+    cursor: pointer !important;
+    z-index: 9500;
+}
+
+.img-place {
+    position: relative;
+    top: -24px;
 }
 
 /* Styles uniformes pour tous les boutons */

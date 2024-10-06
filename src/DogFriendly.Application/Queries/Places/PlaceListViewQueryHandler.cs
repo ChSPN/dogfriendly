@@ -1,5 +1,6 @@
 ﻿using DogFriendly.Domain.Entitites;
 using DogFriendly.Domain.Queries.Places;
+using DogFriendly.Domain.ViewModels.Favorites;
 using DogFriendly.Domain.ViewModels.Places;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using MediatR;
@@ -89,7 +90,17 @@ namespace DogFriendly.Application.Queries.Places
                     Photos = p.Photos,
                     Rating = p.Reviews.Any()
                         ? p.Reviews.Sum(r => r.Rating) / p.Reviews.Count()
-                        : 0
+                        : 0,
+                    Favorite = string.IsNullOrEmpty(request.UserEmail)
+                        ? null
+                        : p.PlaceFavorites
+                            .Where(f => f.FavoriteList.User.Email == request.UserEmail)
+                            .Select(f => new PlaceFavoriteViewModel
+                            {
+                                Id = f.FavoriteList.Id,
+                                Name = f.FavoriteList.Name
+                            })
+                            .FirstOrDefault()
                 })
                 .ToListAsync(cancellationToken);
             return isGlobal

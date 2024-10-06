@@ -4,6 +4,7 @@ using DogFriendly.Domain.Queries.Places;
 using DogFriendly.Domain.ViewModels.Places;
 using DogFriendly.Domain.ViewModels.Reviews;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -30,10 +31,43 @@ namespace DogFriendly.API.Controllers
         }
 
         /// <summary>
+        /// Adds the favorite.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <param name="favoriteId">The favorite identifier.</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{placeId:int}/favorite")]
+        public async Task<ActionResult<int?>> AddFavorite([FromRoute] int placeId,
+            [FromForm] int favoriteId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            var place = new PlaceModel(_mediator, placeId);
+            return Ok(await place.AddFavorite(favoriteId, emailClaim?.Value));
+        }
+
+        /// <summary>
+        /// Adds the favorite.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <param name="favoriteName">Name of the favorite.</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("{placeId:int}/favorite")]
+        public async Task<ActionResult<int?>> AddFavorite([FromRoute] int placeId,
+            [FromForm] string favoriteName)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            var place = new PlaceModel(_mediator, placeId);
+            return Ok(await place.AddFavorite(favoriteName, emailClaim?.Value));
+        }
+
+        /// <summary>
         /// Adds the review.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
+        [Authorize]
         [HttpPost("review")]
         public async Task<ActionResult<List<PlaceReviewViewModel>>> AddReview(
             [FromBody] AddPlaceReviewCommand request)
@@ -42,7 +76,7 @@ namespace DogFriendly.API.Controllers
             request.UserEmail = emailClaim?.Value;
             var place = new PlaceModel(_mediator, request.PlaceId);
             await place.AddReview(request);
-            return await place.GetPlaceReviews();
+            return Ok(await place.GetPlaceReviews());
         }
 
         /// <summary>
@@ -54,7 +88,7 @@ namespace DogFriendly.API.Controllers
         public async Task<ActionResult<List<PlaceReviewViewModel>>> GetReviews(int id)
         {
             var place = new PlaceModel(_mediator, id);
-            return await place.GetPlaceReviews();
+            return Ok(await place.GetPlaceReviews());
         }
 
         /// <summary>
@@ -70,6 +104,22 @@ namespace DogFriendly.API.Controllers
         }
 
         /// <summary>
+        /// Removes the favorite.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <param name="favoriteId">The favorite identifier.</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("{placeId:int}/favorite/{favoriteId:int}")]
+        public async Task<ActionResult<bool>> RemoveFavorite([FromRoute] int placeId,
+            [FromRoute] int favoriteId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            var place = new PlaceModel(_mediator, placeId);
+            return Ok(await place.RemoveFavorite(favoriteId, emailClaim?.Value));
+        }
+
+        /// <summary>
         /// Searches the specified place.
         /// </summary>
         /// <param name="request">The request.</param>
@@ -77,6 +127,10 @@ namespace DogFriendly.API.Controllers
         [HttpPost("search")]
         public async Task<ActionResult<List<PlaceListViewModel>>> Search(
             PlaceListViewQuery request)
-            => Ok(await PlaceModel.Search(_mediator, request));
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            request.UserEmail = emailClaim?.Value;
+            return Ok(await PlaceModel.Search(_mediator, request));
+        }
     }
 }
