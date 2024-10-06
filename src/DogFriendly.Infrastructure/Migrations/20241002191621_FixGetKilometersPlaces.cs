@@ -9,9 +9,8 @@ namespace DogFriendly.Infrastructure.Migrations
 	{
 		/// <inheritdoc />
 		protected override void Up(MigrationBuilder migrationBuilder)
-		{
-
-			migrationBuilder.Sql(@"
+        {
+            migrationBuilder.Sql(@"
 				CREATE OR REPLACE FUNCTION GetKilometersPlaces(km double precision, lat double precision, long double precision)
 				RETURNS TABLE (
 					id integer,
@@ -31,7 +30,9 @@ namespace DogFriendly.Infrastructure.Migrations
 					created_at timestamp with time zone,
 					created_by text,
 					updated_at timestamp with time zone,
-					updated_by text
+					updated_by text,
+                    opening_hours text,
+                    website text
 				) AS $$
 				BEGIN
 					RETURN QUERY
@@ -48,7 +49,7 @@ namespace DogFriendly.Infrastructure.Migrations
 								   POWER(SIN(RADIANS(p.longitude - long) / 2), 2)
 							   ))
 						   )) as kilometers,
-						   p.name, p.phone, p.photos, p.place_type_id, p.postal_code, p.created_at, p.created_by, p.updated_at, p.updated_by
+						   p.name, p.phone, p.photos, p.place_type_id, p.postal_code, p.created_at, p.created_by, p.updated_at, p.updated_by, p.opening_hours, p.website
 					FROM public.places p
 					WHERE (6371.0 * 2 * ATAN2(
 							   SQRT(
@@ -77,7 +78,7 @@ namespace DogFriendly.Infrastructure.Migrations
 				END;
 				$$ LANGUAGE plpgsql;
 			");
-		}
+        }
 
 		/// <inheritdoc />
 		protected override void Down(MigrationBuilder migrationBuilder)
