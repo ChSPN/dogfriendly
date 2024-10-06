@@ -11,6 +11,7 @@
 	<PackageReference Include="EntityFrameworkCore.Data.Repository.Abstractions" Version="8.0.2" />
 	<PackageReference Include="EntityFrameworkCore.Data.UnitOfWork.Abstractions" Version="8.0.2" />
 	<PackageReference Include="MediatR" Version="12.4.1" />
+	<PackageReference Include="Npgsql" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>

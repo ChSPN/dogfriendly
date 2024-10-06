@@ -45,7 +45,6 @@ namespace DogFriendly.Web.Client.Pages
         public void Dispose()
         {
             AuthenticationService.OnUserChanged -= OnUserChanged;
-
         }
 
         /// <summary>

@@ -244,6 +244,10 @@ namespace DogFriendly.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<string>("OpeningHours")
+                        .HasColumnType("text")
+                        .HasColumnName("opening_hours");
+
                     b.Property<string>("Phone")
                         .HasColumnType("text")
                         .HasColumnName("phone");
@@ -253,7 +257,7 @@ namespace DogFriendly.Infrastructure.Migrations
                         .HasColumnType("text[]")
                         .HasColumnName("photos");
 
-                    b.Property<int?>("PlaceTypeId")
+                    b.Property<int>("PlaceTypeId")
                         .HasColumnType("integer")
                         .HasColumnName("place_type_id");
 
@@ -261,10 +265,6 @@ namespace DogFriendly.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("postal_code");
-
-                    b.Property<int>("TypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("type_id");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -274,7 +274,15 @@ namespace DogFriendly.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("updated_by");
 
+                    b.Property<string>("Website")
+                        .HasColumnType("text")
+                        .HasColumnName("website");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Latitude");
+
+                    b.HasIndex("Longitude");
 
                     b.HasIndex("PlaceTypeId");
 
@@ -370,7 +378,6 @@ namespace DogFriendly.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("comment");
 
@@ -501,7 +508,9 @@ namespace DogFriendly.Infrastructure.Migrations
                 {
                     b.HasOne("DogFriendly.Domain.Entitites.PlaceTypeEntity", "PlaceType")
                         .WithMany("Places")
-                        .HasForeignKey("PlaceTypeId");
+                        .HasForeignKey("PlaceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PlaceType");
                 });
@@ -547,7 +556,7 @@ namespace DogFriendly.Infrastructure.Migrations
             modelBuilder.Entity("DogFriendly.Domain.Entitites.ReviewEntity", b =>
                 {
                     b.HasOne("DogFriendly.Domain.Entitites.PlaceEntity", "Place")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("PlaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -585,6 +594,8 @@ namespace DogFriendly.Infrastructure.Migrations
                     b.Navigation("PlaceFavorites");
 
                     b.Navigation("PlaceNews");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("DogFriendly.Domain.Entitites.PlaceTypeEntity", b =>

@@ -1,5 +1,5 @@
-﻿@page "/place/{placeId?}"
-@page "/search/{placeTypeId?}"
+﻿@page "/place/{PlaceId:int?}"
+@page "/search/{PlaceTypeId:int?}"
 
 <!-- Main Content -->
 <main class="container py-4">
@@ -9,87 +9,235 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Je cherche un restaurant">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Filtres</button>
-                            <button class="btn btn-outline-secondary" type="button">Note</button>
-                        </div>
+                        <InputText class="form-control" placeholder="Je recherche ..."
+                                   @bind-Value="SearchQuery"
+                                   @onkeypress="OnSearchKeyPress"
+                                   @oninput="OnSearchText" />
+                    </div>
+                    <div class="mb-3">
+                        <select id="amenities" multiple>
+                            @foreach (var amenity in Amenities)
+                            {
+                                <option value="@amenity.Id">
+                                    <i class="@amenity.IconUri" />
+                                    @amenity.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <select id="rating" class="form-select">
+                            <option value="">Note</option>
+                            <option value="1">1 étoile</option>
+                            <option value="2">2 étoiles</option>
+                            <option value="3">3 étoiles</option>
+                            <option value="4">4 étoiles</option>
+                            <option value="5">5 étoiles</option>
+                        </select>
                     </div>
                     <div class="result-list overflow-auto">
-                        <!-- Example of a result item -->
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;"></div>
-                            <div class="media-body">
-                                <h5 class="mt-0">Nom du restaurant</h5>
-                                <p>★★★★☆</p>
-                                <p class="text-muted">Description du restaurant.</p>
-                            </div>
-                        </div>
-                        <!-- Repeat for more items -->
+                        @if (Places?.Any() == true)
+                        {
+                            @foreach (var place in Places)
+                            {
+                                <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
+                                    <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
+                                        @if (place.Favorite == null)
+                                        {
+                                            <Blazorise.Tooltip Text="Ajouter aux favoris">
+                                                <i class="fa-regular fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
+                                            </Blazorise.Tooltip>
+                                        }
+                                        else
+                                        {
+                                            <Blazorise.Tooltip Text="Supprimer des favoris">
+                                                <i class="fa-solid fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
+                                            </Blazorise.Tooltip>
+                                        }
+                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="mt-0">
+                                            @place.Name
+                                        </h5>
+                                        <p>
+                                            <Rating Value="place.Rating" />
+                                        </p>
+                                        <p class="text-muted">
+                                            @(place.Description)
+                                        </p>
+                                        <p class="text-muted">
+                                            <a href="/place/@(place.Id)" @onclick:preventDefault="true" @onclick="() => OnPlaceClicked(place)">
+                                                Voir la fiche
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>Aucun résultat.</p>
+                        }
                     </div>
                 </div>
             </div>
         </aside>
         <!-- Detailed Information -->
-        <section class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card result-details">
-                <img src="img/news-image-1.jpg" class="card-img-top" alt="Restaurant Image">
-                <div class="card-body">
-                    <h2 class="card-title">Gros titre</h2>
-                    <p class="card-text">★★★★★ (35 reviews)</p>
-                    <p class="card-text">Description du restaurant. Lorem ipsum dolor sit amet.</p>
-                    <ul class="list-unstyled">
-                        <li>✔ Gamelle d'eau sur demande</li>
-                        <li>✔ Espace autour des tables</li>
-                    </ul>
-                    <p>📍 1234 Rue de la Rue, 75000 Paris</p>
-                    <p>📞 03 00 00 00 00</p>
-                    <p>🌐 <a href="#">Site web</a></p>
-                    <p>🕒 Horaires: 09:00 - 23:00</p>
-                    <p class="card-text">Donnez votre avis :</p>
-                    <p class="card-text">
-                        ☆☆☆☆☆
-                    </p>
-                    <p class="card-text">
-                        <textarea class="form-control" rows="3" placeholder="Commentaire"></textarea>
-                    </p>
-                    <p class="card-text d-flex justify-content-end">
-                        <button class="btn btn-primary mb-3">Envoyez</button>
-                    </p>
+        @if (Place != null)
+        {
+            <section class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card result-details">
+                    <i class="fa fa-times position-absolute popin-close" @onclick="ClosePlace" />
+                    <Blazorise.Carousel Autoplay="false">
+                        @foreach (var photo in Place.Photos)
+                        {
+                            <Blazorise.CarouselSlide Name="@photo">
+                                <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover@(photo)" class="d-block w-100" alt="@Place.Name" />
+                            </Blazorise.CarouselSlide>
+                        }
+                    </Blazorise.Carousel>
+                    <div class="card-body">
+                        <h2 class="card-title">@Place.Name</h2>
+                        <p class="card-text">
+                            <Rating Value="Place.Rating" />
+                            @if (Place.ReviewsCount > 0)
+                            {
+                                <span>(@Place.ReviewsCount review@(Place.ReviewsCount > 1 ? "s" : string.Empty))</span>
+                            }
+                        </p>
+                        <p class="card-text">
+                            @Place.Description
+                        </p>
+                        @if (Place.Amenities != null)
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var amenity in Place.Amenities)
+                                {
+                                    <li><i class="@amenity.Value" /> @amenity.Key</li>
+                                }
+                            </ul>
+                        }
+                        <p><i class="fa fa-map-pin" /> @Place.Address, @Place.PostalCode @Place.City</p>
+                        @if (!string.IsNullOrEmpty(Place.Phone))
+                        {
+                            <p><i class="fa fa-phone" /> @Place.Phone</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Place.Email))
+                        {
+                            <p><i class="fa fa-envelope" /> <a href="mailto:@Place.Email">@Place.Email</a></p>
+                        }
+                        @if (!string.IsNullOrEmpty(Place.Website))
+                        {
+                            <p><i class="fa fa-globe" /> <a href="@Place.Website">Site web</a></p>
+                        }
+                        @if (Place.OpeningHours != null)
+                        {
+                            <p><i class="fa fa-clock" /> Horaires: @Place.OpeningHours</p>
+                        }
+                        @if (!Place.HasUserReviewed && !ReviewSendInProgress)
+                        {
+                            <p class="card-text">Donnez votre avis :</p>
+                            <p class="card-text">
+                                <Blazorise.Rating MaxValue="5" @bind-SelectedValue="@AddReview.Rating" />
+                            </p>
+                            <p class="card-text">
+                                <InputTextArea class="form-control" rows="3"
+                                               placeholder="Commentaire ..." @bind-Value="AddReview.Comment" />
+                            </p>
+                            <p class="card-text d-flex justify-content-end">
+                                <button class="btn btn-primary mb-3" @onclick="OnReviewSubmit">
+                                    Envoyez
+                                </button>
+                            </p>
+                        }
+                        @if (ReviewSendInProgress)
+                        {
+                            <div class="d-flex justify-content-center alert alert-info">
+                                Envoi de votre avis en cours...
+                            </div>
+                        }
+                        else if (ReviewSendState == true)
+                        {
+                            <div class="d-flex justify-content-center alert alert-success">
+                                Avis envoyé avec succès !
+                            </div>
+                        }
+                        else if (ReviewSendState == false)
+                        {
+                            <div class="d-flex justify-content-center alert alert-danger">
+                                Échec de l'envoi de l'avis. Veuillez réessayer.
+                            </div>
+                        }
+                        <div class="result-list overflow-auto">
+                            @foreach (var review in Reviews)
+                            {
+                                <div class="media mb-3 pointer">
+                                    <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
+                                        <img href="@review.UserPictureUri" class="img-fluid" alt="@review.UserName" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h6 class="mt-0">
+                                            @review.UserName <Rating Value="review.Rating" />
+                                        </h6>
+                                        <p class="text-muted">
+                                            Le @review.CreatedAt.ToString("dd/MM/yyyy") :<br />
+                                            @review.Comment
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        }
     </div>
 </main>
+<!-- Modal add favorite -->
+<Blazorise.Modal @ref="_modal" Closed="PlaceFavoriteClosed">
+    <Blazorise.ModalContent Centered>
+        <Blazorise.ModalHeader>
+            <h4>Ajouter '@PlaceFavorite?.Name' dans vos favoris</h4>
+            <Blazorise.Button CloseButton @onclick="PlaceFavoriteClosed">
+                <i class="fa fa-times"></i>
+            </Blazorise.Button>
+        </Blazorise.ModalHeader>
+        <Blazorise.ModalBody>
+            <div class="result-list">
+                <div class="row">
+                    @if (Favorites?.Any() == true)
+                    {
+                        @foreach (var favorite in Favorites)
+                        {
+                            <div class="col-6 col-md-4 mb-3">
+                                <div class="card pointer" @onclick="() => OnFavoriteClicked(favorite)">
+                                    @if (!string.IsNullOrEmpty(favorite.PhotoUri))
+                                    {
+                                        <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover@(favorite.PhotoUri)" class="card-img-top" alt="@favorite.Name" />
+                                    }
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">@favorite.Name</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Vous n'avez aucun favori.</p>
+                    }
+                </div>
+            </div>
+        </Blazorise.ModalBody>
+        <Blazorise.ModalFooter class="custom-modal-footer">
+            <div class="custom-content-between">
+                <InputText class="form-control" placeholder="Nom du nouveau favori"
+                           @bind-Value="FavoriteName" />
+                <Blazorise.Button Color="Blazorise.Color.Primary" @onclick="() => OnFavoriteClicked()">
+                    Créer le favori
+                </Blazorise.Button>
+            </div>
+        </Blazorise.ModalFooter>
+    </Blazorise.ModalContent>
+</Blazorise.Modal>

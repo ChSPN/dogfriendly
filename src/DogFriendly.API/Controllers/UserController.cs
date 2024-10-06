@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
+using System.Net;
 using System.Security.Claims;
 
 namespace DogFriendly.API.Controllers
@@ -51,6 +52,7 @@ namespace DogFriendly.API.Controllers
 
             // Load the user.
             await userModel.Load();
+
             return Ok(new UserProfilViewModel
             {
                 UserEmail = userModel.Email,
@@ -92,17 +94,18 @@ namespace DogFriendly.API.Controllers
 
             // Check if the user exists.
             var isExist = await userModel.IsExist();
+
             return Ok(isExist);
         }
 
         /// <summary>
-        /// Registers the specified user.
+        /// Create the specified user.
         /// </summary>
         /// <param name="userRegister">The register user model.</param>
         /// <returns></returns>
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ResponseViewModel>> Register([FromBody] UserProfilViewModel userRegister)
+        public async Task<ActionResult<ResponseViewModel>> Create([FromBody] UserProfilViewModel userRegister)
         {
             // Retrieve the user's email from the claims.
             var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
@@ -127,7 +130,7 @@ namespace DogFriendly.API.Controllers
             };
 
             // Register the user.
-            var response = await userModel.Register();
+            var response = await userModel.Create();
             return this.Ok(response);
         }
 

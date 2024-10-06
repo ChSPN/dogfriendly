@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DogFriendly.Domain.Entitites
+﻿namespace DogFriendly.Domain.Entitites
 {
     /// <summary>
     /// Place entity.
@@ -53,6 +47,14 @@ namespace DogFriendly.Domain.Entitites
         public string? Email { get; set; }
 
         /// <summary>
+        /// Gets or sets the kilometers.
+        /// </summary>
+        /// <value>
+        /// The kilometers.
+        /// </value>
+        public double Kilometers { get; set; }
+
+        /// <summary>
         /// Gets or sets the latitude.
         /// </summary>
         /// <value>
@@ -75,6 +77,14 @@ namespace DogFriendly.Domain.Entitites
         /// The name.
         /// </value>
         public required string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the opening hours.
+        /// </summary>
+        /// <value>
+        /// The opening hours.
+        /// </value>
+        public string? OpeningHours { get; set; }
 
         /// <summary>
         /// Gets or sets the phone.
@@ -125,6 +135,14 @@ namespace DogFriendly.Domain.Entitites
         public PlaceTypeEntity? PlaceType { get; set; }
 
         /// <summary>
+        /// Gets or sets the place type identifier.
+        /// </summary>
+        /// <value>
+        /// The type identifier.
+        /// </value>
+        public int PlaceTypeId { get; set; }
+
+        /// <summary>
         /// Gets or sets the postal code.
         /// </summary>
         /// <value>
@@ -133,11 +151,19 @@ namespace DogFriendly.Domain.Entitites
         public required string PostalCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the type identifier.
+        /// Gets or sets the reviews.
         /// </summary>
         /// <value>
-        /// The type identifier.
+        /// The reviews.
         /// </value>
-        public int TypeId { get; set; }
+        public ICollection<ReviewEntity>? Reviews { get; set; }
+
+        /// <summary>
+        /// Gets or sets the website.
+        /// </summary>
+        /// <value>
+        /// The website.
+        /// </value>
+        public string? Website { get; set; }
     }
 }
