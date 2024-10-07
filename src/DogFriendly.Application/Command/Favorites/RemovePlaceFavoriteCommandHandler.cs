@@ -14,17 +14,21 @@ namespace DogFriendly.Application.Command.Favorites
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<PlaceFavoriteEntity> _placeFavorites;
+        private readonly IRepository<FavoriteListEntity> _favorites;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemovePlaceFavoriteCommandHandler"/> class.
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="placeFavorites">The place favorites.</param>
+        /// <param name="favorites">The favorites.</param>
         public RemovePlaceFavoriteCommandHandler(IUnitOfWork unitOfWork,
-            IRepository<PlaceFavoriteEntity> placeFavorites)
+            IRepository<PlaceFavoriteEntity> placeFavorites,
+            IRepository<FavoriteListEntity> favorites)
         {
             _unitOfWork = unitOfWork;
             _placeFavorites = placeFavorites;
+            _favorites = favorites;
         }
 
         /// <inheritdoc />
@@ -33,17 +37,28 @@ namespace DogFriendly.Application.Command.Favorites
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var isOwner = await _placeFavorites
-                    .AnyAsync(f => f.FavoriteListId == request.FavoriteId
-                        && f.FavoriteList.User.Email == request.UserEmail, cancellationToken);
+                var isOwner = await _favorites
+                    .AnyAsync(f => f.Id == request.FavoriteId
+                        && f.User.Email == request.UserEmail, cancellationToken);
                 if (!isOwner)
                 {
                     return false;
                 }
 
-                var result = await _placeFavorites
-                    .RemoveAsync(f => f.FavoriteListId == request.FavoriteId
-                        && f.PlaceId == request.PlaceId, cancellationToken);
+                int result;
+                if (request.PlaceId == 0)
+                {
+                    await _placeFavorites
+                        .RemoveAsync(f => f.FavoriteListId == request.FavoriteId, cancellationToken);
+                    result = await _favorites
+                        .RemoveAsync(f => f.Id == request.FavoriteId, cancellationToken);
+                }
+                else 
+                {
+                    result = await _placeFavorites
+                        .RemoveAsync(f => f.FavoriteListId == request.FavoriteId
+                            && f.PlaceId == request.PlaceId, cancellationToken);
+                }
 
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitAsync();

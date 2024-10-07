@@ -1,11 +1,11 @@
 ﻿using DogFriendly.Domain.Models;
 using DogFriendly.Domain.ViewModels;
+using DogFriendly.Domain.ViewModels.Places;
 using DogFriendly.Domain.ViewModels.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
-using System.Net;
 using System.Security.Claims;
 
 namespace DogFriendly.API.Controllers
@@ -66,6 +66,33 @@ namespace DogFriendly.API.Controllers
         }
 
         /// <summary>
+        /// Gets the favorites.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("favorites")]
+        public async Task<ActionResult<UserFavoriteViewModel>> GetPlaceFavorites()
+        {
+            // Retrieve the user's email from the claims.
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            if (emailClaim == null)
+            {
+                return BadRequest(new ResponseViewModel
+                {
+                    IsSuccess = false,
+                    Message = "Adresse e-mail introuvable."
+                });
+            }
+
+            // Get the email from the claim.
+            var email = emailClaim.Value;
+
+            // Create a new user model.
+            var userModel = new UserModel(_mediator, email);
+
+            return Ok(await userModel.GetPlaceFavorites());
+        }
+
+        /// <summary>
         /// Gets the place reviews.
         /// </summary>
         /// <returns></returns>
@@ -88,6 +115,35 @@ namespace DogFriendly.API.Controllers
 
             // Get the user reviews.
             return Ok(await userModel.GetPlaceReviews());
+        }
+
+        /// <summary>
+        /// Gets the places.
+        /// </summary>
+        /// <param name="favoriteId">The favorite identifier.</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("/api/user/favorite/{favoriteId:int}")]
+        public async Task<ActionResult<List<PlaceListViewModel>>> GetPlaces(int favoriteId)
+        {
+            // Retrieve the user's email from the claims.
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            if (emailClaim == null)
+            {
+                return BadRequest(new ResponseViewModel
+                {
+                    IsSuccess = false,
+                    Message = "Adresse e-mail introuvable."
+                });
+            }
+
+            // Get the email from the claim.
+            var email = emailClaim.Value;
+
+            // Create a new user model.
+            var userModel = new UserModel(_mediator, email);
+
+            return Ok(await userModel.GetPlaces(favoriteId));
         }
 
         /// <summary>
@@ -158,6 +214,7 @@ namespace DogFriendly.API.Controllers
 
             return Ok(isExist);
         }
+
         /// <summary>
         /// Updates the specified user register.
         /// </summary>

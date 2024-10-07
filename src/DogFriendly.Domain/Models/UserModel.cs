@@ -1,6 +1,7 @@
 ﻿using DogFriendly.Domain.Command.Users;
 using DogFriendly.Domain.Queries.Users;
 using DogFriendly.Domain.ViewModels;
+using DogFriendly.Domain.ViewModels.Places;
 using DogFriendly.Domain.ViewModels.Users;
 using MediatR;
 
@@ -120,6 +121,28 @@ namespace DogFriendly.Domain.Models
                 : "Une erreur est survenue lors de la création de compte."
             };
         }
+
+        /// <summary>
+        /// Gets the place favorites.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<UserFavoriteViewModel>> GetPlaceFavorites()
+            => await _mediator.Send(new GetUserFavoritesQuery
+            {
+                Email = Email
+            });
+
+        /// <summary>
+        /// Gets the places.
+        /// </summary>
+        /// <param name="favoriteId">The favorite identifier.</param>
+        /// <returns></returns>
+        public async Task<List<PlaceListViewModel>> GetPlaces(int favoriteId)
+            => await _mediator.Send(new GetUserPlacesQuery
+            {
+                Email = Email,
+                FavoriteId = favoriteId
+            });
 
         /// <summary>
         /// Gets the place reviews.

@@ -7,80 +7,67 @@
             <div class="card reviews-details">
                 <div class="card-body">
                     <h2>Mes favoris</h2>
-                    <button class="btn btn-outline-dark mb-3">Ajouter une liste</button>
+                    <div class="custom-content-between mb-3">
+                        <InputText class="form-control" placeholder="Nom de la liste"
+                                   @bind-Value="FavoriteName" />
+                        <Blazorise.Button Class="btn btn-outline-dark" @onclick="() => OnFavoriteClicked()">
+                            Ajouter une liste
+                        </Blazorise.Button>
+                    </div>
                     <div class="result-list">
-                        <!-- Example of a result item -->
-                        <div class="row favorite-container">
-                            <div class="d-flex align-items-center">
-                                <h3 class="card-text mr-2">Titre de la liste</h3>
-                                <nav>
-                                    <button class="btn btn-outline-dark">Supprimer</button>
-                                </nav>
-                            </div>
-                            <div class="row favorite-place">
-                                <div class="favorite-item mb-2 mt-2">
-                                    <section>
-                                        <div class="row media">
-                                            <div class="col-4 col-sm-12 col-md-12 col-lg-4 result-image bg-secondary mr-1" style="width: 60px; height: 60px;"></div>
-                                            <div class="col-8 col-sm-12 col-md-12 col-lg-8 media-body">
-                                                <h5 class="mt-0">Nom du restaurant</h5>
-                                                <p>★★★★☆</p>
-                                                <p class="text-muted">Description du restaurant.</p>
+                        @if (UserFavorites?.Any() == true)
+                        {
+                            <ul class="nav nav-tabs">
+                                @foreach (var favorite in UserFavorites)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link @(Favorite?.Id == favorite.Id ? "active show" : "")" 
+                                           tabindex="0" aria-disabled="false"
+                                           @onclick="() => OnSelectedFavorite(favorite)">
+                                            @favorite.Name
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                            @if (Favorite != null)
+                            {
+                                <div class="row favorite-container py-2">
+                                    <div class="d-flex align-items-center">
+                                        <h3 class="card-text me-2">
+                                            @Favorite.Name
+                                        </h3>
+                                        <nav>
+                                            <button class="btn btn-outline-dark" @onclick="OnFavoriteDeleted">
+                                                Supprimer
+                                            </button>
+                                        </nav>
+                                    </div>
+                                    <div class="row favorite-place">
+                                        @foreach (var place in Places)
+                                        {
+                                            <div class="favorite-item mb-2 mt-2">
+                                                <section>
+                                                    <div class="row media">
+                                                        <div class="col-4 col-sm-12 col-md-12 col-lg-4 result-image bg-secondary mr-1" style="width: 60px; height: 60px;">
+                                                            <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
+                                                        </div>
+                                                        <div class="col-8 col-sm-12 col-md-12 col-lg-8 media-body">
+                                                            <h5 class="mt-0">@place.Name</h5>
+                                                            <p><Rating Value="place.Rating" /></p>
+                                                            <p class="text-muted">@place.Description</p>
+                                                        </div>
+                                                    </div>
+                                                </section>
                                             </div>
-                                        </div>
-                                    </section>
+                                        }
+                                    </div>
                                 </div>
-                                <div class="favorite-item mb-2 mt-2">
-                                    <section>
-                                        <div class="row media">
-                                            <div class="col-4 col-sm-12 col-md-12 col-lg-4 result-image bg-secondary mr-1" style="width: 60px; height: 60px;"></div>
-                                            <div class="col-8 col-sm-12 col-md-12 col-lg-8 media-body">
-                                                <h5 class="mt-0">Nom du restaurant</h5>
-                                                <p>★★★★☆</p>
-                                                <p class="text-muted">Description du restaurant.</p>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Repeat for more items -->
-                        <!-- Example of a result item -->
-                        <div class="row favorite-container">
-                            <div class="d-flex align-items-center">
-                                <h3 class="card-text mr-2">Titre de la liste</h3>
-                                <nav>
-                                    <button class="btn btn-outline-dark">Supprimer</button>
-                                </nav>
-                            </div>
-                            <div class="row favorite-place">
-                                <div class="favorite-item mb-2 mt-2">
-                                    <section>
-                                        <div class="row media">
-                                            <div class="col-4 col-sm-12 col-md-12 col-lg-4 result-image bg-secondary mr-1" style="width: 60px; height: 60px;"></div>
-                                            <div class="col-8 col-sm-12 col-md-12 col-lg-8 media-body">
-                                                <h5 class="mt-0">Nom du restaurant</h5>
-                                                <p>★★★★☆</p>
-                                                <p class="text-muted">Description du restaurant.</p>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </div>
-                                <div class="favorite-item mb-2 mt-2">
-                                    <section>
-                                        <div class="row media">
-                                            <div class="col-4 col-sm-12 col-md-12 col-lg-4 result-image bg-secondary mr-1" style="width: 60px; height: 60px;"></div>
-                                            <div class="col-8 col-sm-12 col-md-12 col-lg-8 media-body">
-                                                <h5 class="mt-0">Nom du restaurant</h5>
-                                                <p>★★★★☆</p>
-                                                <p class="text-muted">Description du restaurant.</p>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Repeat for more items -->
+                            }
+                        }
+                        else
+                        {
+                            <p>Vous n'avez aucun favori.</p>
+                        }
                     </div>
                 </div>
             </div>
