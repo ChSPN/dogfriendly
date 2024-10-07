@@ -10,6 +10,13 @@ namespace DogFriendly.Domain.Resources
     public interface IUserResource
     {
         /// <summary>
+        /// Gets the place reviews.
+        /// </summary>
+        /// <returns></returns>
+        [Get("/api/user/reviews")]
+        Task<List<UserReviewViewModel>> GetPlaceReviews();
+
+        /// <summary>
         /// Gets the profil.
         /// </summary>
         /// <returns></returns>

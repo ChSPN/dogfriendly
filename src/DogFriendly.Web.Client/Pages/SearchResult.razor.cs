@@ -204,6 +204,7 @@ namespace DogFriendly.Web.Client.Pages
         /// </value>
         [Inject]
         protected IToastService ToastService { get; set; }
+
         /// <inheritdoc />
         public void Dispose()
         {
@@ -383,7 +384,7 @@ namespace DogFriendly.Web.Client.Pages
             try
             {
                 AddReview.PlaceId = PlaceId.Value;
-                Reviews = await PlaceResource.AddReview(AddReview);
+                Reviews = await PlaceResource.AddReview(PlaceId.Value, AddReview);
                 ReviewSendState = true;
                 Place.HasUserReviewed = true;
             }

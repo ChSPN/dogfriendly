@@ -214,16 +214,14 @@ namespace DogFriendly.Domain.Models
         /// <returns></returns>
         public async Task AddReview(AddPlaceReviewCommand request)
         {
-            if (!Reviews.Any())
-            {
-                await LoadReviews();
-            }
-
-            if (Reviews.Any(r => r.User?.Email == request.UserEmail))
+            if (Reviews?.Any(r => r.User?.Email == request.UserEmail) == true)
                 throw new InvalidOperationException("User already reviewed this place.");
 
             request.PlaceId = Id;
             var review = await _mediator.Send(request);
+
+            if (Reviews == null)
+                Reviews = new List<ReviewModel>().ToImmutableList();
 
             Reviews = Reviews.Insert(0, new ReviewModel(_mediator, review.Id, review.CreatedAt)
             {
@@ -280,7 +278,7 @@ namespace DogFriendly.Domain.Models
                     Rating = r.Rating,
                     UserId = r.UserId,
                     User = new UserModel(_mediator,
-                        r.User?.Email, 
+                        r.User?.Email,
                         r.User?.Name,
                         r.UserId)
                     {
@@ -303,5 +301,24 @@ namespace DogFriendly.Domain.Models
                 PlaceId = Id,
                 UserEmail = userEmail
             });
+
+        /// <summary>
+        /// Removes the review.
+        /// </summary>
+        /// <param name="reviewId">The review identifier.</param>
+        /// <param name="userEmail">The user email.</param>
+        /// <returns></returns>
+        public async Task<bool> RemoveReview(int reviewId, string userEmail)
+        {
+            var result = await _mediator.Send(new RemovePlaceReviewCommand
+            {
+                PlaceId = Id,
+                ReviewId = reviewId,
+                UserEmail = userEmail
+            });
+            if (Reviews != null && result)
+                Reviews.RemoveAll(r => r.Id == reviewId);
+            return result;
+        }
     }
 }

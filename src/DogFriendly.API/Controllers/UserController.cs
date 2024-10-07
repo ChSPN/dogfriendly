@@ -30,6 +30,67 @@ namespace DogFriendly.API.Controllers
         }
 
         /// <summary>
+        /// Create the specified user.
+        /// </summary>
+        /// <param name="userRegister">The register user model.</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<ResponseViewModel>> Create([FromBody] UserProfilViewModel userRegister)
+        {
+            // Retrieve the user's email from the claims.
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            if (emailClaim == null)
+            {
+                return BadRequest(new ResponseViewModel
+                {
+                    IsSuccess = false,
+                    Message = "Adresse e-mail introuvable."
+                });
+            }
+
+            // Get the email from the claim.
+            var email = emailClaim.Value;
+
+            // Create a new user model.
+            var userModel = new UserModel(_mediator, email, userRegister.UserName)
+            {
+                PictureContent = userRegister.PictureContent,
+                PictureName = userRegister.PictureName,
+                PictureUri = userRegister.UserPicture
+            };
+
+            // Register the user.
+            var response = await userModel.Create();
+            return this.Ok(response);
+        }
+
+        /// <summary>
+        /// Gets the place reviews.
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("reviews")]
+        public async Task<ActionResult<List<UserReviewViewModel>>> GetPlaceReviews()
+        {
+            // Retrieve the user's email from the claims.
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            if (emailClaim == null)
+            {
+                return BadRequest("Email claim not found.");
+            }
+
+            // Get the email from the claim.
+            var email = emailClaim.Value;
+
+            // Create a new user model.
+            var userModel = new UserModel(_mediator, email);
+
+            // Get the user reviews.
+            return Ok(await userModel.GetPlaceReviews());
+        }
+
+        /// <summary>
         /// Gets the profil.
         /// </summary>
         /// <returns></returns>
@@ -97,43 +158,6 @@ namespace DogFriendly.API.Controllers
 
             return Ok(isExist);
         }
-
-        /// <summary>
-        /// Create the specified user.
-        /// </summary>
-        /// <param name="userRegister">The register user model.</param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPost]
-        public async Task<ActionResult<ResponseViewModel>> Create([FromBody] UserProfilViewModel userRegister)
-        {
-            // Retrieve the user's email from the claims.
-            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
-            if (emailClaim == null)
-            {
-                return BadRequest(new ResponseViewModel
-                {
-                    IsSuccess = false,
-                    Message = "Adresse e-mail introuvable."
-                });
-            }
-
-            // Get the email from the claim.
-            var email = emailClaim.Value;
-
-            // Create a new user model.
-            var userModel = new UserModel(_mediator, email, userRegister.UserName)
-            {
-                PictureContent = userRegister.PictureContent,
-                PictureName = userRegister.PictureName,
-                PictureUri = userRegister.UserPicture
-            };
-
-            // Register the user.
-            var response = await userModel.Create();
-            return this.Ok(response);
-        }
-
         /// <summary>
         /// Updates the specified user register.
         /// </summary>

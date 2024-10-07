@@ -65,16 +65,19 @@ namespace DogFriendly.API.Controllers
         /// <summary>
         /// Adds the review.
         /// </summary>
+        /// <param name="id">The place identifier.</param>
         /// <param name="request">The request.</param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("review")]
+        [HttpPost("{id:int}/review")]
         public async Task<ActionResult<List<PlaceReviewViewModel>>> AddReview(
+            [FromRoute] int id,
             [FromBody] AddPlaceReviewCommand request)
         {
             var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
             request.UserEmail = emailClaim?.Value;
-            var place = new PlaceModel(_mediator, request.PlaceId);
+            var place = new PlaceModel(_mediator, id);
+            await place.LoadReviews();
             await place.AddReview(request);
             return Ok(await place.GetPlaceReviews());
         }
@@ -84,7 +87,7 @@ namespace DogFriendly.API.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [HttpGet("reviews/{id:int}")]
+        [HttpGet("{id:int}/reviews")]
         public async Task<ActionResult<List<PlaceReviewViewModel>>> GetReviews(int id)
         {
             var place = new PlaceModel(_mediator, id);
@@ -96,7 +99,7 @@ namespace DogFriendly.API.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [HttpGet("view/{id:int}")]
+        [HttpGet("{id:int}/view")]
         public async Task<ActionResult<PlaceViewModel>> GetViewModel(int id)
         {
             var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
@@ -117,6 +120,22 @@ namespace DogFriendly.API.Controllers
             var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
             var place = new PlaceModel(_mediator, placeId);
             return Ok(await place.RemoveFavorite(favoriteId, emailClaim?.Value));
+        }
+
+        /// <summary>
+        /// Removes the review.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <param name="reviewId">The review identifier.</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("{placeId:int}/review/{reviewId:int}")]
+        public async Task<ActionResult<bool>> RemoveReview(
+            [FromRoute] int placeId, [FromRoute] int reviewId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(JwtRegisteredClaimNames.Email);
+            var place = new PlaceModel(_mediator, placeId);
+            return Ok(await place.RemoveReview(reviewId, emailClaim?.Value));
         }
 
         /// <summary>

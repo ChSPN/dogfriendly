@@ -14,17 +14,18 @@ namespace DogFriendly.Domain.Resources
         /// <summary>
         /// Adds the review.
         /// </summary>
+        /// <param name="id">The identifier.</param>
         /// <param name="request">The request.</param>
         /// <returns></returns>
-        [Post("/api/place/review")]
-        Task<List<PlaceReviewViewModel>> AddReview([Body] AddPlaceReviewCommand request);
+        [Post("/api/place/{id}/review")]
+        Task<List<PlaceReviewViewModel>> AddReview(int id, [Body] AddPlaceReviewCommand request);
 
         /// <summary>
         /// Gets the place reviews.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [Get("/api/place/reviews/{id}")]
+        [Get("/api/place/{id}/reviews")]
         Task<List<PlaceReviewViewModel>> GetPlaceReviews(int id);
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace DogFriendly.Domain.Resources
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [Get("/api/place/view/{id}")]
+        [Get("/api/place/{id}/view")]
         Task<PlaceViewModel> GetViewModel(int id);
 
         /// <summary>
@@ -63,6 +64,15 @@ namespace DogFriendly.Domain.Resources
         /// <returns></returns>
         [Delete("/api/place/{placeId}/favorite/{favoriteId}")]
         Task<bool> RemoveFavorite(int placeId, int favoriteId);
+
+        /// <summary>
+        /// Removes the review.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <param name="reviewId">The review identifier.</param>
+        /// <returns></returns>
+        [Delete("/api/place/{placeId}/review/{reviewId}")]
+        Task<bool> RemoveReview(int placeId, int reviewId);
 
         /// <summary>
         /// Searches the specified places.

@@ -1,6 +1,7 @@
 ﻿using DogFriendly.Domain.Command.Users;
 using DogFriendly.Domain.Queries.Users;
 using DogFriendly.Domain.ViewModels;
+using DogFriendly.Domain.ViewModels.Users;
 using MediatR;
 
 namespace DogFriendly.Domain.Models
@@ -119,6 +120,16 @@ namespace DogFriendly.Domain.Models
                 : "Une erreur est survenue lors de la création de compte."
             };
         }
+
+        /// <summary>
+        /// Gets the place reviews.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<UserReviewViewModel>> GetPlaceReviews()
+            => await _mediator.Send(new GetUserReviewsQuery
+            {
+                Email = Email
+            });
 
         /// <summary>
         /// Determines whether is exist.
