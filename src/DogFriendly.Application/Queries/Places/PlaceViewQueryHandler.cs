@@ -1,5 +1,6 @@
 ﻿using DogFriendly.Domain.Entitites;
 using DogFriendly.Domain.Queries.Places;
+using DogFriendly.Domain.ViewModels.Amenities;
 using DogFriendly.Domain.ViewModels.Places;
 using EntityFrameworkCore.Repository.Interfaces;
 using MediatR;
@@ -54,11 +55,12 @@ namespace DogFriendly.Application.Queries.Places
                         : false,
                     Amenities = p.PlaceAmenities.Any()
                         ? p.PlaceAmenities
-                            .Select(pa => new KeyValuePair<string, string?>
-                            (
-                                pa.Amenity.Name,
-                                pa.Amenity.IconUri
-                            ))
+                            .Select(pa => new AmenityListViewModel
+                            {
+                                Id = pa.Amenity.Id,
+                                Name = pa.Amenity.Name,
+                                IconUri = pa.Amenity.IconUri
+                            })
                             .ToList()
                         : null,
                     ReviewsCount = p.Reviews.Any()
