@@ -54,7 +54,7 @@
                                                 <i class="fa-solid fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
                                             </Blazorise.Tooltip>
                                         }
-                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
+                                        <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
                                     </div>
                                     <div class="media-body">
                                         <h5 class="mt-0">
@@ -174,7 +174,7 @@
                             {
                                 <div class="media mb-3 pointer">
                                     <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
-                                        <img href="@review.UserPictureUri" class="img-fluid" alt="@review.UserName" />
+                                        <img src="@review.UserPictureUri" class="img-fluid" alt="@review.UserName" />
                                     </div>
                                     <div class="media-body">
                                         <h6 class="mt-0">

@@ -154,7 +154,7 @@ namespace DogFriendly.Web.Client.Components
                 content = @"<div class='result-list'>
                     <div class='media mb-3'>
                         <div class='result-image bg-secondary mr-3' style='width: 60px; height: 60px;'>
-                            <img href='" + Configuration["PhotoUrl"] + @"width=60,height=60.,quality=75,fit=cover${value.photo}' class='img-fluid' alt='${value.name}' />
+                            <img src='" + Configuration["PhotoUrl"] + @"width=60,height=60.,quality=75,fit=cover/${value.photo}' class='img-fluid' alt='${value.name}' />
                         </div>
                         <div class='media-body'>
                             <h5 class='mt-0'>${value.name}</h5>
