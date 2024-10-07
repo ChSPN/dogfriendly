@@ -54,7 +54,7 @@
                                                 <i class="fa-solid fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
                                             </Blazorise.Tooltip>
                                         }
-                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
+                                        <img href="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
                                     </div>
                                     <div class="media-body">
                                         <h5 class="mt-0">
@@ -93,7 +93,7 @@
                         @foreach (var photo in Place.Photos)
                         {
                             <Blazorise.CarouselSlide Name="@photo">
-                                <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover@(photo)" class="d-block w-100" alt="@Place.Name" />
+                                <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover/@(photo)" class="d-block w-100" alt="@Place.Name" />
                             </Blazorise.CarouselSlide>
                         }
                     </Blazorise.Carousel>
@@ -214,7 +214,7 @@
                                 <div class="card pointer" @onclick="() => OnFavoriteClicked(favorite)">
                                     @if (!string.IsNullOrEmpty(favorite.PhotoUri))
                                     {
-                                        <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover@(favorite.PhotoUri)" class="card-img-top" alt="@favorite.Name" />
+                                        <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover/@(favorite.PhotoUri)" class="card-img-top" alt="@favorite.Name" />
                                     }
                                     <div class="card-body text-center">
                                         <h6 class="card-title">@favorite.Name</h6>
