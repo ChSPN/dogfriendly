@@ -1,4 +1,6 @@
-﻿namespace DogFriendly.Domain.ViewModels.Places
+﻿using DogFriendly.Domain.ViewModels.Amenities;
+
+namespace DogFriendly.Domain.ViewModels.Places
 {
     /// <summary>
     /// View model for place.
@@ -19,7 +21,7 @@
         /// <value>
         /// The amenities.
         /// </value>
-        public List<KeyValuePair<string, string?>>? Amenities { get; set; }
+        public List<AmenityListViewModel>? Amenities { get; set; }
 
         /// <summary>
         /// Gets or sets the city.
