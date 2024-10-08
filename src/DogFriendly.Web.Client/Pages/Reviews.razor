@@ -19,8 +19,8 @@
                                 <div class="row review-item mb-1">
                                     <section class="col-sm-4 col-md-4 col-lg-4">
                                         <div class="row media">
-                                            <div class="col-4 col-sm-12 col-md-12 col-lg-4 result-image bg-secondary mr-1" style="width: 60px; height: 60px;">
-                                                <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(review.Place.Photo)" class="img-fluid img-place" alt="@review.Place.Name" />
+                                            <div class="col-4 col-sm-12 col-md-12 col-lg-4 result-image bg-secondary mr-1" style="width: 60px;height: 60px;padding: 0;">
+                                                <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(review.Place.Photo)" alt="@review.Place.Name" />
                                             </div>
                                             <div class="col-8 col-sm-12 col-md-12 col-lg-8 media-body">
                                                 <h5 class="mt-0">@review.Place.Name</h5>
