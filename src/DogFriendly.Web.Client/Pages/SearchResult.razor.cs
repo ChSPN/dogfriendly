@@ -501,7 +501,6 @@ namespace DogFriendly.Web.Client.Pages
             {
                 Place = await PlaceResource.GetViewModel(PlaceId.Value);
                 PlaceTypeId = Place.PlaceTypeId;
-                await JSRuntime.InvokeVoidAsync("initializeShareThis");
             }
 
             if (PlaceTypeId.HasValue)
@@ -520,6 +519,7 @@ namespace DogFriendly.Web.Client.Pages
             PlaceId = place.Id;
             NavigationManager.NavigateTo($"/place/{PlaceId}");
             Reviews = await PlaceResource.GetPlaceReviews(PlaceId.Value);
+            await JSRuntime.InvokeVoidAsync("initializeShareThis");
         }
     }
 }
