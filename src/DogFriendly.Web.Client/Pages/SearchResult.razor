@@ -1,6 +1,8 @@
 ﻿@page "/place/{PlaceId:int?}"
 @page "/search/{PlaceTypeId:int?}"
 
+<PageTitle>Carte de recherche</PageTitle>
+
 <!-- Main Content -->
 <main class="container py-4">
     <div class="row">
@@ -28,11 +30,11 @@
                     <div class="mb-3">
                         <select id="rating" class="form-select">
                             <option value="">Note</option>
-                            <option value="1">1 étoile</option>
-                            <option value="2">2 étoiles</option>
-                            <option value="3">3 étoiles</option>
-                            <option value="4">4 étoiles</option>
-                            <option value="5">5 étoiles</option>
+                            <option value="1">>= 1 étoile</option>
+                            <option value="2">>= 2 étoiles</option>
+                            <option value="3">>= 3 étoiles</option>
+                            <option value="4">>= 4 étoiles</option>
+                            <option value="5">= 5 étoiles</option>
                         </select>
                     </div>
                     <div class="result-list overflow-auto">
@@ -42,17 +44,20 @@
                             {
                                 <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
                                     <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
-                                        @if (place.Favorite == null)
+                                        @if (IsAuthenticated)
                                         {
-                                            <Blazorise.Tooltip Text="Ajouter aux favoris">
-                                                <i class="fa-regular fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
-                                            </Blazorise.Tooltip>
-                                        }
-                                        else
-                                        {
-                                            <Blazorise.Tooltip Text="Supprimer des favoris">
-                                                <i class="fa-solid fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
-                                            </Blazorise.Tooltip>
+                                            @if (place.Favorite == null)
+                                            {
+                                                <Blazorise.Tooltip Text="Ajouter aux favoris">
+                                                    <i class="fa-regular fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
+                                                </Blazorise.Tooltip>
+                                            }
+                                            else
+                                            {
+                                                <Blazorise.Tooltip Text="Supprimer des favoris">
+                                                    <i class="fa-solid fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
+                                                </Blazorise.Tooltip>
+                                            }
                                         }
                                         <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
                                     </div>
@@ -135,7 +140,8 @@
                         {
                             <p><i class="fa fa-clock" /> Horaires: @Place.OpeningHours</p>
                         }
-                        @if (!Place.HasUserReviewed && !ReviewSendInProgress)
+                        <div id="my-sharethis-buttons" class="sharethis-inline-share-buttons mb-2"></div>
+                        @if (!Place.HasUserReviewed && !ReviewSendInProgress && IsAuthenticated)
                         {
                             <p class="card-text">Donnez votre avis :</p>
                             <p class="card-text">
