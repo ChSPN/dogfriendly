@@ -501,6 +501,7 @@ namespace DogFriendly.Web.Client.Pages
             {
                 Place = await PlaceResource.GetViewModel(PlaceId.Value);
                 PlaceTypeId = Place.PlaceTypeId;
+                await JSRuntime.InvokeVoidAsync("initializeShareThis");
             }
 
             if (PlaceTypeId.HasValue)

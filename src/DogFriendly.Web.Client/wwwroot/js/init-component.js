@@ -42,3 +42,15 @@ window.hideSpinner = function () {
 window.showSpinner = function () {
     $('#spinner').show();
 }
+
+window.initializeShareThis = function () {
+    if (window.__sharethis__) {
+        setTimeout(function () {
+            window.__sharethis__.load('inline-share-buttons', {
+                alignment: 'center',
+                id: 'my-sharethis-buttons',
+                enabled: true
+            });
+        }, 500);
+    }
+};
