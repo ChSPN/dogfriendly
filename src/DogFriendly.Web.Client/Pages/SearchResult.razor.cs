@@ -143,6 +143,23 @@ namespace DogFriendly.Web.Client.Pages
         protected IPlaceResource PlaceResource { get; set; }
 
         /// <summary>
+        /// Gets or sets the authentication service.
+        /// </summary>
+        /// <value>
+        /// The authentication service.
+        /// </value>
+        [Inject]
+        protected AuthenticationService AuthenticationService { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is authenticated.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is authenticated; otherwise, <c>false</c>.
+        /// </value>
+        protected bool IsAuthenticated { get; set; }
+
+        /// <summary>
         /// Gets or sets the places.
         /// </summary>
         /// <value>
@@ -259,6 +276,7 @@ namespace DogFriendly.Web.Client.Pages
                 Amenities = await AmenityResource.GetViewAll();
                 DotNetObjectReference<SearchResult> objRef = DotNetObjectReference.Create(this);
                 await JSRuntime.InvokeVoidAsync("searchResultInit", objRef);
+                IsAuthenticated = (await AuthenticationService.GetUserProfil()) != null;
             }
 
             await base.OnAfterRenderAsync(firstRender);

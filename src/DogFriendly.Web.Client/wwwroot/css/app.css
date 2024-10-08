@@ -28,6 +28,88 @@
     }
 }
 
+/* Overlay couvrant toute la page */
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Conteneur du spinner */
+.walking-dog {
+    position: relative;
+    width: 300px; /* Largeur pour simuler un chemin horizontal */
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Patte du chien */
+.paw {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: url('/img/pawprint.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0;
+}
+
+/* Patte 1 (à gauche) */
+.paw-1 {
+    left: 0;
+    animation: paw-step 2s infinite ease-in-out 0s;
+}
+
+/* Patte 2 */
+.paw-2 {
+    left: 50px;
+    animation: paw-step 2s infinite ease-in-out 0.4s;
+}
+
+/* Patte 3 */
+.paw-3 {
+    left: 100px;
+    animation: paw-step 2s infinite ease-in-out 0.8s;
+}
+
+/* Patte 4 (à droite) */
+.paw-4 {
+    left: 150px;
+    animation: paw-step 2s infinite ease-in-out 1.2s;
+}
+
+/* Animation des pattes - elles apparaissent et avancent horizontalement */
+@keyframes paw-step {
+    0% {
+        opacity: 0;
+        transform: translateX(0px);
+    }
+
+    25% {
+        opacity: 1;
+        transform: translateX(15px); /* Légère avancée */
+    }
+
+    75% {
+        opacity: 1;
+        transform: translateX(30px); /* Avance un peu plus */
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(45px); /* Disparait plus loin */
+    }
+}
+
+
 .blazor-error-ui {
     display: none;
 }
@@ -85,6 +167,10 @@
 body, html {
     height: 100%;
     margin: 0;
+}
+
+.leaflet-right {
+    display: none;
 }
 
 .map-section {

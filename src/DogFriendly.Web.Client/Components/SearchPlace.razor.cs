@@ -274,16 +274,19 @@ namespace DogFriendly.Web.Client.Components
         private async Task PlacesChanged(List<PlaceListViewModel> places)
         {
             await this.Map.Geometric.Points.delete();
-            await this.Map.Geometric.Points.upload(places
-                .Select(p => new StreamPoint
-                {
-                    guid = Guid.NewGuid(),
-                    latitude = p.Latitude,
-                    longitude = p.Longitude,
-                    type = "place",
-                    value = p
-                })
-                .ToList());
+            if (places?.Any() == true)
+            {
+                await this.Map.Geometric.Points.upload(places
+                    .Select(p => new StreamPoint
+                    {
+                        guid = Guid.NewGuid(),
+                        latitude = p.Latitude,
+                        longitude = p.Longitude,
+                        type = "place",
+                        value = p
+                    })
+                    .ToList());
+            }
         }
 
         /// <summary>

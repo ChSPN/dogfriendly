@@ -41,16 +41,26 @@ builder.Services.AddGeolocationService();
 builder.Services.AddNominatimGeocoderService();
 builder.Services.AddSingleton<AuthenticationService>();
 builder.Services.AddSingleton<SearchService>();
+builder.Services.AddScoped<UnauthorizedService>();
 builder.Services.AddHttpClient("DogFriendly", apiConfig);
 builder.Services.AddRefitClient<INominatimResource>()
     .ConfigureHttpClient((c) =>
     {
         c.BaseAddress = new Uri("https://nominatim.openstreetmap.org");
-    });
-builder.Services.AddRefitClient<IPlaceTypeResource>().ConfigureHttpClient(apiConfig);
-builder.Services.AddRefitClient<IUserResource>().ConfigureHttpClient(apiConfig);
-builder.Services.AddRefitClient<IPlaceResource>().ConfigureHttpClient(apiConfig);
-builder.Services.AddRefitClient<IAmenityResource>().ConfigureHttpClient(apiConfig);
+    })
+    .AddHttpMessageHandler<UnauthorizedService>();
+builder.Services.AddRefitClient<IPlaceTypeResource>()
+    .ConfigureHttpClient(apiConfig)
+    .AddHttpMessageHandler<UnauthorizedService>();
+builder.Services.AddRefitClient<IUserResource>()
+    .ConfigureHttpClient(apiConfig)
+    .AddHttpMessageHandler<UnauthorizedService>();
+builder.Services.AddRefitClient<IPlaceResource>()
+    .ConfigureHttpClient(apiConfig)
+    .AddHttpMessageHandler<UnauthorizedService>();
+builder.Services.AddRefitClient<IAmenityResource>()
+    .ConfigureHttpClient(apiConfig)
+    .AddHttpMessageHandler<UnauthorizedService>();
 
 // Build the app.
 var app = builder.Build();

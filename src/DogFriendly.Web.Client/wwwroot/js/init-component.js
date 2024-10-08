@@ -34,3 +34,11 @@ window.searchResultInit = function (objRef) {
         });
     }, 500);
 };
+
+window.hideSpinner = function () {
+    $('#spinner').hide();
+};
+
+window.showSpinner = function () {
+    $('#spinner').show();
+}
