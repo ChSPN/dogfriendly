@@ -76,11 +76,21 @@ namespace DogFriendly.Application.Command.Favorites
                         UserId = userId
                     };
                     favorite = await _favorites.AddAsync(favorite, cancellationToken);
-                    placeFavorite = await _placeFavorites.AddAsync(new PlaceFavoriteEntity
+                    if (request.PlaceId == 0)
                     {
-                        FavoriteList = favorite,
-                        PlaceId = request.PlaceId
-                    }, cancellationToken);
+                        placeFavorite = new PlaceFavoriteEntity
+                        {
+                            FavoriteList = favorite
+                        };
+                    }
+                    else
+                    {
+                        placeFavorite = await _placeFavorites.AddAsync(new PlaceFavoriteEntity
+                        {
+                            FavoriteList = favorite,
+                            PlaceId = request.PlaceId
+                        }, cancellationToken);
+                    }
                 }
                 else
                 {

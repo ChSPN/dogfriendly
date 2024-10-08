@@ -18,4 +18,8 @@
 	<ProjectReference Include="..\DogFriendly.Domain\DogFriendly.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Queries\Favorites\" />
+  </ItemGroup>
+
 </Project>

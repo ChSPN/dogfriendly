@@ -59,6 +59,7 @@ namespace DogFriendly.Web.Client.Pages
         {
             if (firstRender)
             {
+                await Task.Delay(200);
                 var isAuthenticated = await Authentication.IsUserAuthenticated();
                 if (!isAuthenticated)
                 {

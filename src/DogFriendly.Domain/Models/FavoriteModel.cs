@@ -1,6 +1,4 @@
-﻿using DogFriendly.Domain.Queries.Favorites;
-using DogFriendly.Domain.ViewModels.Favorites;
-using MediatR;
+﻿using MediatR;
 
 namespace DogFriendly.Domain.Models
 {
@@ -55,14 +53,5 @@ namespace DogFriendly.Domain.Models
         /// The user.
         /// </value>
         public UserModel User { get; set; }
-
-        /// <summary>
-        /// Loads the view model.
-        /// </summary>
-        /// <param name="mediator">The mediator.</param>
-        /// <param name="userEmail">The user email.</param>
-        /// <returns></returns>
-        public static async Task<List<FavoriteListViewModel>> LoadViewModel(IMediator mediator, string userEmail)
-            => await mediator.Send(new FavoriteListViewQuery { UserEmail = userEmail });
     }
 }

@@ -6,6 +6,7 @@ using DogFriendly.Domain.ViewModels.Amenities;
 using DogFriendly.Domain.ViewModels.Favorites;
 using DogFriendly.Domain.ViewModels.Places;
 using DogFriendly.Domain.ViewModels.Reviews;
+using DogFriendly.Domain.ViewModels.Users;
 using DogFriendly.Web.Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -84,21 +85,12 @@ namespace DogFriendly.Web.Client.Pages
         protected string? FavoriteName { get; set; }
 
         /// <summary>
-        /// Gets or sets the favorite resource.
-        /// </summary>
-        /// <value>
-        /// The favorite resource.
-        /// </value>
-        [Inject]
-        protected IFavoriteResource FavoriteResource { get; set; }
-
-        /// <summary>
         /// Gets or sets the favorites.
         /// </summary>
         /// <value>
         /// The favorites.
         /// </value>
-        protected List<FavoriteListViewModel> Favorites { get; set; } = new List<FavoriteListViewModel>();
+        protected List<UserFavoriteViewModel> Favorites { get; set; } = new List<UserFavoriteViewModel>();
 
         /// <summary>
         /// Gets or sets the js runtime.
@@ -165,7 +157,7 @@ namespace DogFriendly.Web.Client.Pages
         /// The reviews.
         /// </value>
         protected List<PlaceReviewViewModel> Reviews { get; set; } = new List<PlaceReviewViewModel>();
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether review send in progress.
         /// </summary>
@@ -204,6 +196,16 @@ namespace DogFriendly.Web.Client.Pages
         /// </value>
         [Inject]
         protected IToastService ToastService { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user resource.
+        /// </summary>
+        /// <value>
+        /// The user resource.
+        /// </value>
+        [Inject]
+        protected IUserResource UserResource { get; set; }
+
         /// <inheritdoc />
         public void Dispose()
         {
@@ -288,7 +290,7 @@ namespace DogFriendly.Web.Client.Pages
             if (place.Favorite == null)
             {
                 await _modal.Show();
-                Favorites = await FavoriteResource.GetViewAll();
+                Favorites = await UserResource.GetPlaceFavorites();
             }
             else
             {
@@ -311,7 +313,7 @@ namespace DogFriendly.Web.Client.Pages
         /// Called when favorite clicked.
         /// </summary>
         /// <param name="favorite">The favorite.</param>
-        protected async Task OnFavoriteClicked(FavoriteListViewModel favorite)
+        protected async Task OnFavoriteClicked(UserFavoriteViewModel favorite)
         {
             var result = await PlaceResource.PutFavorite(PlaceFavorite.Id, favorite.Id);
 
@@ -383,7 +385,7 @@ namespace DogFriendly.Web.Client.Pages
             try
             {
                 AddReview.PlaceId = PlaceId.Value;
-                Reviews = await PlaceResource.AddReview(AddReview);
+                Reviews = await PlaceResource.AddReview(PlaceId.Value, AddReview);
                 ReviewSendState = true;
                 Place.HasUserReviewed = true;
             }

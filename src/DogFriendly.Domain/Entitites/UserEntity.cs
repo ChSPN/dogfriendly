@@ -37,5 +37,13 @@
         /// The photo URI.
         /// </value>
         public string? PhotoUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reviews.
+        /// </summary>
+        /// <value>
+        /// The reviews.
+        /// </value>
+        public ICollection<ReviewEntity>? Reviews { get; set; }
     }
 }
