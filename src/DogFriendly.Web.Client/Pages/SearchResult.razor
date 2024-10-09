@@ -30,11 +30,11 @@
                     <div class="mb-3">
                         <select id="rating" class="form-select">
                             <option value="">Note</option>
-                            <option value="1">>= 1 étoile</option>
-                            <option value="2">>= 2 étoiles</option>
-                            <option value="3">>= 3 étoiles</option>
-                            <option value="4">>= 4 étoiles</option>
-                            <option value="5">= 5 étoiles</option>
+                            <option value="1">dès 1 étoile</option>
+                            <option value="2">dès 2 étoiles</option>
+                            <option value="3">dès 3 étoiles</option>
+                            <option value="4">dès 4 étoiles</option>
+                            <option value="5">5 étoiles</option>
                         </select>
                     </div>
                     <div class="result-list overflow-auto">
@@ -140,7 +140,7 @@
                         {
                             <p><i class="fa fa-clock" /> Horaires: @Place.OpeningHours</p>
                         }
-                        <div id="my-sharethis-buttons" class="sharethis-inline-share-buttons mb-2"></div>
+                        <div class="elfsight-app-8e4089cb-db22-4e67-8d59-d9d640f92ea2" data-elfsight-app-lazy></div>
                         @if (!Place.HasUserReviewed && !ReviewSendInProgress && IsAuthenticated)
                         {
                             <p class="card-text">Donnez votre avis :</p>
