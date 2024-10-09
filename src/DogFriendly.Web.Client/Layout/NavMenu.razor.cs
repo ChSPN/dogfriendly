@@ -23,6 +23,15 @@ namespace DogFriendly.Web.Client.Layout
         protected IServiceProvider Provider { get; set; }
 
         /// <summary>
+        /// Gets or sets the navigation manager.
+        /// </summary>
+        /// <value>
+        /// The navigation manager.
+        /// </value>
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is authenticated.
         /// </summary>
         /// <value>
@@ -43,6 +52,14 @@ namespace DogFriendly.Web.Client.Layout
             await SetIsAuthenticated(AuthenticationService.JwtToken);
             AuthenticationService.OnUserChanged += OnUserChanged;
             base.OnInitialized();
+        }
+
+        /// <summary>
+        /// Called when clicked.
+        /// </summary>
+        protected void OnClicked()
+        {
+            NavigationManager.NavigateTo("/login", true);
         }
 
         /// <summary>
