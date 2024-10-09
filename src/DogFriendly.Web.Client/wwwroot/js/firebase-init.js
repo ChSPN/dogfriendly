@@ -56,7 +56,13 @@ window.initFirebaseUi = async function () {
                     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
                 ],
                 tosUrl: window.location.href,
-                privacyPolicyUrl: window.location.href
+                privacyPolicyUrl: window.location.href,
+                callbacks: {
+                    signInSuccessWithAuthResult: function () {
+                        window.location.reload();
+                        return false;
+                    }
+                }
             };
             new firebaseui.auth.AuthUI(fb.auth()).start('#firebaseui-auth-container', uiConfig);
         } catch { }
@@ -66,6 +72,6 @@ window.initFirebaseUi = async function () {
 window.logoutFirebaseAuth = async function () {
     if (fb != null) {
         fb.auth().signOut();
-        setTimeout(window.initFirebaseUi, 500);
+        window.location.reload();
     }
 }
