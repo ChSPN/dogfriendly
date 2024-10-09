@@ -1,4 +1,7 @@
 ﻿@page "/login"
+@using Blazorise
+@using Blazorise.Bootstrap5
+@using Blazorise.Icons.FontAwesome
 
 <PageTitle>Connexion</PageTitle>
 
@@ -31,3 +34,21 @@
         </section>
     </div>
 </main>
+
+<Modal @ref="_modal">
+    <ModalContent Centered>
+        <ModalHeader>
+            Confirmation de déconnexion
+            <Button CloseButton @onclick="Cancel">
+                <i class="fa fa-times"></i>
+            </Button>
+        </ModalHeader>
+        <Blazorise.ModalBody>
+            Êtes-vous sûr de vouloir vous déconnecter ?
+        </Blazorise.ModalBody>
+        <Blazorise.ModalFooter class="custom-modal-footer">
+            <Button Color="Color.Primary" @onclick="Confirm">Oui</Button>
+            <Button Color="Color.Secondary" @onclick="Cancel">Non</Button>
+        </Blazorise.ModalFooter>
+    </ModalContent>
+</Modal>

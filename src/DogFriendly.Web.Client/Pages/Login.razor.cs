@@ -1,4 +1,5 @@
-﻿using DogFriendly.Domain.Resources;
+﻿using Blazorise;
+using DogFriendly.Domain.Resources;
 using DogFriendly.Domain.ViewModels.Users;
 using DogFriendly.Web.Client.Services;
 using Microsoft.AspNetCore.Components;
@@ -13,6 +14,7 @@ namespace DogFriendly.Web.Client.Pages
     /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
     public partial class Login : ComponentBase, IDisposable
     {
+        private Modal _modal;
         private EventHandler<JwtSecurityToken> OnUserChanged;
 
         /// <summary>
@@ -48,16 +50,34 @@ namespace DogFriendly.Web.Client.Pages
         }
 
         /// <summary>
-        /// Logouts this instance.
+        /// Cancels this instance.
         /// </summary>
         /// <returns></returns>
-        protected async Task Logout()
+        protected async Task Cancel()
+        {
+            await _modal.Hide();
+        }
+
+        /// <summary>
+        /// Confirms this instance.
+        /// </summary>
+        /// <returns></returns>
+        protected async Task Confirm()
         {
             await ServiceProvider
                 .GetRequiredService<AuthenticationService>()
                 .Logout();
             await UserChanged(null);
             StateHasChanged();
+        }
+
+        /// <summary>
+        /// Logouts this instance.
+        /// </summary>
+        /// <returns></returns>
+        protected async Task Logout()
+        {
+            await _modal.Show();
         }
 
         /// <inheritdoc />
