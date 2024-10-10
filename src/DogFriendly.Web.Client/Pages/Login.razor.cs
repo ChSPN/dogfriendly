@@ -14,7 +14,6 @@ namespace DogFriendly.Web.Client.Pages
     /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
     public partial class Login : ComponentBase, IDisposable
     {
-        private Modal _modal;
         private EventHandler<JwtSecurityToken> OnUserChanged;
 
         /// <summary>
@@ -53,9 +52,9 @@ namespace DogFriendly.Web.Client.Pages
         /// Cancels this instance.
         /// </summary>
         /// <returns></returns>
-        protected async Task Cancel()
+        protected void Cancel()
         {
-            await _modal.Hide();
+            NavigationManager.NavigateTo("/");
         }
 
         /// <summary>
@@ -69,15 +68,6 @@ namespace DogFriendly.Web.Client.Pages
                 .Logout();
             await UserChanged(null);
             StateHasChanged();
-        }
-
-        /// <summary>
-        /// Logouts this instance.
-        /// </summary>
-        /// <returns></returns>
-        protected async Task Logout()
-        {
-            await _modal.Show();
         }
 
         /// <inheritdoc />

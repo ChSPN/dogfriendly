@@ -109,9 +109,68 @@
     }
 }
 
+.axeptio_mount {
+    margin-top: -8px;
+}
 
 .blazor-error-ui {
     display: none;
+}
+
+header {
+    color: white;
+    background-color: #E06555;
+}
+
+.btn-outline-dark {
+    color: #8E3837 !important;
+    background-color: #FFE9E1 !important;
+    border-color: #8E3837 !important;
+}
+
+    .btn-outline-dark:hover {
+        color: white !important;
+        background-color: #8E3837 !important;
+        border-color: #8E3837 !important;
+    }
+
+.btn-primary {
+    color: white !important;
+    background-color: #332256 !important;
+    border-color: #E9EEE8 !important;
+}
+
+    .btn-primary:hover {
+        color: #332256 !important;
+        background-color: #E9EEE8 !important;
+        border-color: #332256 !important;
+    }
+
+.form-control, .form-select {
+    color: #E06555;
+    background-color: #FFE9E1;
+    border-color: #8E3837;
+}
+
+    .form-control::placeholder, .form-select::placeholder {
+        color: #E06555;
+    }
+
+.select2-selection--multiple {
+    background-color: #FFE9E1 !important;
+    border-color: #8E3837 !important;
+}
+
+.select2-search__field::placeholder {
+    color: #E06555;
+}
+
+a {
+    color: #E06555 !important;
+}
+
+a:hover {
+    color: #8E3837 !important;
 }
 
 .custom-modal-footer {
@@ -206,7 +265,7 @@ body, html {
     position: absolute;
     cursor: pointer !important;
     font-weight: bold;
-    z-index: 9000;
+    z-index: 1000;
     border-radius: 5px;
     background-color: white;
     padding: 5px;

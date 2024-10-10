@@ -27,6 +27,24 @@
             projectId: '@Configuration["Firebase:ProjectId"]',
             appId: '@Configuration["Firebase:AppId"]'
         };
+        window.axeptioSettings = {
+            clientId: "6706df3f9f012add27a9fd33",
+            cookiesVersion: "dogfriendly-test-fr-EU",
+            googleConsentMode: {
+                default: {
+                    analytics_storage: "denied",
+                    ad_storage: "denied",
+                    ad_user_data: "denied",
+                    ad_personalization: "denied",
+                    wait_for_update: 500
+                }
+            }
+        };
+        (function (d, s) {
+            var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
+            e.async = true; e.src = "//static.axept.io/sdk.js";
+            t.parentNode.insertBefore(e, t);
+        })(document, "script");
     </script>
 </head>
 <body>
@@ -34,6 +52,27 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://static.elfsight.com/platform/platform.js" async></script>
     <Routes @rendermode="new InteractiveWebAssemblyRenderMode(true)" />
+    <!-- Footer -->
+    <footer class="bg-light py-4">
+        <div class="container text-center newsletter">
+            <div class="form-inline justify-content-center d-flex align-items-center">
+                <label for="email" class="me-2">Souscrire à la newsletter</label>
+                <input type="email" class="form-control mb-2 me-2" placeholder="Entrez votre email" id="email">
+                <button class="btn btn-dark mb-2" id="newsletter">Valider</button>
+            </div>
+            <nav class="mt-3">
+                <a href="/travel-tips" class="text-dark mr-3">Conseils pour bien voyager</a>
+                <a href="/legals-terms" class="text-dark mr-3">Mentions légales</a>
+                <a href="/privacy-policy" class="text-dark mr-3">Politique de confidentialité</a>
+                <a href="/contact-us" class="text-dark">Nous contacter</a>
+            </nav>
+            <p class="text-muted mt-3">&copy; 2024 Dog Friendly. All Rights Reserved</p>
+        </div>
+    </footer>
+    <!-- Dependencies -->
+    <script src="js/firebase-init.js"></script>
+    <script src="js/map-component.js"></script>
+    <script src="js/init-component.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth__fr.js"></script>
