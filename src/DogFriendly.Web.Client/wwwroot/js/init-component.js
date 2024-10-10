@@ -36,29 +36,11 @@ window.searchResultInit = function (objRef) {
 };
 
 window.hideSpinner = function () {
-    $('#spinner').hide();
+    setTimeout(() => {
+        $('#spinner').hide();
+    }, 500);
 };
 
 window.showSpinner = function () {
     $('#spinner').show();
 };
-
-window.axeptioSettings = {
-    clientId: "6706df3f9f012add27a9fd33",
-    cookiesVersion: "dogfriendly-test-fr-EU",
-    googleConsentMode: {
-        default: {
-            analytics_storage: "denied",
-            ad_storage: "denied",
-            ad_user_data: "denied",
-            ad_personalization: "denied",
-            wait_for_update: 500
-        }
-    }
-};
-
-(function (d, s) {
-    var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
-    e.async = true; e.src = "//static.axept.io/sdk.js";
-    t.parentNode.insertBefore(e, t);
-})(document, "script");

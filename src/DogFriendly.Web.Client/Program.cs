@@ -47,8 +47,7 @@ builder.Services.AddRefitClient<INominatimResource>()
     .ConfigureHttpClient((c) =>
     {
         c.BaseAddress = new Uri("https://nominatim.openstreetmap.org");
-    })
-    .AddHttpMessageHandler<UnauthorizedService>();
+    });
 builder.Services.AddRefitClient<IPlaceTypeResource>()
     .ConfigureHttpClient(apiConfig)
     .AddHttpMessageHandler<UnauthorizedService>();

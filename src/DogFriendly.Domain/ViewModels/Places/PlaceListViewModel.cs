@@ -7,6 +7,8 @@ namespace DogFriendly.Domain.ViewModels.Places
     /// </summary>
     public class PlaceListViewModel
     {
+        private List<string>? _photos = null;
+
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
@@ -77,7 +79,46 @@ namespace DogFriendly.Domain.ViewModels.Places
         /// <value>
         /// The photos.
         /// </value>
-        public List<string>? Photos { get; set; }
+        public List<string>? Photos 
+        {
+            get
+            {
+                if (_photos?.Any() != true)
+                {
+                    switch (PlaceTypeId)
+                    {
+                        case 1:
+                            return
+                            [
+                                "img/restaurants.png"
+                            ];
+                        case 2:
+                            return
+                            [
+                                "img/hotels.png"
+                            ];
+                        case 3:
+                            return
+                            [
+                                "img/activites.png"
+                            ];
+                        case 4:
+                            return
+                            [
+                                "img/services.png"
+                            ];
+                        default:
+                            return [];
+                    }
+                }
+
+                return _photos;
+            }
+            set
+            {
+                _photos = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the place type identifier.

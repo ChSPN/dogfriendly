@@ -1,7 +1,5 @@
 ﻿@page "/login"
 @using Blazorise
-@using Blazorise.Bootstrap5
-@using Blazorise.Icons.FontAwesome
 
 <PageTitle>Connexion</PageTitle>
 
@@ -11,19 +9,24 @@
         <section class="col-sm-12 col-md-6 col-lg-4 mx-auto">
             <div class="card user-login">
                 <div class="card-body">
+                    <a href="/">
+                        <i class="fa fa-times position-absolute popin-close" />
+                    </a>
                     <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
                     @if (!string.IsNullOrEmpty(UserProfil?.UserName))
                     {
                         <p>Bonjour, <strong>@UserProfil?.UserName</strong>.</p>
+                        <p>
+                            Êtes-vous sûr de vouloir vous déconnecter ?
+                        </p>
                         @if (!string.IsNullOrEmpty(UserProfil?.UserPicture))
                         {
                             <p>
                                 <img src="@UserProfil.UserPicture" alt="Profile" style="width: 150px;" />
                             </p>
                         }
-                        <button class="btn btn-outline-dark" @onclick="Logout">
-                            Déconnexion
-                        </button>
+                        <Button Color="Color.Primary" @onclick="Confirm">Oui</Button>
+                        <Button Color="Color.Secondary" @onclick="Cancel">Non</Button>
                     }
                     else
                     {
@@ -34,21 +37,3 @@
         </section>
     </div>
 </main>
-
-<Modal @ref="_modal">
-    <ModalContent Centered>
-        <ModalHeader>
-            Confirmation de déconnexion
-            <Button CloseButton @onclick="Cancel">
-                <i class="fa fa-times"></i>
-            </Button>
-        </ModalHeader>
-        <Blazorise.ModalBody>
-            Êtes-vous sûr de vouloir vous déconnecter ?
-        </Blazorise.ModalBody>
-        <Blazorise.ModalFooter class="custom-modal-footer">
-            <Button Color="Color.Primary" @onclick="Confirm">Oui</Button>
-            <Button Color="Color.Secondary" @onclick="Cancel">Non</Button>
-        </Blazorise.ModalFooter>
-    </ModalContent>
-</Modal>
