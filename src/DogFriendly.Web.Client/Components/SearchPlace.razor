@@ -1,4 +1,5 @@
-﻿<div class="map" id="map">
+﻿@using Blazorise
+<div class="map" id="map">
     <RealTimeMap Parameters="@Parameters" height="300%" width="100%" @ref="Map"
                  OnMouseUpMap="OnMouseUpMap" 
                  OnZoomLevelEndChange="OnZoomLevelEndChange"
@@ -12,9 +13,12 @@
         <div class="container">
             <div class="input-group mb-3">
                 <InputText class="form-control" id="search" placeholder="Je recherche ..."
-                           @bind-Value="SearchQuery" 
+                           @bind-Value="SearchQuery"
                            @onkeypress="OnSearchKeyPress"
                            @oninput="OnSearchChanged" />
+                <button type="button" class="btn-clear" @onclick="() => SearchQuery = null">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                </button>
                 @if (Suggestions.Any())
                 {
                     <ul class="suggestions">

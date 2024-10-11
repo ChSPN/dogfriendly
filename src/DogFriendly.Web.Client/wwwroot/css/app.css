@@ -1,3 +1,23 @@
+/* Désactiver la détection du thème du système */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Forcer les couleurs du thème clair même si l'utilisateur est en mode sombre */
+        --background-color: #ffffff;
+        --text-color: #000000;
+    }
+}
+
+/* Appliquer le thème clair par défaut */
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
 /* Style de la scrollbar */
 ::-webkit-scrollbar {
     width: 8px; /* Largeur de la scrollbar */
@@ -111,7 +131,25 @@
 
 .axeptio_mount {
     margin-top: -8px;
+    z-index: 200 !important;
 }
+
+    .axeptio_mount img {
+        display: none;
+    }
+
+    .axeptio_mount .AxeptioConsentButton {
+        padding-left: 12px;
+        color: #FFFCE9 !important;
+        background-color: #DF6452 !important;
+        border-color: #DF6452 !important;
+    }
+
+        .axeptio_mount .AxeptioConsentButton:hover {
+            color: white !important;
+            background-color: #DF6452 !important;
+            border-color: #DF6452 !important;
+        }
 
 .blazor-error-ui {
     display: none;
@@ -119,59 +157,87 @@
 
 header {
     color: white;
-    background-color: #E06555;
+    background-color: #8E3837;
+}
+
+    header h1 {
+        font-family: Sacramento;
+    }
+
+
+footer {
+    color: white;
+    background-color: #8E3837;
+    padding: 20px 0;
+}
+
+    footer label {
+        font-family: Sacramento;
+        font-size: 36px;
+    }
+
+input:focus {
+    box-shadow: 0 0 5px 2px rgba(223, 100, 82, 0.5)!important;
+    border-color: #DF6452!important;
 }
 
 .btn-outline-dark {
-    color: #8E3837 !important;
-    background-color: #FFE9E1 !important;
+    color: #FFFCE9 !important;
+    background-color: #8E3837 !important;
     border-color: #8E3837 !important;
 }
 
     .btn-outline-dark:hover {
         color: white !important;
-        background-color: #8E3837 !important;
-        border-color: #8E3837 !important;
+        background-color: #DF6452 !important;
+        border-color: #DF6452 !important;
     }
 
+
+.btn-logout {
+    background-color: #DF6452 !important;
+    border-color: #DF6452 !important;
+}
+
 .btn-primary {
-    color: white !important;
-    background-color: #332256 !important;
-    border-color: #E9EEE8 !important;
+    color: #FFFCE9 !important;
+    background-color: #8E3837 !important;
+    border-color: #DF6452 !important;
 }
 
     .btn-primary:hover {
-        color: #332256 !important;
-        background-color: #E9EEE8 !important;
-        border-color: #332256 !important;
+        color: white !important;
+        background-color: #DF6452 !important;
+        border-color: #8E3837 !important;
     }
 
 .form-control, .form-select {
-    color: #E06555;
-    background-color: #FFE9E1;
-    border-color: #8E3837;
+    color: #903837;
+    background-color: #FFFCE9;
+    border-color: #903837;
 }
 
     .form-control::placeholder, .form-select::placeholder {
-        color: #E06555;
+        color: #903837;
     }
 
 .select2-selection--multiple {
-    background-color: #FFE9E1 !important;
-    border-color: #8E3837 !important;
+    background-color: #FFFCE9 !important;
+    border-color: #903837 !important;
+    border-color: #903837 !important;
 }
 
 .select2-search__field::placeholder {
-    color: #E06555;
+    color: #903837;
 }
 
 a {
-    color: #E06555 !important;
+    color: #903837 !important;
 }
 
-a:hover {
-    color: #8E3837 !important;
-}
+    a:hover {
+        color: #E26553 !important;
+    }
 
 .custom-modal-footer {
     height: 60px;
@@ -191,15 +257,15 @@ a:hover {
         width: 70%;
     }
 
-    /* Rendre Select2 plus cohérent avec Bootstrap */
-    .select2-container .select2-selection--single {
-        height: calc(2.25rem + 2px); /* Hauteur du champ similaire à un input Bootstrap */
-        padding: 0.375rem 0.75rem; /* Padding similaire à Bootstrap */
-        font-size: 1rem; /* Taille du texte */
-        line-height: 1.5;
-        border: 1px solid #ced4da; /* Bordure similaire aux inputs Bootstrap */
-        border-radius: 0.375rem; /* Coins arrondis */
-    }
+/* Rendre Select2 plus cohérent avec Bootstrap */
+.select2-container .select2-selection--single {
+    height: calc(2.25rem + 2px); /* Hauteur du champ similaire à un input Bootstrap */
+    padding: 0.375rem 0.75rem; /* Padding similaire à Bootstrap */
+    font-size: 1rem; /* Taille du texte */
+    line-height: 1.5;
+    border: 1px solid #ced4da; /* Bordure similaire aux inputs Bootstrap */
+    border-radius: 0.375rem; /* Coins arrondis */
+}
 
 /* Bordure et ombre pour le focus */
 .select2-container--default .select2-selection--single:focus {
@@ -303,7 +369,7 @@ body, html {
     }
 
 .button-overlay input {
-    border: black 1px solid;
+    border: 1px solid;
 }
 
 .button-background {
@@ -320,7 +386,32 @@ body, html {
 
 [data-userName] {
     display: block;
-}]
+}
+
+.btn-clear {
+    position: absolute;
+    right: 4px;
+    top: 48%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #8E3837;
+    z-index: 900;
+}
+
+    .btn-clear:hover {
+        color: #DF6452;
+    }
+
+#search {
+    border-radius: 10px;
+}
+
+#search::placeholder {
+    padding-left: 10px;
+}
 
 .result-list {
     height: 610px;
@@ -382,7 +473,7 @@ body, html {
 }
 
 .invalid {
-    border-color: red!important;
+    border-color: red !important;
 }
 
 .suggestions {
@@ -423,12 +514,3 @@ body, html {
 .newsletter label {
     padding-bottom: 10px;
 }
-
-footer {
-    background-color: #f8f9fa; /* Couleur de fond du footer */
-    padding: 20px 0;
-}
-
-    footer p, footer a {
-        color: #6c757d;
-    }
