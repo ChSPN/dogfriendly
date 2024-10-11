@@ -46,27 +46,28 @@
                             @foreach (var place in Places)
                             {
                                 <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
-                                    <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
-                                        @if (IsAuthenticated)
-                                        {
-                                            @if (place.Favorite == null)
-                                            {
-                                                <Blazorise.Tooltip Text="Ajouter aux favoris">
-                                                    <i class="fa-regular fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
-                                                </Blazorise.Tooltip>
-                                            }
-                                            else
-                                            {
-                                                <Blazorise.Tooltip Text="Supprimer des favoris">
-                                                    <i class="fa-solid fa-heart favorite-place-add" @onclick="() => OnFavoriteChanged(place)" />
-                                                </Blazorise.Tooltip>
-                                            }
-                                        }
+                                    <div class="mr-3" style="width: 60px; height: 60px;">
                                         <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
                                     </div>
                                     <div class="media-body">
-                                        <h5 class="mt-0">
+                                        <h5 class="mt-0 d-flex align-items-center">
                                             @place.Name
+                                            &nbsp;
+                                            @if (IsAuthenticated)
+                                            {
+                                                @if (place.Favorite == null)
+                                                {
+                                                    <Blazorise.Tooltip Text="Ajouter aux favoris">
+                                                        <i class="fa-regular fa-heart ml-2" @onclick="() => OnFavoriteChanged(place)" />
+                                                    </Blazorise.Tooltip>
+                                                }
+                                                else
+                                                {
+                                                    <Blazorise.Tooltip Text="Supprimer des favoris">
+                                                        <i class="fa-solid fa-heart ml-2" @onclick="() => OnFavoriteChanged(place)" />
+                                                    </Blazorise.Tooltip>
+                                                }
+                                            }
                                         </h5>
                                         <p>
                                             <Rating Value="place.Rating" />
@@ -178,11 +179,11 @@
                                 Échec de l'envoi de l'avis. Veuillez réessayer.
                             </div>
                         }
-                        <div class="result-list overflow-auto">
+                        <div class="overflow-auto">
                             @foreach (var review in Reviews)
                             {
                                 <div class="media mb-3 pointer">
-                                    <div class="result-image bg-secondary mr-3" style="width: 60px; height: 60px;">
+                                    <div class="mr-3" style="width: 60px; height: 60px;">
                                         <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@review.UserPictureUri" class="img-fluid" alt="@review.UserName" />
                                     </div>
                                     <div class="media-body">
@@ -213,7 +214,7 @@
             </Blazorise.Button>
         </Blazorise.ModalHeader>
         <Blazorise.ModalBody>
-            <div class="result-list">
+            <div>
                 <div class="row">
                     @if (Favorites?.Any() == true)
                     {
