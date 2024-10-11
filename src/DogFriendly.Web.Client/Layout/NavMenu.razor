@@ -11,7 +11,7 @@
             <span>Mon compte</span>
         </a>
     }
-    <a class="btn btn-outline-dark me-1" href="/login" @onclick:preventDefault="true" @onclick="OnClicked">
+    <a class="btn btn-outline-dark btn-logout me-1" href="/login" @onclick:preventDefault="true" @onclick="OnClicked">
         @if (IsAuthenticated)
         {
             <span>Déconnexion</span>
