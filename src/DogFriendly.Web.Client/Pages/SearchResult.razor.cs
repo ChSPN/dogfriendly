@@ -486,9 +486,8 @@ namespace DogFriendly.Web.Client.Pages
         /// <param name="place">The place.</param>
         protected void ViewResult(PlaceListViewModel place)
         {
-            // todo: fix this position for the map center.
-            var latitude = place.Latitude/* - 0.01*/;
-            var longitude = place.Longitude/* + 0.04*/;
+            var latitude = place.Latitude - 0.02;
+            var longitude = place.Longitude - 0.01;
             SearchService.SetView(latitude, longitude, 15);
         }
 
@@ -519,7 +518,6 @@ namespace DogFriendly.Web.Client.Pages
             PlaceId = place.Id;
             NavigationManager.NavigateTo($"/place/{PlaceId}");
             Reviews = await PlaceResource.GetPlaceReviews(PlaceId.Value);
-            await JSRuntime.InvokeVoidAsync("initializeShareThis");
         }
     }
 }
