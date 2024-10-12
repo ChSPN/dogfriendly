@@ -145,21 +145,19 @@ namespace DogFriendly.Web.Client.Components
             SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 13);
             this.Map.Geometric.Points.AppearanceOnType((item) => item.type == "place").pattern = new PointIcon
             {
-                iconUrl = "/img/point.png",
-                iconSize = new int[] { 30, 50 },
+                iconUrl = "/img/point.png?v=1.0.1",
+                iconSize = [30, 50],
             };
             this.Map.Geometric.Points.Appearance(item => item.type == "place").pattern = new PointTooltip
             {
                 permanent = false,
-                content = @"<div class='result-list'>
-                    <div class='media mb-3'>
-                        <div class='mr-3' style='width: 60px; height: 60px;'>
-                            <img src='" + Configuration["PhotoUrl"] + @"width=60,height=60.,quality=75,fit=cover/${value.photo}' class='img-fluid' alt='${value.name}' />
-                        </div>
-                        <div class='media-body'>
-                            <h5 class='mt-0'>${value.name}</h5>
-                            <p class='text-muted'>${value.description}</p>
-                        </div>
+                content = @"<div class=""media mb-3"">
+                    <div class=""mr-3"" style=""width: 60px; height: 60px;"">
+                        <img src=""" + Configuration["PhotoUrl"] + @"width=60,height=60,quality=75,fit=cover/${value.photo}"" class=""img-fluid"" alt=""${value.name}"" />
+                    </div>
+                    <div class=""media-body"">
+                        <h5 class=""mt-0"">${value.name}</h5>
+                        <p>${value.description}</p>
                     </div>
                 </div>"
             };
@@ -286,6 +284,13 @@ namespace DogFriendly.Web.Client.Components
                         value = p
                     })
                     .ToList());
+                await Task.Delay(500);
+                this.Map.View.setCenter = new Location
+                {
+                    latitude = SearchService.Latitude - 0.01,
+                    longitude = SearchService.Longitude - 0.03
+                };
+                this.Map.View.setZoomLevel = 13;
             }
         }
 
@@ -342,8 +347,15 @@ namespace DogFriendly.Web.Client.Components
         /// <summary>
         /// Views the changed.
         /// </summary>
-        private void ViewChanged()
+        private async void ViewChanged()
         {
+            this.Map.View.setZoomLevel = SearchService.ZoomLevel;
+            this.Map.View.setCenter = new Location
+            {
+                latitude = SearchService.Latitude,
+                longitude = SearchService.Longitude
+            };
+            await Task.Delay(500);
             this.Map.View.setZoomLevel = SearchService.ZoomLevel;
             this.Map.View.setCenter = new Location
             {
