@@ -1,0 +1,61 @@
+@page "/amenity/create"
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContext
+
+<PageTitle>Création d'un équipement</PageTitle>
+
+<h1>Création</h1>
+
+<h4>Equipement</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="AmenityEntity" OnValidSubmit="AddAmenityEntity" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="iconuri" class="form-label">Icone :</label> 
+                <InputText id="iconuri" @bind-Value="AmenityEntity.IconUri" class="form-control" /> 
+                <ValidationMessage For="() => AmenityEntity.IconUri" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="name" class="form-label">Nom :</label> 
+                <InputText id="name" @bind-Value="AmenityEntity.Name" class="form-control" /> 
+                <ValidationMessage For="() => AmenityEntity.Name" class="text-danger" /> 
+            </div>       
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/amenities">Liste des équipements</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public AmenityEntity AmenityEntity { get; set; }
+
+    protected override void OnInitialized()
+    {
+        AmenityEntity = new AmenityEntity
+        {
+            Name = "",
+            CreatedAt = DateTimeOffset.Now,
+            CreatedBy = HttpContext.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value,
+        };
+    }
+
+    public async Task AddAmenityEntity()
+    {
+        DB.Amenities.Add(AmenityEntity);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/amenities");
+    }
+}

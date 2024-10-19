@@ -1,0 +1,32 @@
+﻿@inject IConfiguration Configuration
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link href="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.css" rel="stylesheet" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="DogFriendly.Admin.styles.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet @rendermode="InteractiveServer" />
+    <script>
+        const firebaseConfig = {
+            apiKey: '@Configuration["Firebase:ApiKey"]',
+            authDomain: '@Configuration["Firebase:AuthDomain"]',
+            projectId: '@Configuration["Firebase:ProjectId"]',
+            appId: '@Configuration["Firebase:AppId"]'
+        };
+    </script>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth__fr.js"></script>
+    <script src="/js/firebase-init.js"></script>
+    <Routes @rendermode="InteractiveServer" />
+    <script src="_framework/blazor.web.js"></script>
+</body>
+</html>

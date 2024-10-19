@@ -1,0 +1,29 @@
+@page "/amenities"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des équipements</PageTitle>
+
+<h1>Liste des équipements</h1>
+
+<p>
+    <a href="amenity/create">Créé un équipement</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.Amenities">
+    <PropertyColumn Property="amenityentity => amenityentity.IconUri" />
+    <PropertyColumn Property="amenityentity => amenityentity.Name" />
+    <PropertyColumn Property="amenityentity => amenityentity.CreatedAt" />
+    <PropertyColumn Property="amenityentity => amenityentity.CreatedBy" />
+    <PropertyColumn Property="amenityentity => amenityentity.UpdatedAt" />
+    <PropertyColumn Property="amenityentity => amenityentity.UpdatedBy" />
+
+    <TemplateColumn Context="amenityentity">
+        <a href="@($"amenity/edit?id={amenityentity.Id}")">Modifier</a> |
+        <a href="@($"amenity/details?id={amenityentity.Id}")">Détails</a> |
+        <a href="@($"amenity/delete?id={amenityentity.Id}")">Supprimer</a>
+    </TemplateColumn>
+</QuickGrid>

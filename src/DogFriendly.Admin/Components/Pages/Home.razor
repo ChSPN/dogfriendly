@@ -1,0 +1,20 @@
+﻿@page "/"
+@using DogFriendly.Admin.Services
+@inject AuthenticationService Authentication
+
+<PageTitle>Administration DogFriendly</PageTitle>
+
+<h1>Administration DogFriendly</h1>
+
+<p>Veuillez-vous connecter pour administrer l'application.</p>
+
+<p><a href="/login">Se connecter.</a></p>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (Authentication.IsAuthenticated)
+        {
+        }
+    }
+}
