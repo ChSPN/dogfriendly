@@ -1,0 +1,106 @@
+@page "/review/edit"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Modifier un avis</PageTitle>
+
+<h1>Modification</h1>
+
+<h4>Avis d'un place</h4>
+<hr />
+@if (ReviewEntity is null)
+{
+    <p><em>Chargement de l'avis ...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="ReviewEntity" OnValidSubmit="UpdateReviewEntity" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="ReviewEntity.Id" value="@ReviewEntity.Id" />
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Commentaire :</label>
+                    <InputText id="comment" @bind-Value="ReviewEntity.Comment" class="form-control" />
+                    <ValidationMessage For="() => ReviewEntity.Comment" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Note :</label>
+                    <InputNumber id="rating" @bind-Value="ReviewEntity.Rating" class="form-control" />
+                    <ValidationMessage For="() => ReviewEntity.Rating" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="placeid" class="form-label">Identifiant du lieu :</label>
+                    <InputNumber id="placeid" @bind-Value="ReviewEntity.PlaceId" class="form-control" />
+                    <ValidationMessage For="() => ReviewEntity.PlaceId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="userid" class="form-label">Identifiant de l'utilisateur :</label>
+                    <InputNumber id="userid" @bind-Value="ReviewEntity.UserId" class="form-control" />
+                    <ValidationMessage For="() => ReviewEntity.UserId" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/reviews">Liste des avis</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public ReviewEntity? ReviewEntity { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ReviewEntity ??= await DB.Reviews.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (ReviewEntity is null)
+        {
+            NavigationManager.NavigateTo("/reviews");
+        }
+    }
+
+    public async Task UpdateReviewEntity()
+    {
+        DB.Attach(ReviewEntity!).State = EntityState.Modified;
+
+        try
+        {
+            ReviewEntity.UpdatedAt = DateTimeOffset.UtcNow;
+            ReviewEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ReviewEntityExists(ReviewEntity!.Id))
+            {
+                NavigationManager.NavigateTo("/reviews");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/reviews");
+    }
+
+    bool ReviewEntityExists(int id)
+    {
+        return DB.Reviews.Any(e => e.Id == id);
+    }
+}

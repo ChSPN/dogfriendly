@@ -1,0 +1,62 @@
+@page "/review/details"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+
+<PageTitle>Détails de l'avis</PageTitle>
+
+<h1>Détails</h1>
+
+<div>
+    <h4>Avis du lieu</h4>
+    <hr />
+    @if (reviewentity is null)
+    {
+        <p><em>Chargement de l'avis du lieu ...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Commentaire</dt>
+            <dd class="col-sm-10">@reviewentity.Comment</dd>
+            <dt class="col-sm-2">Note</dt>
+            <dd class="col-sm-10">@reviewentity.Rating</dd>
+            <dt class="col-sm-2">Identifiant du lieu</dt>
+            <dd class="col-sm-10">@reviewentity.PlaceId</dd>
+            <dt class="col-sm-2">Identifiant de l'utilisateur</dt>
+            <dd class="col-sm-10">@reviewentity.UserId</dd>
+            <dt class="col-sm-2">Créé le</dt>
+            <dd class="col-sm-10">@reviewentity.CreatedAt</dd>
+            <dt class="col-sm-2">Créé par</dt>
+            <dd class="col-sm-10">@reviewentity.CreatedBy</dd>
+            <dt class="col-sm-2">Modifié le</dt>
+            <dd class="col-sm-10">@reviewentity.UpdatedAt</dd>
+            <dt class="col-sm-2">Modifié par</dt>
+            <dd class="col-sm-10">@reviewentity.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/review/edit?id={reviewentity.Id}")">Modifier</a> |
+            <a href="@($"/reviews")">Liste des avis</a>
+        </div>
+    }
+</div>
+
+@code {
+    ReviewEntity? reviewentity;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        reviewentity = await DB.Reviews.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (reviewentity is null)
+        {
+            NavigationManager.NavigateTo("/reviews");
+        }
+    }
+}
