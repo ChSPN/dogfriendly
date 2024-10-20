@@ -1,0 +1,139 @@
+@page "/place/delete"
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+
+<PageTitle>Supprimer un lieu</PageTitle>
+
+<h1>Suppression</h1>
+
+<h3>Etes-vous sur de vouloir supprimer le lieu ?</h3>
+<div>
+    <h4>Lieu</h4>
+    <hr />
+    @if (placeentity is null)
+    {
+        <p><em>Chargement du lieu ...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Adresse</dt>
+            <dd class="col-sm-10">@placeentity.Address</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Ville</dt>
+            <dd class="col-sm-10">@placeentity.City</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Pays</dt>
+            <dd class="col-sm-10">@placeentity.Country</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Description</dt>
+            <dd class="col-sm-10">@placeentity.Description</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Email</dt>
+            <dd class="col-sm-10">@placeentity.Email</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Latitude</dt>
+            <dd class="col-sm-10">@placeentity.Latitude</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Longitude</dt>
+            <dd class="col-sm-10">@placeentity.Longitude</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Nom</dt>
+            <dd class="col-sm-10">@placeentity.Name</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Horaires</dt>
+            <dd class="col-sm-10">@placeentity.OpeningHours</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Téléphone</dt>
+            <dd class="col-sm-10">@placeentity.Phone</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Photos</dt>
+            <dd class="col-sm-10">@placeentity.Photos</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Identifiant du type de lieu</dt>
+            <dd class="col-sm-10">@placeentity.PlaceTypeId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Code postal</dt>
+            <dd class="col-sm-10">@placeentity.PostalCode</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Site web</dt>
+            <dd class="col-sm-10">@placeentity.Website</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Créé le</dt>
+            <dd class="col-sm-10">@placeentity.CreatedAt</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Créé par</dt>
+            <dd class="col-sm-10">@placeentity.CreatedBy</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Modifié le</dt>
+            <dd class="col-sm-10">@placeentity.UpdatedAt</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Modifié par</dt>
+            <dd class="col-sm-10">@placeentity.UpdatedBy</dd>
+        </dl>
+        <EditForm method="post" Model="placeentity" OnValidSubmit="DeletePlaceEntity" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(placeentity is null)">Supprimer</button> |
+            <a href="/places">Liste de lieux</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    PlaceEntity? placeentity;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        placeentity = await DB.Places.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (placeentity is null)
+        {
+            NavigationManager.NavigateTo("/places");
+        }
+    }
+
+    public async Task DeletePlaceEntity()
+    {
+        var placeFavorites = await DB.PlaceFavorites
+            .Where(x => x.PlaceId == placeentity.Id)
+            .ToListAsync();
+        if (placeFavorites.Count > 0)
+        {
+            DB.PlaceFavorites.RemoveRange(placeFavorites);
+        }
+
+        var placeAmenities = await DB.PlaceAmenities
+            .Where(p => p.PlaceId == placeentity.Id)
+            .ToListAsync();
+        if (placeAmenities.Count > 0)
+        {
+            DB.PlaceAmenities.RemoveRange(placeAmenities);
+        }
+
+        DB.Places.Remove(placeentity!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/places");
+    }
+}

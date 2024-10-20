@@ -72,6 +72,14 @@
 
     public async Task DeleteFavoriteListEntity()
     {
+        var placeFavorites = await DB.PlaceFavorites
+            .Where(x => x.FavoriteListId == favoritelistentity.Id)
+            .ToListAsync();
+        if (placeFavorites.Count > 0)
+        {
+            DB.PlaceFavorites.RemoveRange(placeFavorites);
+        }
+
         DB.Favorites.Remove(favoritelistentity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/favoritelist");

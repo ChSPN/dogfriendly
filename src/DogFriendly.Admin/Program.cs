@@ -2,6 +2,7 @@ using DogFriendly.Admin.Components;
 using DogFriendly.Admin.Services;
 using DogFriendly.Domain.Options;
 using DogFriendly.Domain.Repositories;
+using DogFriendly.Domain.Resources;
 using DogFriendly.Infrastructure.Context;
 using DogFriendly.Infrastructure.Repositories;
 using FirebaseAdmin;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json;
+using Refit;
 using Microsoft.AspNetCore.Identity;
 
 // Create a new app builder.
@@ -62,6 +64,11 @@ builder.Services.AddScoped<DogFriendly.Admin.Services.AuthenticationService>();
 builder.Services.AddScoped<DbContext>(s => s.GetRequiredService<DogFriendlyContext>());
 builder.Services.AddScoped<IFileStorageRepository, CloudflareStorageRepository>();
 builder.Services.AddScoped<IDesignTimeDbContextFactory<DogFriendlyContext>, DogFriendlyContextFactory>();
+builder.Services.AddRefitClient<INominatimResource>()
+    .ConfigureHttpClient((c) =>
+    {
+        c.BaseAddress = new Uri("https://nominatim.openstreetmap.org");
+    });
 builder.Services.AddControllersWithViews();
 builder.Services
     .AddRazorComponents()
