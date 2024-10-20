@@ -48,7 +48,7 @@
         AmenityEntity = new AmenityEntity
         {
             Name = "",
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = DateTimeOffset.UtcNow,
             CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
         };
     }

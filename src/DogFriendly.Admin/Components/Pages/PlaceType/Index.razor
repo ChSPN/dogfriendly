@@ -1,0 +1,30 @@
+@page "/placetypes"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des types de lieux</PageTitle>
+
+<h1>Liste des types de lieux</h1>
+
+<p>
+    <a href="placetype/create">Créer un type de lieu</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.PlaceTypes">
+    <PropertyColumn Property="placetypeentity => placetypeentity.Name" />
+    <PropertyColumn Property="placetypeentity => placetypeentity.IconUri" />
+    <PropertyColumn Property="placetypeentity => placetypeentity.Color" />
+    <PropertyColumn Property="placetypeentity => placetypeentity.CreatedAt" />
+    <PropertyColumn Property="placetypeentity => placetypeentity.CreatedBy" />
+    <PropertyColumn Property="placetypeentity => placetypeentity.UpdatedAt" />
+    <PropertyColumn Property="placetypeentity => placetypeentity.UpdatedBy" />
+
+    <TemplateColumn Context="placetypeentity">
+        <a href="@($"placetype/edit?id={placetypeentity.Id}")">Modifier</a> |
+        <a href="@($"placetype/details?id={placetypeentity.Id}")">Détails</a> |
+        <a href="@($"placetype/delete?id={placetypeentity.Id}")">Supprimer</a>
+    </TemplateColumn>
+</QuickGrid>

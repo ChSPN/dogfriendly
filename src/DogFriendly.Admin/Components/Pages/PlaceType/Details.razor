@@ -1,0 +1,59 @@
+@page "/placetype/details"
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+
+<PageTitle>Détails du type de lieu</PageTitle>
+
+<h1>Détails</h1>
+
+<div>
+    <h4>Type de lieu</h4>
+    <hr />
+    @if (placetypeentity is null)
+    {
+        <p><em>Chargement du type de lieu ...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Nom</dt>
+            <dd class="col-sm-10">@placetypeentity.Name</dd>
+            <dt class="col-sm-2">Icone</dt>
+            <dd class="col-sm-10">@placetypeentity.IconUri</dd>
+            <dt class="col-sm-2">Couleur</dt>
+            <dd class="col-sm-10">@placetypeentity.Color</dd>
+            <dt class="col-sm-2">Créé à</dt>
+            <dd class="col-sm-10">@placetypeentity.CreatedAt</dd>
+            <dt class="col-sm-2">Créé le</dt>
+            <dd class="col-sm-10">@placetypeentity.CreatedBy</dd>
+            <dt class="col-sm-2">Modifié à</dt>
+            <dd class="col-sm-10">@placetypeentity.UpdatedAt</dd>
+            <dt class="col-sm-2">Modifié par</dt>
+            <dd class="col-sm-10">@placetypeentity.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/placetype/edit?id={placetypeentity.Id}")">Modifier</a> |
+            <a href="@($"/placetypes")">Liste des types de lieux</a>
+        </div>
+    }
+</div>
+
+@code {
+    PlaceTypeEntity? placetypeentity;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        placetypeentity = await DB.PlaceTypes.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (placetypeentity is null)
+        {
+            NavigationManager.NavigateTo("/placetypes");
+        }
+    }
+}

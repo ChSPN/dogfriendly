@@ -10,15 +10,15 @@
 @inject AuthenticationService Authentication
 @inject NavigationManager NavigationManager
 
-<h3>Connexion</h3>
-
 @if (Authentication.IsAuthenticated)
 {
-    <p>Vous êtes connecté</p>
+    <h3>Déconnexion</h3>
+    <p>Vous êtes connecté @(Authentication.Identity.FindFirst(ClaimTypes.Name).Value).</p>
     <button @onclick="LogoutUser" class="btn btn-primary">Déconnexion</button>
 }
 else
 {
+    <h3>Connexion</h3>
     <div id="firebaseui-auth-container"></div>
 }
 

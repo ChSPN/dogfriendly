@@ -132,6 +132,14 @@
             DB.PlaceAmenities.RemoveRange(placeAmenities);
         }
 
+        var reviews = await DB.Reviews
+            .Where(x => x.PlaceId == placeentity.Id)
+            .ToListAsync();
+        if (reviews.Count > 0)
+        {
+            DB.Reviews.RemoveRange(reviews);
+        }
+
         DB.Places.Remove(placeentity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/places");

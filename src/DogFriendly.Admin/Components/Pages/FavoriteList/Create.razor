@@ -53,7 +53,7 @@
         FavoriteListEntity = new FavoriteListEntity
         {
             Name = "",
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = DateTimeOffset.UtcNow,
             CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
         };
     }
