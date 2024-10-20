@@ -1,0 +1,106 @@
+@page "/user/edit"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Modifier un utilisateur</PageTitle>
+
+<h1>Modification</h1>
+
+<h4>Utilisateur</h4>
+<hr />
+@if (UserEntity is null)
+{
+    <p><em>Chargement de l'utilisateur ...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="UserEntity" OnValidSubmit="UpdateUserEntity" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="UserEntity.Id" value="@UserEntity.Id" />
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nom :</label>
+                    <InputText id="name" @bind-Value="UserEntity.Name" class="form-control" />
+                    <ValidationMessage For="() => UserEntity.Name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email :</label>
+                    <InputText id="email" @bind-Value="UserEntity.Email" class="form-control" />
+                    <ValidationMessage For="() => UserEntity.Email" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="isadmin" class="form-label">Administrateur :</label>
+                    <InputCheckbox id="isadmin" @bind-Value="UserEntity.IsAdmin" class="form-check-input" />
+                    <ValidationMessage For="() => UserEntity.IsAdmin" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="photouri" class="form-label">Photo :</label>
+                    <InputText id="photouri" @bind-Value="UserEntity.PhotoUri" class="form-control" />
+                    <ValidationMessage For="() => UserEntity.PhotoUri" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/users">Liste des utilisateurs</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public UserEntity? UserEntity { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserEntity ??= await DB.Users.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (UserEntity is null)
+        {
+            NavigationManager.NavigateTo("/users");
+        }
+    }
+
+    public async Task UpdateUserEntity()
+    {
+        DB.Attach(UserEntity!).State = EntityState.Modified;
+
+        try
+        {
+            UserEntity.UpdatedAt = DateTimeOffset.UtcNow;
+            UserEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!UserEntityExists(UserEntity!.Id))
+            {
+                NavigationManager.NavigateTo("/users");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/users");
+    }
+
+    bool UserEntityExists(int id)
+    {
+        return DB.Users.Any(e => e.Id == id);
+    }
+}

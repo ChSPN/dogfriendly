@@ -1,0 +1,83 @@
+@page "/user/delete"
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+
+<PageTitle>Supprimer l'utilisateur</PageTitle>
+
+<h1>Suppression</h1>
+
+<h3>Etes-vous sur de vouloir supprimer l'utilisateur ?</h3>
+<div>
+    <h4>Utilisateur</h4>
+    <hr />
+    @if (userentity is null)
+    {
+        <p><em>Chargement de l'utilisateur ...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Nom</dt>
+            <dd class="col-sm-10">@userentity.Name</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Email</dt>
+            <dd class="col-sm-10">@userentity.Email</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Administrateur</dt>
+            <dd class="col-sm-10">@userentity.IsAdmin</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Photo</dt>
+            <dd class="col-sm-10">@userentity.PhotoUri</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Créé le</dt>
+            <dd class="col-sm-10">@userentity.CreatedAt</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Créé par</dt>
+            <dd class="col-sm-10">@userentity.CreatedBy</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Modifié le</dt>
+            <dd class="col-sm-10">@userentity.UpdatedAt</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Modifié par</dt>
+            <dd class="col-sm-10">@userentity.UpdatedBy</dd>
+        </dl>
+        <EditForm method="post" Model="userentity" OnValidSubmit="DeleteUserEntity" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(userentity is null)">Supprimer</button> |
+            <a href="/users">Liste des utilisateurs</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    UserEntity? userentity;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        userentity = await DB.Users.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (userentity is null)
+        {
+            NavigationManager.NavigateTo("/users");
+        }
+    }
+
+    public async Task DeleteUserEntity()
+    {
+        DB.Users.Remove(userentity!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/users");
+    }
+}
