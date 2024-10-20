@@ -5,16 +5,18 @@
 <PageTitle>Administration DogFriendly</PageTitle>
 
 <h1>Administration DogFriendly</h1>
+<p>Bienvenue dans l'application DogFriendly Admin.</p>
 
-<p>Veuillez-vous connecter pour administrer l'application.</p>
-
-<p><a href="/login">Se connecter.</a></p>
-
-@code {
-    protected override async Task OnInitializedAsync()
-    {
-        if (Authentication.IsAuthenticated)
-        {
-        }
-    }
+@if (Authentication.IsAdmin)
+{
+    <p>Vous pouvez administrer l'application DogFriendly.</p>
+}
+else if (Authentication.IsAuthenticated)
+{
+    <p>Vous n'avez pas les droits pour administrer l'application.</p>
+}
+else
+{
+    <p>Veuillez-vous connecter pour administrer l'application.</p>
+    <p><a href="/login">Se connecter.</a></p>
 }

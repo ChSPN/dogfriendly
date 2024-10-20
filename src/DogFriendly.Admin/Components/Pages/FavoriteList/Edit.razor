@@ -1,0 +1,101 @@
+@page "/favoritelist/edit"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Modifier la liste de favoris</PageTitle>
+
+<h1>Modifier</h1>
+
+<h4>Liste de favoris</h4>
+<hr />
+@if (FavoriteListEntity is null)
+{
+    <p><em>Chargement ...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="FavoriteListEntity" OnValidSubmit="UpdateFavoriteListEntity" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="FavoriteListEntity.Id" value="@FavoriteListEntity.Id" />
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Commentaire :</label>
+                    <InputText id="comment" @bind-Value="FavoriteListEntity.Comment" class="form-control" />
+                    <ValidationMessage For="() => FavoriteListEntity.Comment" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nom :</label>
+                    <InputText id="name" @bind-Value="FavoriteListEntity.Name" class="form-control" />
+                    <ValidationMessage For="() => FavoriteListEntity.Name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="userid" class="form-label">Identifiant de l'utilisateur :</label>
+                    <InputNumber id="userid" @bind-Value="FavoriteListEntity.UserId" class="form-control" />
+                    <ValidationMessage For="() => FavoriteListEntity.UserId" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/favoritelist">Liste des favoris</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public FavoriteListEntity? FavoriteListEntity { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FavoriteListEntity ??= await DB.Favorites.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (FavoriteListEntity is null)
+        {
+            NavigationManager.NavigateTo("/favoritelist");
+        }
+    }
+
+    public async Task UpdateFavoriteListEntity()
+    {
+        DB.Attach(FavoriteListEntity!).State = EntityState.Modified;
+
+        try
+        {
+            FavoriteListEntity.UpdatedAt = DateTimeOffset.UtcNow;
+            FavoriteListEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!FavoriteListEntityExists(FavoriteListEntity!.Id))
+            {
+                NavigationManager.NavigateTo("/favoritelist");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/favoritelist");
+    }
+
+    bool FavoriteListEntityExists(int id)
+    {
+        return DB.Favorites.Any(e => e.Id == id);
+    }
+}

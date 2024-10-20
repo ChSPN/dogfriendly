@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
 
 // Create a new app builder.
 var builder = WebApplication.CreateBuilder(args);

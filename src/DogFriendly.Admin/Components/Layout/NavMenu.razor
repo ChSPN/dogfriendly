@@ -7,20 +7,28 @@
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+<input type="checkbox" title="Menu" class="navbar-toggler" />
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Accueil
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/amenities">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Amenities
-            </NavLink>
-        </div>
+        @if (AuthenticationService.IsAdmin)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/amenities">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Equipements
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/favoritelist">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Favoris
+                </NavLink>
+            </div>
+        }
         @if (AuthenticationService.IsAuthenticated)
         {
             <div class="nav-item px-3">

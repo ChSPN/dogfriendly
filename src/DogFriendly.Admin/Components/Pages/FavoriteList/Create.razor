@@ -1,0 +1,67 @@
+@page "/favoritelist/create"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Création d'une liste de favoris</PageTitle>
+
+<h1>Création</h1>
+
+<h4>Liste de favoris</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="FavoriteListEntity" OnValidSubmit="AddFavoriteListEntity" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="comment" class="form-label">Commentaire :</label> 
+                <InputText id="comment" @bind-Value="FavoriteListEntity.Comment" class="form-control" /> 
+                <ValidationMessage For="() => FavoriteListEntity.Comment" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="name" class="form-label">Nom :</label> 
+                <InputText id="name" @bind-Value="FavoriteListEntity.Name" class="form-control" /> 
+                <ValidationMessage For="() => FavoriteListEntity.Name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="userid" class="form-label">Identifiant de l'utilisateur :</label> 
+                <InputNumber id="userid" @bind-Value="FavoriteListEntity.UserId" class="form-control" /> 
+                <ValidationMessage For="() => FavoriteListEntity.UserId" class="text-danger" /> 
+            </div>       
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/favoritelist">Liste des favoris</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public FavoriteListEntity FavoriteListEntity { get; set; }
+
+    protected override void OnInitialized()
+    {
+        FavoriteListEntity = new FavoriteListEntity
+        {
+            Name = "",
+            CreatedAt = DateTimeOffset.Now,
+            CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
+        };
+    }
+
+    public async Task AddFavoriteListEntity()
+    {
+        DB.Favorites.Add(FavoriteListEntity);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/favoritelist");
+    }
+}

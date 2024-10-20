@@ -1,0 +1,30 @@
+@page "/favoritelist"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des favoris</PageTitle>
+
+<h1>Liste des favoris</h1>
+
+<p>
+    <a href="favoritelist/create">Ajout d'une liste</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.Favorites">
+    <PropertyColumn Property="favoritelistentity => favoritelistentity.Comment" />
+    <PropertyColumn Property="favoritelistentity => favoritelistentity.Name" />
+    <PropertyColumn Property="favoritelistentity => favoritelistentity.UserId" />
+    <PropertyColumn Property="favoritelistentity => favoritelistentity.CreatedAt" />
+    <PropertyColumn Property="favoritelistentity => favoritelistentity.CreatedBy" />
+    <PropertyColumn Property="favoritelistentity => favoritelistentity.UpdatedAt" />
+    <PropertyColumn Property="favoritelistentity => favoritelistentity.UpdatedBy" />
+
+    <TemplateColumn Context="favoritelistentity">
+        <a href="@($"favoritelist/edit?id={favoritelistentity.Id}")">Modifier</a> |
+        <a href="@($"favoritelist/details?id={favoritelistentity.Id}")">Détails</a> |
+        <a href="@($"favoritelist/delete?id={favoritelistentity.Id}")">Supprimer</a>
+    </TemplateColumn>
+</QuickGrid>

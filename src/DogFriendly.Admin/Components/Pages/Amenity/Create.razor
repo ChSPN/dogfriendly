@@ -1,11 +1,12 @@
 @page "/amenity/create"
+@using DogFriendly.Admin.Services
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
-@inject IHttpContextAccessor HttpContext
+@inject AuthenticationService Authentication
 
 <PageTitle>Création d'un équipement</PageTitle>
 
@@ -48,7 +49,7 @@
         {
             Name = "",
             CreatedAt = DateTimeOffset.Now,
-            CreatedBy = HttpContext.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value,
+            CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
         };
     }
 
