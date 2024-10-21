@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 
@@ -13,14 +14,14 @@
     <a href="place/create">Ajouter un lieu</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.Places">
+<QuickGrid Class="table" Items="DB.Places.Include(p => p.PlaceType)">
     <PropertyColumn Property="placeentity => placeentity.Name" />
     <PropertyColumn Property="placeentity => placeentity.Address" />
     <PropertyColumn Property="placeentity => placeentity.City" />
     <PropertyColumn Property="placeentity => placeentity.PostalCode" />
     <PropertyColumn Property="placeentity => placeentity.Country" />
     <PropertyColumn Property="placeentity => placeentity.Latitude" />
-    <PropertyColumn Property="placeentity => placeentity.PlaceTypeId" />
+    <PropertyColumn Property="placeentity => placeentity.PlaceType.Name" />
 
     <TemplateColumn Context="placeentity">
         <a href="@($"place/edit?id={placeentity.Id}")">Modifier</a> |

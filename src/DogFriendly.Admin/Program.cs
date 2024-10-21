@@ -68,6 +68,7 @@ builder.Services.AddRefitClient<INominatimResource>()
     .ConfigureHttpClient((c) =>
     {
         c.BaseAddress = new Uri("https://nominatim.openstreetmap.org");
+        c.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; AcmeInc/1.0)");
     });
 builder.Services.AddControllersWithViews();
 builder.Services

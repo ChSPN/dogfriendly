@@ -18,7 +18,19 @@
     {
         <p><em>Chargement du lieu ...</em></p>
     }
-    else {
+    else
+    {
+        <dt class="col-sm-2">Nom</dt>
+        <dd class="col-sm-10">@placeentity.Name</dd>
+        <dt class="col-sm-2">Type de lieu</dt>
+        <dd class="col-sm-10">@placeentity.PlaceType.Name</dd>
+        <dt class="col-sm-2">Equipements</dt>
+        <dd class="col-sm-10">
+            @foreach (var placeAmenity in placeentity.PlaceAmenities)
+            {
+                <span> @placeAmenity.Amenity.Name </span>
+            }
+        </dd>
         <dl class="row">
             <dt class="col-sm-2">Adresse</dt>
             <dd class="col-sm-10">@placeentity.Address</dd>
@@ -48,10 +60,6 @@
             <dd class="col-sm-10">@placeentity.Longitude</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Nom</dt>
-            <dd class="col-sm-10">@placeentity.Name</dd>
-        </dl>
-        <dl class="row">
             <dt class="col-sm-2">Horaires</dt>
             <dd class="col-sm-10">@placeentity.OpeningHours</dd>
         </dl>
@@ -62,10 +70,6 @@
         <dl class="row">
             <dt class="col-sm-2">Photos</dt>
             <dd class="col-sm-10">@placeentity.Photos</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Identifiant du type de lieu</dt>
-            <dd class="col-sm-10">@placeentity.PlaceTypeId</dd>
         </dl>
         <dl class="row">
             <dt class="col-sm-2">Code postal</dt>
@@ -106,7 +110,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        placeentity = await DB.Places.FirstOrDefaultAsync(m => m.Id == Id);
+        placeentity = await DB.Places
+            .Include(p => p.PlaceAmenities)
+            .ThenInclude(p => p.Amenity)
+            .Include(p => p.PlaceType)
+            .FirstOrDefaultAsync(m => m.Id == Id);
 
         if (placeentity is null)
         {
