@@ -42,11 +42,6 @@ else
                     <InputCheckbox id="isadmin" @bind-Value="UserEntity.IsAdmin" class="form-check-input" />
                     <ValidationMessage For="() => UserEntity.IsAdmin" class="text-danger" />
                 </div>
-                <div class="mb-3">
-                    <label for="photouri" class="form-label">Photo :</label>
-                    <InputText id="photouri" @bind-Value="UserEntity.PhotoUri" class="form-control" />
-                    <ValidationMessage For="() => UserEntity.PhotoUri" class="text-danger" />
-                </div>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </EditForm>
         </div>

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="DogFriendly.Admin.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
+    <RadzenTheme Theme="default" @rendermode="InteractiveServer" />
     <HeadOutlet @rendermode="InteractiveServer" />
     <script>
         const firebaseConfig = {
@@ -33,5 +34,6 @@
     <script src="/js/init-component.js"></script>
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
 </body>
 </html>

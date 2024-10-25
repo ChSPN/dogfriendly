@@ -1,16 +1,22 @@
 @page "/place/create"
 @using DogFriendly.Admin.Services
 @using DogFriendly.Domain.Entitites
+@using DogFriendly.Domain.Options
+@using DogFriendly.Domain.Repositories
 @using DogFriendly.Domain.Resources
 @using Microsoft.AspNetCore.Authorization
-@using System.Security.Claims
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Options
+@using Newtonsoft.Json
+@using System.Security.Claims
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
 @inject AuthenticationService Authentication
 @inject IJSRuntime JSRuntime
 @inject INominatimResource NominatimResource
+@inject IFileStorageRepository FileStorageRepository
+@inject IOptions<FileStorageOption> FileStorageOption
 
 <PageTitle>Créer un lieu</PageTitle>
 
@@ -53,9 +59,9 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="address" class="form-label">Adresse :</label> 
-                <InputText id="address" @bind-Value="PlaceEntity.Address" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.Address" class="text-danger" /> 
+                <label for="address" class="form-label">Adresse :</label>
+                <InputText id="address" @bind-Value="PlaceEntity.Address" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.Address" class="text-danger" />
             </div>
             <div class="mb-3">
                 <label for="postalcode" class="form-label">Code postal :</label>
@@ -63,14 +69,14 @@
                 <ValidationMessage For="() => PlaceEntity.PostalCode" class="text-danger" />
             </div>
             <div class="mb-3">
-                <label for="city" class="form-label">Ville :</label> 
-                <InputText id="city" @bind-Value="PlaceEntity.City" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.City" class="text-danger" /> 
-            </div>        
+                <label for="city" class="form-label">Ville :</label>
+                <InputText id="city" @bind-Value="PlaceEntity.City" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.City" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="country" class="form-label">Pays :</label> 
-                <InputText id="country" @bind-Value="PlaceEntity.Country" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.Country" class="text-danger" /> 
+                <label for="country" class="form-label">Pays :</label>
+                <InputText id="country" @bind-Value="PlaceEntity.Country" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.Country" class="text-danger" />
             </div>
             <a class="btn btn-primary" @onclick="OnGeoClick">Géolocaliser l'adresse</a>
             <div class="mb-3">
@@ -84,29 +90,50 @@
                 <ValidationMessage For="() => PlaceEntity.Longitude" class="text-danger" />
             </div>
             <div class="mb-3">
-                <label for="description" class="form-label">Description :</label> 
-                <InputTextArea id="description" @bind-Value="PlaceEntity.Description" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.Description" class="text-danger" /> 
-            </div>        
+                <label for="description" class="form-label">Description :</label>
+                <InputTextArea id="description" @bind-Value="PlaceEntity.Description" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.Description" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Email :</label> 
-                <InputText id="email" @bind-Value="PlaceEntity.Email" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.Email" class="text-danger" /> 
-            </div>        
+                <label for="email" class="form-label">Email :</label>
+                <InputText id="email" @bind-Value="PlaceEntity.Email" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.Email" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="openinghours" class="form-label">Horaires :</label> 
-                <InputText id="openinghours" @bind-Value="PlaceEntity.OpeningHours" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.OpeningHours" class="text-danger" /> 
-            </div>        
+                <label for="openinghours" class="form-label">Horaires :</label>
+                <InputText id="openinghours" @bind-Value="PlaceEntity.OpeningHours" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.OpeningHours" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="phone" class="form-label">Téléphone :</label> 
-                <InputText id="phone" @bind-Value="PlaceEntity.Phone" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.Phone" class="text-danger" /> 
-            </div>            
+                <label for="phone" class="form-label">Téléphone :</label>
+                <InputText id="phone" @bind-Value="PlaceEntity.Phone" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.Phone" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="website" class="form-label">Site web :</label> 
-                <InputText id="website" @bind-Value="PlaceEntity.Website" class="form-control" /> 
-                <ValidationMessage For="() => PlaceEntity.Website" class="text-danger" /> 
+                <label for="website" class="form-label">Site web :</label>
+                <InputText id="website" @bind-Value="PlaceEntity.Website" class="form-control" />
+                <ValidationMessage For="() => PlaceEntity.Website" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <RadzenText TextStyle="TextStyle.H4">Photos :</RadzenText>
+                <RadzenUpload ChooseText="Ajouter une photo" Multiple="true" Url="/api/upload/place" Complete="OnUploadComplete" />
+                <div class="rz-fileupload">
+                @foreach (var photo in Photos)
+                {
+                    <div class="rz-fileupload-content rz-corner-bottom">
+                        <div class="rz-fileupload-files">
+                            <div class="rz-fileupload-row">
+                                <div><img style="width:200px;" src="@photo.Value" alt="@photo.Key" /></div>
+                                <div><span>@photo.Key</span></div>
+                                <div><span></span></div>
+                                <div>
+                                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="() => OnUploadDelete(photo)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Enregistrer</button>
         </EditForm>
@@ -118,22 +145,25 @@
 </div>
 
 @code {
-
     [SupplyParameterFromForm]
     public PlaceEntity PlaceEntity { get; set; }
 
-    public IEnumerable<PlaceTypeEntity> PlaceTypes { get; set; } = new List<PlaceTypeEntity>();
+    protected IEnumerable<AmenityEntity> Amenities { get; set; } = new List<AmenityEntity>();
+    protected List<int> AmenitiesIds { get; set; } = new List<int>();
+    protected Dictionary<string, string> Photos = new Dictionary<string, string>();
+    protected IEnumerable<PlaceTypeEntity> PlaceTypes { get; set; } = new List<PlaceTypeEntity>();
 
-    public IEnumerable<AmenityEntity> Amenities { get; set; } = new List<AmenityEntity>();
-
-    public List<int> AmenitiesIds { get; set; } = new List<int>();
-
+    /// <summary>
+    /// On change event for amenities.
+    /// </summary>
+    /// <param name="amenities">List of amenities.</param>
     [JSInvokable]
     public void OnAmenitiesChange(List<int> amenities)
     {
         AmenitiesIds = amenities;
     }
 
+    /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
         PlaceEntity = new PlaceEntity
@@ -143,7 +173,7 @@
             City = "",
             Country = "",
             Description = "",
-            PostalCode  = "",
+            PostalCode = "",
             CreatedAt = DateTimeOffset.UtcNow,
             CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
         };
@@ -151,6 +181,64 @@
         PlaceTypes = await DB.PlaceTypes.OrderBy(p => p.Name).ToListAsync();
     }
 
+    /// <inheritdoc />
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            DotNetObjectReference<Create> objRef = DotNetObjectReference.Create(this);
+            JSRuntime.InvokeVoidAsync("initSelect", objRef);
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    /// <summary>
+    /// Add place entity.
+    /// </summary>
+    /// <returns></returns>
+    protected async Task AddPlaceEntity()
+    {
+        await DB.Places.AddAsync(PlaceEntity);
+        await DB.SaveChangesAsync();
+
+        if (AmenitiesIds.Count > 0)
+        {
+            PlaceEntity.PlaceAmenities = AmenitiesIds
+                .Select(id => new PlaceAmenityEntity
+                    {
+                        AmenityId = id,
+                        Place = PlaceEntity
+                    })
+                .ToList();
+            PlaceEntity.Photos = Photos.Values.ToList();
+            await DB.PlaceAmenities.AddRangeAsync(PlaceEntity.PlaceAmenities);
+            await DB.SaveChangesAsync();
+        }
+
+        NavigationManager.NavigateTo("/places");
+    }
+
+    /// <summary>
+    /// On upload complete event.
+    /// </summary>
+    /// <param name="args">Arguments.</param>
+    protected void OnUploadComplete(UploadCompleteEventArgs args)
+    {
+        if (!string.IsNullOrEmpty(args.RawResponse))
+        {
+            var photos = JsonConvert.DeserializeObject<List<string>>(args.RawResponse);
+            foreach (var photo in photos)
+            {
+                Photos.Add(photo.Split('/').Last(), photo);
+            }
+        }
+    }
+
+    /// <summary>
+    /// On geolocalize click event.
+    /// </summary>
+    /// <returns></returns>
     protected async Task OnGeoClick()
     {
         var address = $"{PlaceEntity.Address}, {PlaceEntity.PostalCode} {PlaceEntity.City}, {PlaceEntity.Country}";
@@ -163,35 +251,15 @@
         }
     }
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    /// <summary>
+    /// On upload delete event.
+    /// </summary>
+    /// <param name="photo">Photo.</param>
+    protected async void OnUploadDelete(KeyValuePair<string, string> photo)
     {
-        if (firstRender)
+        if (await FileStorageRepository.RemoveFileAsync($"{FileStorageOption.Value.PlacesUri}/{photo.Key}"))
         {
-            DotNetObjectReference<Create> objRef = DotNetObjectReference.Create(this);
-            JSRuntime.InvokeVoidAsync("initSelect", objRef);
+            Photos.Remove(photo.Key);
         }
-
-        return base.OnAfterRenderAsync(firstRender);
-    }
-
-    protected async Task AddPlaceEntity()
-    {
-        await DB.Places.AddAsync(PlaceEntity);
-        await DB.SaveChangesAsync();
-
-        if (AmenitiesIds.Count > 0)
-        {
-            PlaceEntity.PlaceAmenities = AmenitiesIds
-                .Select(id => new PlaceAmenityEntity
-                {
-                    AmenityId = id,
-                    Place = PlaceEntity
-                })
-                .ToList();
-            await DB.PlaceAmenities.AddRangeAsync(PlaceEntity.PlaceAmenities);
-            await DB.SaveChangesAsync();
-        }
-
-        NavigationManager.NavigateTo("/places");
     }
 }

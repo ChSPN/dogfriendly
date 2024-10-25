@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json;
 using Refit;
 using Microsoft.AspNetCore.Identity;
+using Radzen;
 
 // Create a new app builder.
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,8 @@ FirebaseApp.Create(new AppOptions
 builder.Services.AddSingleton(FirebaseAuth.DefaultInstance);
 
 // Add services to the container.
+builder.Services.AddRadzenComponents();
+builder.Services.AddScoped<ThemeService>();
 builder.Services.AddDbContext<DogFriendlyContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DogFriendlyContext"));

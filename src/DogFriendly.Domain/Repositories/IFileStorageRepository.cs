@@ -13,5 +13,12 @@ namespace DogFriendly.Domain.Repositories
         /// <param name="fileContent">Content of the file.</param>
         /// <returns></returns>
         Task<bool> UploadFileAsync(string fileName, byte[] fileContent);
+
+        /// <summary>
+        /// Removes the file asynchronous.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns></returns>
+        Task<bool> RemoveFileAsync(string fileName);
     }
 }

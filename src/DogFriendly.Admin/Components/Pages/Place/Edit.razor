@@ -1,16 +1,22 @@
 @page "/place/edit"
 @using DogFriendly.Admin.Services
 @using DogFriendly.Domain.Entitites
+@using DogFriendly.Domain.Options
+@using DogFriendly.Domain.Repositories
 @using DogFriendly.Domain.Resources
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
+@using Microsoft.Extensions.Options
+@using Newtonsoft.Json
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
 @inject AuthenticationService Authentication
 @inject IJSRuntime JSRuntime
 @inject INominatimResource NominatimResource
+@inject IFileStorageRepository FileStorageRepository
+@inject IOptions<FileStorageOption> FileStorageOption
 
 <PageTitle>Modifier un lieu</PageTitle>
 
@@ -135,6 +141,27 @@ else
                     <InputText id="website" @bind-Value="PlaceEntity.Website" class="form-control" />
                     <ValidationMessage For="() => PlaceEntity.Website" class="text-danger" />
                 </div>
+                <div class="mb-3">
+                    <RadzenText TextStyle="TextStyle.H4">Photos :</RadzenText>
+                    <RadzenUpload ChooseText="Ajouter une photo" Multiple="true" Url="/api/upload/place" Complete="OnUploadComplete" />
+                    <div class="rz-fileupload">
+                        @foreach (var photo in Photos)
+                        {
+                            <div class="rz-fileupload-content rz-corner-bottom">
+                                <div class="rz-fileupload-files">
+                                    <div class="rz-fileupload-row">
+                                        <div><img style="width:200px;" src="@photo.Value" alt="@photo.Key" /></div>
+                                        <div><span>@photo.Key</span></div>
+                                        <div><span></span></div>
+                                        <div>
+                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="() => OnUploadDelete(photo)" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </EditForm>
         </div>
@@ -152,18 +179,22 @@ else
     [SupplyParameterFromForm]
     public PlaceEntity? PlaceEntity { get; set; }
 
-    public List<int> AmenitiesIds { get; set; } = new List<int>();
+    protected IEnumerable<AmenityEntity> Amenities { get; set; } = new List<AmenityEntity>();
+    protected List<int> AmenitiesIds { get; set; } = new List<int>();
+    protected IEnumerable<PlaceTypeEntity> PlaceTypes { get; set; } = new List<PlaceTypeEntity>();
+    protected Dictionary<string, string> Photos = new Dictionary<string, string>();
 
-    public IEnumerable<PlaceTypeEntity> PlaceTypes { get; set; } = new List<PlaceTypeEntity>();
-
-    public IEnumerable<AmenityEntity> Amenities { get; set; } = new List<AmenityEntity>();
-
+    /// <summary>
+    /// On amenities changed.
+    /// </summary>
+    /// <param name="amenities">List of amenities.</param>
     [JSInvokable]
     public void OnAmenitiesChange(List<int> amenities)
     {
         AmenitiesIds = amenities;
     }
 
+    /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
         PlaceEntity ??= await DB.Places
@@ -178,9 +209,11 @@ else
         {
             Amenities = await DB.Amenities.OrderBy(p => p.Name).ToListAsync();
             PlaceTypes = await DB.PlaceTypes.OrderBy(p => p.Name).ToListAsync();
+            Photos = PlaceEntity.Photos.ToDictionary(p => p.Split('/').Last(), p => p);
         }
     }
 
+    /// <inheritdoc />
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -192,6 +225,10 @@ else
         return base.OnAfterRenderAsync(firstRender);
     }
 
+    /// <summary>
+    /// On geolocalize click event.
+    /// </summary>
+    /// <returns></returns>
     protected async Task OnGeoClick()
     {
         var address = $"{PlaceEntity.Address}, {PlaceEntity.PostalCode} {PlaceEntity.City}, {PlaceEntity.Country}";
@@ -204,7 +241,11 @@ else
         }
     }
 
-    public async Task UpdatePlaceEntity()
+    /// <summary>
+    /// Update place entity.
+    /// </summary>
+    /// <returns></returns>
+    protected async Task UpdatePlaceEntity()
     {
         DB.Attach(PlaceEntity!).State = EntityState.Modified;
 
@@ -258,6 +299,7 @@ else
                 await DB.PlaceAmenities.AddRangeAsync(PlaceEntity.PlaceAmenities);
             }
 
+            PlaceEntity.Photos = Photos.Values.ToList();
             PlaceEntity.UpdatedAt = DateTimeOffset.UtcNow;
             PlaceEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
             await DB.SaveChangesAsync();
@@ -277,8 +319,41 @@ else
         NavigationManager.NavigateTo("/places");
     }
 
-    bool PlaceEntityExists(int id)
+    /// <summary>
+    /// Place entity exists.
+    /// </summary>
+    /// <param name="id">Identifier.</param>
+    /// <returns></returns>
+    protected bool PlaceEntityExists(int id)
     {
         return DB.Places.Any(e => e.Id == id);
+    }
+
+    /// <summary>
+    /// On upload complete event.
+    /// </summary>
+    /// <param name="args">Arguments.</param>
+    protected void OnUploadComplete(UploadCompleteEventArgs args)
+    {
+        if (!string.IsNullOrEmpty(args.RawResponse))
+        {
+            var photos = JsonConvert.DeserializeObject<List<string>>(args.RawResponse);
+            foreach (var photo in photos)
+            {
+                Photos.Add(photo.Split('/').Last(), photo);
+            }
+        }
+    }
+
+    /// <summary>
+    /// On upload delete event.
+    /// </summary>
+    /// <param name="photo">Photo.</param>
+    protected async void OnUploadDelete(KeyValuePair<string, string> photo)
+    {
+        if (await FileStorageRepository.RemoveFileAsync($"{FileStorageOption.Value.PlacesUri}/{photo.Key}"))
+        {
+            Photos.Remove(photo.Key);
+        }
     }
 }
