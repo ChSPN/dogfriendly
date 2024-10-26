@@ -199,6 +199,7 @@
     /// <returns></returns>
     protected async Task AddPlaceEntity()
     {
+        PlaceEntity.Photos = Photos.Values.ToList();
         await DB.Places.AddAsync(PlaceEntity);
         await DB.SaveChangesAsync();
 
@@ -211,7 +212,6 @@
                         Place = PlaceEntity
                     })
                 .ToList();
-            PlaceEntity.Photos = Photos.Values.ToList();
             await DB.PlaceAmenities.AddRangeAsync(PlaceEntity.PlaceAmenities);
             await DB.SaveChangesAsync();
         }

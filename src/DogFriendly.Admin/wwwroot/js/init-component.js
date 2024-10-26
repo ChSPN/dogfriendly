@@ -25,5 +25,10 @@ window.initSelect = function (objRef) {
             var amenities = $('#amenities').val();
             await objRef.invokeMethodAsync('OnAmenitiesChange', amenities.map(a => Number.parseInt(a)));
         });
+
+        $('#places').on('change', async function () {
+            var places = $('#places').val();
+            await objRef.invokeMethodAsync('OnPlacesChange', places.map(a => Number.parseInt(a)));
+        });
     }, 500);
 };

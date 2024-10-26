@@ -17,14 +17,15 @@
     {
         <p><em>Chargement de la liste ...</em></p>
     }
-    else {
+    else 
+    {
         <dl class="row">
-            <dt class="col-sm-2">Commentaire</dt>
-            <dd class="col-sm-10">@favoritelistentity.Comment</dd>
             <dt class="col-sm-2">Nom</dt>
             <dd class="col-sm-10">@favoritelistentity.Name</dd>
-            <dt class="col-sm-2">Identifiant de l'utilisateur</dt>
-            <dd class="col-sm-10">@favoritelistentity.UserId</dd>
+            <dt class="col-sm-2">Commentaire</dt>
+            <dd class="col-sm-10">@favoritelistentity.Comment</dd>
+            <dt class="col-sm-2">Utilisateur</dt>
+            <dd class="col-sm-10">@favoritelistentity.User.Name</dd>
             <dt class="col-sm-2">Créé le</dt>
             <dd class="col-sm-10">@favoritelistentity.CreatedAt</dd>
             <dt class="col-sm-2">Créé par</dt>
@@ -33,6 +34,20 @@
             <dd class="col-sm-10">@favoritelistentity.UpdatedAt</dd>
             <dt class="col-sm-2">Modifié par</dt>
             <dd class="col-sm-10">@favoritelistentity.UpdatedBy</dd>
+            <dt class="col-sm-2">Lieux</dt>
+            <dd class="col-sm-10">
+                @if (favoritelistentity.PlaceFavorites?.Any() == true)
+                {
+                    foreach (var place in favoritelistentity.PlaceFavorites)
+                    {
+                        <span> @place.Place.Name </span>
+                    }
+                }
+                else
+                {
+                    <span>Aucun lieu</span>
+                }
+            </dd>
         </dl>
         <div>
             <a href="@($"/favoritelist/edit?id={favoritelistentity.Id}")">Modifier</a> |
@@ -49,7 +64,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        favoritelistentity = await DB.Favorites.FirstOrDefaultAsync(m => m.Id == Id);
+        favoritelistentity = await DB.Favorites
+            .Include(f => f.User)
+            .Include(f => f.PlaceFavorites)
+            .ThenInclude(pf => pf.Place)
+            .FirstOrDefaultAsync(m => m.Id == Id);
 
         if (favoritelistentity is null)
         {

@@ -18,18 +18,19 @@
     {
         <p><em>Chargement de la liste ...</em></p>
     }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Commentaire</dt>
-            <dd class="col-sm-10">@favoritelistentity.Comment</dd>
-        </dl>
+    else 
+    {
         <dl class="row">
             <dt class="col-sm-2">Nom</dt>
             <dd class="col-sm-10">@favoritelistentity.Name</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Identifiant de l'utilisateur</dt>
-            <dd class="col-sm-10">@favoritelistentity.UserId</dd>
+            <dt class="col-sm-2">Commentaire</dt>
+            <dd class="col-sm-10">@favoritelistentity.Comment</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Utilisateur</dt>
+            <dd class="col-sm-10">@favoritelistentity.User.Name</dd>
         </dl>
         <dl class="row">
             <dt class="col-sm-2">Créé le</dt>
@@ -47,6 +48,22 @@
             <dt class="col-sm-2">Modifié par</dt>
             <dd class="col-sm-10">@favoritelistentity.UpdatedBy</dd>
         </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Lieux</dt>
+            <dd class="col-sm-10">
+                @if (favoritelistentity.PlaceFavorites?.Any() == true)
+                {
+                    foreach (var place in favoritelistentity.PlaceFavorites)
+                    {
+                        <span> @place.Place.Name </span>
+                    }
+                }
+                else
+                {
+                    <span>Aucun lieu</span>
+                }
+            </dd>
+        </dl>
         <EditForm method="post" Model="favoritelistentity" OnValidSubmit="DeleteFavoriteListEntity" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(favoritelistentity is null)">Supprimer</button> |
             <a href="/favoritelist">Liste des favoris</a>
@@ -62,7 +79,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        favoritelistentity = await DB.Favorites.FirstOrDefaultAsync(m => m.Id == Id);
+        favoritelistentity = await DB.Favorites
+            .Include(f => f.User)
+            .Include(f => f.PlaceFavorites)
+            .ThenInclude(pf => pf.Place)
+            .FirstOrDefaultAsync(m => m.Id == Id);
 
         if (favoritelistentity is null)
         {
@@ -70,7 +91,7 @@
         }
     }
 
-    public async Task DeleteFavoriteListEntity()
+    protected async Task DeleteFavoriteListEntity()
     {
         var placeFavorites = await DB.PlaceFavorites
             .Where(x => x.FavoriteListId == favoritelistentity.Id)
