@@ -28,12 +28,12 @@
             <dd class="col-sm-10">@reviewentity.Rating</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Identifiant du lieu</dt>
-            <dd class="col-sm-10">@reviewentity.PlaceId</dd>
+            <dt class="col-sm-2">Lieu</dt>
+            <dd class="col-sm-10">@reviewentity.Place.Name</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Identifiant de l'utilisateur</dt>
-            <dd class="col-sm-10">@reviewentity.UserId</dd>
+            <dt class="col-sm-2">Utilisateur</dt>
+            <dd class="col-sm-10">@reviewentity.User.Name</dd>
         </dl>
         <dl class="row">
             <dt class="col-sm-2">Créé le</dt>
@@ -66,7 +66,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        reviewentity = await DB.Reviews.FirstOrDefaultAsync(m => m.Id == Id);
+        reviewentity = await DB.Reviews
+            .Include(r => r.Place)
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(m => m.Id == Id);
 
         if (reviewentity is null)
         {
