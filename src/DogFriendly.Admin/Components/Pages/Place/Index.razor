@@ -14,18 +14,25 @@
     <a href="place/create">Ajouter un lieu</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.Places.Include(p => p.PlaceType)">
-    <PropertyColumn Property="placeentity => placeentity.Name" />
-    <PropertyColumn Property="placeentity => placeentity.Address" />
-    <PropertyColumn Property="placeentity => placeentity.City" />
-    <PropertyColumn Property="placeentity => placeentity.PostalCode" />
-    <PropertyColumn Property="placeentity => placeentity.Country" />
-    <PropertyColumn Property="placeentity => placeentity.Latitude" />
-    <PropertyColumn Property="placeentity => placeentity.PlaceType.Name" />
-
+<QuickGrid Class="table" Pagination=@Pagination Items="DB.Places.Include(p => p.PlaceType)">
+    <PropertyColumn Title="Nom" Sortable="true" Property="placeentity => placeentity.Name" />
+    <PropertyColumn Title="Adresse" Sortable="true" Property="placeentity => placeentity.Address" />
+    <PropertyColumn Title="Ville" Sortable="true" Property="placeentity => placeentity.City" />
+    <PropertyColumn Title="Code postal" Sortable="true" Property="placeentity => placeentity.PostalCode" />
+    <PropertyColumn Title="Pays" Sortable="true" Property="placeentity => placeentity.Country" />
+    <PropertyColumn Title="Type" Sortable="true" Property="placeentity => placeentity.PlaceType.Name" />
     <TemplateColumn Context="placeentity">
         <a href="@($"place/edit?id={placeentity.Id}")">Modifier</a> |
         <a href="@($"place/details?id={placeentity.Id}")">Détails</a> |
         <a href="@($"place/delete?id={placeentity.Id}")">Supprimer</a>
     </TemplateColumn>
 </QuickGrid>
+<Paginator State=@Pagination />
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+        {
+            ItemsPerPage = 10
+        };
+}

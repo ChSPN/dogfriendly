@@ -13,18 +13,24 @@
     <a href="placetype/create">Créer un type de lieu</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.PlaceTypes">
-    <PropertyColumn Property="placetypeentity => placetypeentity.Name" />
-    <PropertyColumn Property="placetypeentity => placetypeentity.IconUri" />
-    <PropertyColumn Property="placetypeentity => placetypeentity.Color" />
-    <PropertyColumn Property="placetypeentity => placetypeentity.CreatedAt" />
-    <PropertyColumn Property="placetypeentity => placetypeentity.CreatedBy" />
-    <PropertyColumn Property="placetypeentity => placetypeentity.UpdatedAt" />
-    <PropertyColumn Property="placetypeentity => placetypeentity.UpdatedBy" />
-
+<QuickGrid Class="table" Pagination=@Pagination Items="DB.PlaceTypes">
+    <PropertyColumn Title="Nom" Sortable="true" Property="placetypeentity => placetypeentity.Name" />
+    <PropertyColumn Title="Icone" Sortable="true" Property="placetypeentity => placetypeentity.IconUri" />
+    <PropertyColumn Title="Couleur" Sortable="true" Property="placetypeentity => placetypeentity.Color" />
+    <PropertyColumn Title="Créé le" Sortable="true" Property="placetypeentity => placetypeentity.CreatedAt" />
+    <PropertyColumn Title="Modifié le" Sortable="true" Property="placetypeentity => placetypeentity.UpdatedAt" />
     <TemplateColumn Context="placetypeentity">
         <a href="@($"placetype/edit?id={placetypeentity.Id}")">Modifier</a> |
         <a href="@($"placetype/details?id={placetypeentity.Id}")">Détails</a> |
         <a href="@($"placetype/delete?id={placetypeentity.Id}")">Supprimer</a>
     </TemplateColumn>
 </QuickGrid>
+<Paginator State=@Pagination />
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+        {
+            ItemsPerPage = 10
+        };
+}

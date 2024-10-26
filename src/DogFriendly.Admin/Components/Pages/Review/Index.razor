@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 
@@ -13,15 +14,24 @@
     <a href="review/create">Ajouter un avis</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.Reviews">
-    <PropertyColumn Property="reviewentity => reviewentity.Comment" />
-    <PropertyColumn Property="reviewentity => reviewentity.Rating" />
-    <PropertyColumn Property="reviewentity => reviewentity.PlaceId" />
-    <PropertyColumn Property="reviewentity => reviewentity.UserId" />
-
+<QuickGrid Class="table" Pagination=@Pagination
+    Items="DB.Reviews.Include(r => r.Place).Include(r => r.User)">
+    <PropertyColumn Title="Commentaire" Sortable="true" Property="reviewentity => reviewentity.Comment" />
+    <PropertyColumn Title="Note" Sortable="true" Property="reviewentity => reviewentity.Rating" />
+    <PropertyColumn Title="Nom du lieu" Sortable="true" Property="reviewentity => reviewentity.Place.Name" />
+    <PropertyColumn Title="Utilisateur" Sortable="true" Property="reviewentity => reviewentity.User.Name" />
     <TemplateColumn Context="reviewentity">
         <a href="@($"review/edit?id={reviewentity.Id}")">Modifier</a> |
         <a href="@($"review/details?id={reviewentity.Id}")">Détails</a> |
         <a href="@($"review/delete?id={reviewentity.Id}")">Supprimer</a>
     </TemplateColumn>
 </QuickGrid>
+<Paginator State=@Pagination />
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState 
+    {
+        ItemsPerPage = 10
+    };
+}

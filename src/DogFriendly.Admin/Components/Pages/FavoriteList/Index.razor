@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 
@@ -13,17 +14,24 @@
     <a href="favoritelist/create">Ajout d'une liste</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.Favorites">
-    <PropertyColumn Property="favoritelistentity => favoritelistentity.Name" />
-    <PropertyColumn Property="favoritelistentity => favoritelistentity.UserId" />
-    <PropertyColumn Property="favoritelistentity => favoritelistentity.CreatedAt" />
-    <PropertyColumn Property="favoritelistentity => favoritelistentity.CreatedBy" />
-    <PropertyColumn Property="favoritelistentity => favoritelistentity.UpdatedAt" />
-    <PropertyColumn Property="favoritelistentity => favoritelistentity.UpdatedBy" />
-
+<QuickGrid Class="table" Pagination=@Pagination Items="DB.Favorites.Include(f => f.User).Include(f => f.PlaceFavorites)">
+    <PropertyColumn Title="Nom" Sortable="true" Property="favoritelistentity => favoritelistentity.Name" />
+    <PropertyColumn Title="Utilisateur" Sortable="true" Property="favoritelistentity => favoritelistentity.User.Name" />
+    <PropertyColumn Title="Nombre de lieux" Sortable="true" Property="favoritelistentity => favoritelistentity.PlaceFavorites == null ? 0 : favoritelistentity.PlaceFavorites.Count" />
+    <PropertyColumn Title="Créé le" Sortable="true" Property="favoritelistentity => favoritelistentity.CreatedAt" />
+    <PropertyColumn Title="Modifié le" Sortable="true" Property="favoritelistentity => favoritelistentity.UpdatedAt" />
     <TemplateColumn Context="favoritelistentity">
         <a href="@($"favoritelist/edit?id={favoritelistentity.Id}")">Modifier</a> |
         <a href="@($"favoritelist/details?id={favoritelistentity.Id}")">Détails</a> |
         <a href="@($"favoritelist/delete?id={favoritelistentity.Id}")">Supprimer</a>
     </TemplateColumn>
 </QuickGrid>
+<Paginator State=@Pagination />
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+        {
+            ItemsPerPage = 10
+        };
+}

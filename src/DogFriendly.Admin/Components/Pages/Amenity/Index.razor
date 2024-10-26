@@ -13,17 +13,23 @@
     <a href="amenity/create">Créé un équipement</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.Amenities">
-    <PropertyColumn Property="amenityentity => amenityentity.IconUri" />
-    <PropertyColumn Property="amenityentity => amenityentity.Name" />
-    <PropertyColumn Property="amenityentity => amenityentity.CreatedAt" />
-    <PropertyColumn Property="amenityentity => amenityentity.CreatedBy" />
-    <PropertyColumn Property="amenityentity => amenityentity.UpdatedAt" />
-    <PropertyColumn Property="amenityentity => amenityentity.UpdatedBy" />
-
+<QuickGrid Class="table" Pagination=@Pagination Items="DB.Amenities">
+    <PropertyColumn Title="Nom" Sortable="true" Property="amenityentity => amenityentity.Name" />
+    <PropertyColumn Title="Icone" Sortable="true" Property="amenityentity => amenityentity.IconUri" />
+    <PropertyColumn Title="Créé le" Sortable="true" Property="amenityentity => amenityentity.CreatedAt" />
+    <PropertyColumn Title="Modifié le" Sortable="true" Property="amenityentity => amenityentity.UpdatedAt" />
     <TemplateColumn Context="amenityentity">
         <a href="@($"amenity/edit?id={amenityentity.Id}")">Modifier</a> |
         <a href="@($"amenity/details?id={amenityentity.Id}")">Détails</a> |
         <a href="@($"amenity/delete?id={amenityentity.Id}")">Supprimer</a>
     </TemplateColumn>
 </QuickGrid>
+<Paginator State=@Pagination />
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+        {
+            ItemsPerPage = 10
+        };
+}
