@@ -1,0 +1,76 @@
+@page "/review/details"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+
+<PageTitle>Détails de l'avis</PageTitle>
+
+<NavBar Title="Détails de l'avis" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (reviewentity is null)
+                    {
+                        <p><em>Chargement de l'avis du lieu ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Commentaire</dt>
+                            <dd class="col-sm-10">@reviewentity.Comment</dd>
+                            <dt class="col-sm-2">Note</dt>
+                            <dd class="col-sm-10">@reviewentity.Rating</dd>
+                            <dt class="col-sm-2">Lieu</dt>
+                            <dd class="col-sm-10">@reviewentity.Place.Name</dd>
+                            <dt class="col-sm-2">Utilisateur</dt>
+                            <dd class="col-sm-10">@reviewentity.User.Name</dd>
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@reviewentity.CreatedAt</dd>
+                            <dt class="col-sm-2">Créé par</dt>
+                            <dd class="col-sm-10">@reviewentity.CreatedBy</dd>
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@reviewentity.UpdatedAt</dd>
+                            <dt class="col-sm-2">Modifié par</dt>
+                            <dd class="col-sm-10">@reviewentity.UpdatedBy</dd>
+                        </dl>
+                    }
+                </div>
+                <div class="card-header">
+                    @if (reviewentity is not null)
+                    {
+                        <p class="card-category">
+                            <a href="@($"/review/edit?id={reviewentity.Id}")">Modifier</a> |
+                            <a href="@($"/reviews")">Liste des avis</a>
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    ReviewEntity? reviewentity;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        reviewentity = await DB.Reviews
+            .Include(r => r.Place)
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (reviewentity is null)
+        {
+            NavigationManager.NavigateTo("/reviews");
+        }
+    }
+}

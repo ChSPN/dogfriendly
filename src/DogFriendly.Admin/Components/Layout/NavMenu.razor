@@ -1,0 +1,64 @@
+﻿@using DogFriendly.Admin.Services
+@inject AuthenticationService AuthenticationService
+
+<div class="sidebar-wrapper">
+    <ul class="nav">
+        @if (AuthenticationService.IsAdmin)
+        {
+            <li>
+                <a href="/amenities">
+                    <i class="nc-icon nc-badge"></i>
+                    <p>Equipements</p>
+                </a>
+            </li>
+            <li>
+                <a href="/placetypes">
+                    <i class="nc-icon nc-pin-3"></i>
+                    <p>Type de lieux</p>
+                </a>
+            </li>
+            <li>
+                <a href="/places">
+                    <i class="nc-icon nc-world-2"></i>
+                    <p>Lieux</p>
+                </a>
+            </li>
+            <li>
+                <a href="/favoritelist">
+                    <i class="nc-icon nc-tag-content"></i>
+                    <p>Favoris</p>
+                </a>
+            </li>
+            <li>
+                <a href="/reviews">
+                    <i class="nc-icon nc-diamond"></i>
+                    <p>Avis</p>
+                </a>
+            </li>
+            <li>
+                <a href="/users">
+                    <i class="nc-icon nc-single-02"></i>
+                    <p>Utilisateurs</p>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="active">
+                <a href="/">
+                    <i class="nc-icon nc-bank"></i>
+                    <p>Accueil</p>
+                </a>
+            </li>
+        }
+        @if (AuthenticationService.IsAuthenticated)
+        {
+            <li>
+                <a href="/login">
+                    <i class="nc-icon nc-button-power"></i>
+                    <p>Se deconnecter</p>
+                </a>
+            </li>
+        }
+    </ul>
+</div>

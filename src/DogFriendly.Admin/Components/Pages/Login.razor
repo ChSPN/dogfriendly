@@ -1,0 +1,71 @@
+﻿@page "/login"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using FirebaseAdmin
+@using FirebaseAdmin.Auth
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.JSInterop
+@using System.Security.Claims
+@inject IJSRuntime JS
+@inject AuthenticationService Authentication
+@inject NavigationManager NavigationManager
+
+<PageTitle>Connexion Dog Friendly Admin</PageTitle>
+
+<NavBar Title="Connexion Dog Friendly Admin" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            @if (Authentication.IsAuthenticated)
+            {
+                <p>Vous êtes connecté @(Authentication.Identity.FindFirst(ClaimTypes.Name).Value).</p>
+                <button @onclick="LogoutUser" class="btn btn-primary">Déconnexion</button>
+            }
+            else
+            {
+                <div id="firebaseui-auth-container"></div>
+            }
+        </div>
+    </div>
+</div>
+
+@code 
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            DotNetObjectReference<Login> objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("initFirebaseUi", objRef);
+        }
+    }
+
+    [JSInvokable]
+    public async Task LoginUser(string token)
+    {
+        await Authentication.LogIn(token);
+        NavigationManager.NavigateTo("/");
+    }
+
+    [JSInvokable]
+    public async Task LogoutUser()
+    {
+        Authentication.LogOut();
+        await JS.InvokeVoidAsync("logoutFirebaseAuth");
+        NavigationManager.NavigateTo("/");
+    }
+
+    [JSInvokable]
+    public async Task SigninUser(string token)
+    {
+        await Authentication.LogIn(token);
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void SignoutUser()
+    {
+        Authentication.LogOut();
+        StateHasChanged();
+    }
+}

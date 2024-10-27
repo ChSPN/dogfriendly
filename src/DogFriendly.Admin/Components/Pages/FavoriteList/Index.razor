@@ -1,0 +1,49 @@
+@page "/favoritelist"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des favoris</PageTitle>
+
+<NavBar Title="Liste des favoris" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="favoritelist/create">Ajouter un favori</a>
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <QuickGrid Class="table" Pagination=@Pagination Items="DB.Favorites.Include(f => f.User).Include(f => f.PlaceFavorites)">
+                            <PropertyColumn Title="Nom" Sortable="true" Property="favoritelistentity => favoritelistentity.Name" />
+                            <PropertyColumn Title="Utilisateur" Sortable="true" Property="favoritelistentity => favoritelistentity.User.Name" />
+                            <PropertyColumn Title="Nombre de lieux" Sortable="true" Property="favoritelistentity => favoritelistentity.PlaceFavorites == null ? 0 : favoritelistentity.PlaceFavorites.Count" />
+                            <PropertyColumn Title="Créé le" Sortable="true" Property="favoritelistentity => favoritelistentity.CreatedAt" />
+                            <PropertyColumn Title="Modifié le" Sortable="true" Property="favoritelistentity => favoritelistentity.UpdatedAt" />
+                            <TemplateColumn Context="favoritelistentity">
+                                <a href="@($"favoritelist/edit?id={favoritelistentity.Id}")">Modifier</a> |
+                                <a href="@($"favoritelist/details?id={favoritelistentity.Id}")">Détails</a> |
+                                <a href="@($"favoritelist/delete?id={favoritelistentity.Id}")">Supprimer</a>
+                            </TemplateColumn>
+                        </QuickGrid>
+                        <Paginator State=@Pagination />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+    {
+        ItemsPerPage = 10
+    };
+}

@@ -1,0 +1,50 @@
+@page "/places"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des lieux</PageTitle>
+
+<NavBar Title="Liste des lieux" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="place/create">Ajouter un lieu</a>
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <QuickGrid Class="table" Pagination=@Pagination Items="DB.Places.Include(p => p.PlaceType)">
+                            <PropertyColumn Title="Nom" Sortable="true" Property="placeentity => placeentity.Name" />
+                            <PropertyColumn Title="Adresse" Sortable="true" Property="placeentity => placeentity.Address" />
+                            <PropertyColumn Title="Ville" Sortable="true" Property="placeentity => placeentity.City" />
+                            <PropertyColumn Title="Code postal" Sortable="true" Property="placeentity => placeentity.PostalCode" />
+                            <PropertyColumn Title="Pays" Sortable="true" Property="placeentity => placeentity.Country" />
+                            <PropertyColumn Title="Type" Sortable="true" Property="placeentity => placeentity.PlaceType.Name" />
+                            <TemplateColumn Context="placeentity">
+                                <a href="@($"place/edit?id={placeentity.Id}")">Modifier</a> |
+                                <a href="@($"place/details?id={placeentity.Id}")">Détails</a> |
+                                <a href="@($"place/delete?id={placeentity.Id}")">Supprimer</a>
+                            </TemplateColumn>
+                        </QuickGrid>
+                        <Paginator State=@Pagination />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+    {
+        ItemsPerPage = 10
+    };
+}

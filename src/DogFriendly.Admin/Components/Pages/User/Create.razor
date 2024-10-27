@@ -1,0 +1,73 @@
+@page "/user/create"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Créer un utilisateur</PageTitle>
+
+<NavBar Title="Créer un utilisateur" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <EditForm method="post" Model="UserEntity" OnValidSubmit="AddUserEntity" FormName="create" Enhance>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom :</label>
+                            <InputText id="name" @bind-Value="UserEntity.Name" class="form-control" />
+                            <ValidationMessage For="() => UserEntity.Name" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email :</label>
+                            <InputText id="email" @bind-Value="UserEntity.Email" class="form-control" />
+                            <ValidationMessage For="() => UserEntity.Email" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="isadmin" class="form-label">Administrateur :</label>
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <InputCheckbox id="isadmin" @bind-Value="UserEntity.IsAdmin" class="form-check-input" />
+                            <ValidationMessage For="() => UserEntity.IsAdmin" class="text-danger" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </EditForm>
+                </div>
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/users">Liste des utilisateurs</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code 
+{
+    [SupplyParameterFromForm]
+    public UserEntity UserEntity { get; set; }
+
+    protected override void OnInitialized()
+    {
+        UserEntity = new UserEntity
+        {
+            Email = string.Empty,
+            Name = string.Empty,
+            CreatedAt = DateTimeOffset.UtcNow,
+            CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
+        };
+    }
+
+    public async Task AddUserEntity()
+    {
+        DB.Users.Add(UserEntity);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/users");
+    }
+}

@@ -1,0 +1,66 @@
+@page "/amenity/create"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Création d'un équipement</PageTitle>
+
+<NavBar Title="Création d'un équipement" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <EditForm method="post" Model="AmenityEntity" OnValidSubmit="AddAmenityEntity" FormName="create" Enhance>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+                        <div class="mb-3">
+                            <label for="iconuri" class="form-label">Icone :</label>
+                            <InputText id="iconuri" @bind-Value="AmenityEntity.IconUri" class="form-control" />
+                            <ValidationMessage For="() => AmenityEntity.IconUri" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom :</label>
+                            <InputText id="name" @bind-Value="AmenityEntity.Name" class="form-control" />
+                            <ValidationMessage For="() => AmenityEntity.Name" class="text-danger" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </EditForm>
+                </div>
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/amenities">Liste des équipements</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public AmenityEntity AmenityEntity { get; set; }
+
+    protected override void OnInitialized()
+    {
+        AmenityEntity = new AmenityEntity
+            {
+                Name = "",
+                CreatedAt = DateTimeOffset.UtcNow,
+                CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
+            };
+    }
+
+    public async Task AddAmenityEntity()
+    {
+        DB.Amenities.Add(AmenityEntity);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/amenities");
+    }
+}

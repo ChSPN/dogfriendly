@@ -1,0 +1,49 @@
+@page "/reviews"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des avis</PageTitle>
+
+<NavBar Title="Liste des avis" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="review/create">Ajouter un avis</a>
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <QuickGrid Class="table" Pagination=@Pagination
+                                   Items="DB.Reviews.Include(r => r.Place).Include(r => r.User)">
+                            <PropertyColumn Title="Commentaire" Sortable="true" Property="reviewentity => reviewentity.Comment" />
+                            <PropertyColumn Title="Note" Sortable="true" Property="reviewentity => reviewentity.Rating" />
+                            <PropertyColumn Title="Nom du lieu" Sortable="true" Property="reviewentity => reviewentity.Place.Name" />
+                            <PropertyColumn Title="Utilisateur" Sortable="true" Property="reviewentity => reviewentity.User.Name" />
+                            <TemplateColumn Context="reviewentity">
+                                <a href="@($"review/edit?id={reviewentity.Id}")">Modifier</a> |
+                                <a href="@($"review/details?id={reviewentity.Id}")">Détails</a> |
+                                <a href="@($"review/delete?id={reviewentity.Id}")">Supprimer</a>
+                            </TemplateColumn>
+                        </QuickGrid>
+                        <Paginator State=@Pagination />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+    {
+        ItemsPerPage = 10
+    };
+}

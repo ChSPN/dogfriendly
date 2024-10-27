@@ -55,5 +55,21 @@ namespace DogFriendly.Infrastructure.Repositories
                 return response.HttpStatusCode == HttpStatusCode.OK;
             }
         }
+
+        /// <summary>
+        /// Removes the file asynchronous.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns></returns>
+        public async Task<bool> RemoveFileAsync(string fileName)
+        {
+            var deleteRequest = new DeleteObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = fileName
+            };
+            var response = await _s3Client.DeleteObjectAsync(deleteRequest);
+            return response.HttpStatusCode == HttpStatusCode.NoContent;
+        }
     }
 }

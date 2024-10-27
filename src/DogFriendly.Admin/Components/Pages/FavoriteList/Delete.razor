@@ -1,0 +1,117 @@
+@page "/favoritelist/delete"
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+
+<PageTitle>Suppresion d'une liste de favoris</PageTitle>
+
+<NavBar Title="Suppresion d'une liste de favoris" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        Etes-vous sur de vouloir supprimer cette liste ?
+                    </p>
+                </div>
+                <div class="card-body">
+                    @if (favoritelistentity is null)
+                    {
+                        <p><em>Chargement de la liste ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Nom</dt>
+                            <dd class="col-sm-10">@favoritelistentity.Name</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Commentaire</dt>
+                            <dd class="col-sm-10">@favoritelistentity.Comment</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Utilisateur</dt>
+                            <dd class="col-sm-10">@favoritelistentity.User.Name</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@favoritelistentity.CreatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé par</dt>
+                            <dd class="col-sm-10">@favoritelistentity.CreatedBy</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@favoritelistentity.UpdatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié par</dt>
+                            <dd class="col-sm-10">@favoritelistentity.UpdatedBy</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Lieux</dt>
+                            <dd class="col-sm-10">
+                                @if (favoritelistentity.PlaceFavorites?.Any() == true)
+                                {
+                                    foreach (var place in favoritelistentity.PlaceFavorites)
+                                    {
+                                        <span> @place.Place.Name </span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span>Aucun lieu</span>
+                                }
+                            </dd>
+                        </dl>
+                        <EditForm method="post" Model="favoritelistentity" OnValidSubmit="DeleteFavoriteListEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(favoritelistentity is null)">Supprimer</button> |
+                            <a href="/favoritelist">Liste des favoris</a>
+                        </EditForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    FavoriteListEntity? favoritelistentity;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        favoritelistentity = await DB.Favorites
+            .Include(f => f.User)
+            .Include(f => f.PlaceFavorites)
+            .ThenInclude(pf => pf.Place)
+            .FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (favoritelistentity is null)
+        {
+            NavigationManager.NavigateTo("/favoritelist");
+        }
+    }
+
+    protected async Task DeleteFavoriteListEntity()
+    {
+        var placeFavorites = await DB.PlaceFavorites
+            .Where(x => x.FavoriteListId == favoritelistentity.Id)
+            .ToListAsync();
+        if (placeFavorites.Count > 0)
+        {
+            DB.PlaceFavorites.RemoveRange(placeFavorites);
+        }
+
+        DB.Favorites.Remove(favoritelistentity!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/favoritelist");
+    }
+}
