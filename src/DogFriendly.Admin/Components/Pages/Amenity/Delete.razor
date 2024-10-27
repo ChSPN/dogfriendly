@@ -8,50 +8,60 @@
 
 <PageTitle>Suppression d'un équipement</PageTitle>
 
-<h1>Suppression</h1>
-
-<h3>Etes-vous sur de vouloir supprimer cet équipement ?</h3>
-<div>
-    <h4>Equipement</h4>
-    <hr />
-    @if (amenityentity is null)
-    {
-        <p><em>Chargement de l'équipement ...</em></p>
-    }
-    else
-    {
-        <dl class="row">
-            <dt class="col-sm-2">Icone</dt>
-            <dd class="col-sm-10">@amenityentity.IconUri</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Nom</dt>
-            <dd class="col-sm-10">@amenityentity.Name</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Créé le</dt>
-            <dd class="col-sm-10">@amenityentity.CreatedAt</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Créé par</dt>
-            <dd class="col-sm-10">@amenityentity.CreatedBy</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Modifié le</dt>
-            <dd class="col-sm-10">@amenityentity.UpdatedAt</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Modifié par</dt>
-            <dd class="col-sm-10">@amenityentity.UpdatedBy</dd>
-        </dl>
-        <EditForm method="post" Model="amenityentity" OnValidSubmit="DeleteAmenityEntity" FormName="delete" Enhance>
-            <button type="submit" class="btn btn-danger" disabled="@(amenityentity is null)">Supprimer</button> |
-            <a href="/amenities">Liste des équipements</a>
-        </EditForm>
-    }
+<NavBar Title="Suppresion d'un équipement" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        Etes-vous sur de vouloir supprimer cet équipement ?
+                    </p>
+                </div>
+                <div class="card-body">
+                    @if (amenityentity is null)
+                    {
+                        <p><em>Chargement de l'équipement ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Icone</dt>
+                            <dd class="col-sm-10">@amenityentity.IconUri</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Nom</dt>
+                            <dd class="col-sm-10">@amenityentity.Name</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@amenityentity.CreatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé par</dt>
+                            <dd class="col-sm-10">@amenityentity.CreatedBy</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@amenityentity.UpdatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié par</dt>
+                            <dd class="col-sm-10">@amenityentity.UpdatedBy</dd>
+                        </dl>
+                        <EditForm method="post" Model="amenityentity" OnValidSubmit="DeleteAmenityEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(amenityentity is null)">Supprimer</button> |
+                            <a href="/amenities">Liste des équipements</a>
+                        </EditForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-@code {
+@code
+{
     AmenityEntity? amenityentity;
 
     [SupplyParameterFromQuery]
@@ -70,8 +80,8 @@
     public async Task DeleteAmenityEntity()
     {
         var placeAmenities = await DB.PlaceAmenities
-            .Where(p => p.AmenityId == amenityentity.Id)
-            .ToListAsync();
+        .Where(p => p.AmenityId == amenityentity.Id)
+        .ToListAsync();
         if (placeAmenities.Count > 0)
         {
             DB.PlaceAmenities.RemoveRange(placeAmenities);

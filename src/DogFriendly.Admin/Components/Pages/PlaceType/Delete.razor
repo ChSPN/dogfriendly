@@ -8,50 +8,60 @@
 
 <PageTitle>Supprimer un type de lieu</PageTitle>
 
-<h1>Suppression</h1>
-
-<h3>Etes-vous sur de vouloir supprimer le type de lieu ?</h3>
-<div>
-    <h4>Type de lieu</h4>
-    <hr />
-    @if (placetypeentity is null)
-    {
-        <p><em>Chargement du type de lieu ...</em></p>
-    }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Nom</dt>
-            <dd class="col-sm-10">@placetypeentity.Name</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Icone</dt>
-            <dd class="col-sm-10">@placetypeentity.IconUri</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Couleur</dt>
-            <dd class="col-sm-10">@placetypeentity.Color</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Créé le</dt>
-            <dd class="col-sm-10">@placetypeentity.CreatedAt</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Créé par</dt>
-            <dd class="col-sm-10">@placetypeentity.CreatedBy</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Modifié le</dt>
-            <dd class="col-sm-10">@placetypeentity.UpdatedAt</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Modifié par</dt>
-            <dd class="col-sm-10">@placetypeentity.UpdatedBy</dd>
-        </dl>
-        <EditForm method="post" Model="placetypeentity" OnValidSubmit="DeletePlaceTypeEntity" FormName="delete" Enhance>
-            <button type="submit" class="btn btn-danger" disabled="@(placetypeentity is null)">Supprimer</button> |
-            <a href="/placetypes">Liste des type de lieux</a>
-        </EditForm>
-    }
+<NavBar Title="Suppresion d'un type de lieu" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        Etes-vous sur de vouloir supprimer ce type de lieu ?
+                    </p>
+                </div>
+                <div class="card-body">
+                    @if (placetypeentity is null)
+                    {
+                        <p><em>Chargement du type de lieu ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Nom</dt>
+                            <dd class="col-sm-10">@placetypeentity.Name</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Icone</dt>
+                            <dd class="col-sm-10">@placetypeentity.IconUri</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Couleur</dt>
+                            <dd class="col-sm-10">@placetypeentity.Color</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@placetypeentity.CreatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé par</dt>
+                            <dd class="col-sm-10">@placetypeentity.CreatedBy</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@placetypeentity.UpdatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié par</dt>
+                            <dd class="col-sm-10">@placetypeentity.UpdatedBy</dd>
+                        </dl>
+                        <EditForm method="post" Model="placetypeentity" OnValidSubmit="DeletePlaceTypeEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(placetypeentity is null)">Supprimer</button> |
+                            <a href="/placetypes">Liste des type de lieux</a>
+                        </EditForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {

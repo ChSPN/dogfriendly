@@ -10,53 +10,57 @@
 
 <PageTitle>Créer un type de lieu</PageTitle>
 
-<h1>Création</h1>
-
-<h4>Type de lieu</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <EditForm method="post" Model="PlaceTypeEntity" OnValidSubmit="AddPlaceTypeEntity" FormName="create" Enhance>
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" />
-            <div class="mb-3">
-                <label for="name" class="form-label">Nom :</label>
-                <InputText id="name" @bind-Value="PlaceTypeEntity.Name" class="form-control" />
-                <ValidationMessage For="() => PlaceTypeEntity.Name" class="text-danger" />
+<NavBar Title="Créer un type de lieu" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <EditForm method="post" Model="PlaceTypeEntity" OnValidSubmit="AddPlaceTypeEntity" FormName="create" Enhance>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom :</label>
+                            <InputText id="name" @bind-Value="PlaceTypeEntity.Name" class="form-control" />
+                            <ValidationMessage For="() => PlaceTypeEntity.Name" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="iconuri" class="form-label">Icone :</label>
+                            <InputText id="iconuri" @bind-Value="PlaceTypeEntity.IconUri" class="form-control" />
+                            <ValidationMessage For="() => PlaceTypeEntity.IconUri" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="color" class="form-label">Couleur :</label>
+                            <InputText id="color" @bind-Value="PlaceTypeEntity.Color" class="form-control" />
+                            <ValidationMessage For="() => PlaceTypeEntity.Color" class="text-danger" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </EditForm>
+                </div>
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/placetypes">Liste des types de lieux</a>
+                    </p>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="iconuri" class="form-label">Icone :</label>
-                <InputText id="iconuri" @bind-Value="PlaceTypeEntity.IconUri" class="form-control" />
-                <ValidationMessage For="() => PlaceTypeEntity.IconUri" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="color" class="form-label">Couleur :</label> 
-                <InputText id="color" @bind-Value="PlaceTypeEntity.Color" class="form-control" /> 
-                <ValidationMessage For="() => PlaceTypeEntity.Color" class="text-danger" /> 
-            </div>                      
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </EditForm>
+        </div>
     </div>
 </div>
 
-<div>
-    <a href="/placetypes">Liste des types de lieux</a>
-</div>
-
-@code {
-
+@code
+{
     [SupplyParameterFromForm]
     public PlaceTypeEntity PlaceTypeEntity { get; set; }
 
     protected override void OnInitialized()
     {
         PlaceTypeEntity = new PlaceTypeEntity
-        {
-            Name = string.Empty,
-            IconUri = string.Empty,
+            {
+                Name = string.Empty,
+                IconUri = string.Empty,
                 CreatedAt = DateTimeOffset.UtcNow,
-            CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
-        };
+                CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
+            };
     }
 
     public async Task AddPlaceTypeEntity()

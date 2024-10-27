@@ -1,25 +1,42 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
+<div class="wrapper">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <div class="logo">
+            <a href="/" class="simple-text logo-mini">
+                <div class="logo-image-small">
+                    <img src="/img/logo.png">
+                </div>
+            </a>
+            <a href="/" class="simple-text logo-normal">
+                Dog Friendly
+            </a>
+        </div>
         <NavMenu />
     </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://dogfriendly.delpierre.me/" target="_blank">DogFriendly.Web</a>
+    <div class="main-panel">
+        @Body
+        <footer class="footer footer-black footer-white">
+            <div class="container-fluid">
+                <div class="row">
+                    <nav class="footer-nav">
+                        <ul>
+                            <li><a href="https://dogfriendly-test.delpierre.me/" target="_blank">Dog Friendly</a></li>
+                            <li><a href="https://www.creative-tim.com/" target="_blank">Creative Tim</a></li>
+                        </ul>
+                    </nav>
+                    <div class="credits ml-auto">
+                        <span class="copyright">
+                            © 2024, Dog Friendly with Creative Tim Template
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div id="blazor-error-ui">
+            An unhandled error has occurred.
+            <a href="" class="reload">Reload</a>
+            <a class="dismiss">🗙</a>
         </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+    </div>
 </div>
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
-
-<RadzenComponents @rendermode="InteractiveServer" />

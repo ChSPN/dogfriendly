@@ -8,66 +8,77 @@
 
 <PageTitle>Détails du lieu</PageTitle>
 
-<h1>Détails</h1>
-
-<div>
-    <h4>Lieu</h4>
-    <hr />
-    @if (placeentity is null)
-    {
-        <p><em>Chargement du lieu ...</em></p>
-    }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Nom</dt>
-            <dd class="col-sm-10">@placeentity.Name</dd>
-            <dt class="col-sm-2">Type de lieu</dt>
-            <dd class="col-sm-10">@placeentity.PlaceType.Name</dd>
-            <dt class="col-sm-2">Equipements</dt>
-            <dd class="col-sm-10">
-                @foreach (var placeAmenity in placeentity.PlaceAmenities)
-                {
-                    <span> @placeAmenity.Amenity.Name </span>
-                }
-            </dd>
-            <dt class="col-sm-2">Adresse</dt>
-            <dd class="col-sm-10">@placeentity.Address</dd>
-            <dt class="col-sm-2">Code postal</dt>
-            <dd class="col-sm-10">@placeentity.PostalCode</dd>
-            <dt class="col-sm-2">Ville</dt>
-            <dd class="col-sm-10">@placeentity.City</dd>
-            <dt class="col-sm-2">Pays</dt>
-            <dd class="col-sm-10">@placeentity.Country</dd>
-            <dt class="col-sm-2">Description</dt>
-            <dd class="col-sm-10">@placeentity.Description</dd>
-            <dt class="col-sm-2">Email</dt>
-            <dd class="col-sm-10">@placeentity.Email</dd>
-            <dt class="col-sm-2">Latitude</dt>
-            <dd class="col-sm-10">@placeentity.Latitude</dd>
-            <dt class="col-sm-2">Longitude</dt>
-            <dd class="col-sm-10">@placeentity.Longitude</dd>
-            <dt class="col-sm-2">Horaires</dt>
-            <dd class="col-sm-10">@placeentity.OpeningHours</dd>
-            <dt class="col-sm-2">Téléphone</dt>
-            <dd class="col-sm-10">@placeentity.Phone</dd>
-            <dt class="col-sm-2">Photos</dt>
-            <dd class="col-sm-10">@placeentity.Photos</dd>
-            <dt class="col-sm-2">Site web</dt>
-            <dd class="col-sm-10">@placeentity.Website</dd>
-            <dt class="col-sm-2">Créé le</dt>
-            <dd class="col-sm-10">@placeentity.CreatedAt</dd>
-            <dt class="col-sm-2">Créé par</dt>
-            <dd class="col-sm-10">@placeentity.CreatedBy</dd>
-            <dt class="col-sm-2">Modifié le</dt>
-            <dd class="col-sm-10">@placeentity.UpdatedAt</dd>
-            <dt class="col-sm-2">Modifié par</dt>
-            <dd class="col-sm-10">@placeentity.UpdatedBy</dd>
-        </dl>
-        <div>
-            <a href="@($"/place/edit?id={placeentity.Id}")">Modifier</a> |
-            <a href="@($"/places")">Liste des lieux</a>
+<NavBar Title="Détails du lieu" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (placeentity is null)
+                    {
+                        <p><em>Chargement du lieu ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Nom</dt>
+                            <dd class="col-sm-10">@placeentity.Name</dd>
+                            <dt class="col-sm-2">Type de lieu</dt>
+                            <dd class="col-sm-10">@placeentity.PlaceType.Name</dd>
+                            <dt class="col-sm-2">Equipements</dt>
+                            <dd class="col-sm-10">
+                                @foreach (var placeAmenity in placeentity.PlaceAmenities)
+                                {
+                                    <span> @placeAmenity.Amenity.Name </span>
+                                }
+                            </dd>
+                            <dt class="col-sm-2">Adresse</dt>
+                            <dd class="col-sm-10">@placeentity.Address</dd>
+                            <dt class="col-sm-2">Code postal</dt>
+                            <dd class="col-sm-10">@placeentity.PostalCode</dd>
+                            <dt class="col-sm-2">Ville</dt>
+                            <dd class="col-sm-10">@placeentity.City</dd>
+                            <dt class="col-sm-2">Pays</dt>
+                            <dd class="col-sm-10">@placeentity.Country</dd>
+                            <dt class="col-sm-2">Description</dt>
+                            <dd class="col-sm-10">@placeentity.Description</dd>
+                            <dt class="col-sm-2">Email</dt>
+                            <dd class="col-sm-10">@placeentity.Email</dd>
+                            <dt class="col-sm-2">Latitude</dt>
+                            <dd class="col-sm-10">@placeentity.Latitude</dd>
+                            <dt class="col-sm-2">Longitude</dt>
+                            <dd class="col-sm-10">@placeentity.Longitude</dd>
+                            <dt class="col-sm-2">Horaires</dt>
+                            <dd class="col-sm-10">@placeentity.OpeningHours</dd>
+                            <dt class="col-sm-2">Téléphone</dt>
+                            <dd class="col-sm-10">@placeentity.Phone</dd>
+                            <dt class="col-sm-2">Photos</dt>
+                            <dd class="col-sm-10">@placeentity.Photos</dd>
+                            <dt class="col-sm-2">Site web</dt>
+                            <dd class="col-sm-10">@placeentity.Website</dd>
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@placeentity.CreatedAt</dd>
+                            <dt class="col-sm-2">Créé par</dt>
+                            <dd class="col-sm-10">@placeentity.CreatedBy</dd>
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@placeentity.UpdatedAt</dd>
+                            <dt class="col-sm-2">Modifié par</dt>
+                            <dd class="col-sm-10">@placeentity.UpdatedBy</dd>
+                        </dl>
+                    }
+                </div>
+                <div class="card-header">
+                    @if (placeentity is not null)
+                    {
+                        <p class="card-category">
+                            <a href="@($"/place/edit?id={placeentity.Id}")">Modifier</a> |
+                            <a href="@($"/places")">Liste des lieux</a>
+                        </p>
+                    }
+                </div>
+            </div>
         </div>
-    }
+    </div>
 </div>
 
 @code {

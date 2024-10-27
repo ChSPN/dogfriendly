@@ -12,71 +12,75 @@
 
 <PageTitle>Modifier la liste de favoris</PageTitle>
 
-<h1>Modifier</h1>
-
-<h4>Liste de favoris</h4>
-<hr />
-@if (FavoriteListEntity is null)
-{
-    <p><em>Chargement ...</em></p>
-}
-else
-{
+<NavBar Title="Modifier la liste de favoris" />
+<div class="content">
     <div class="row">
-        <div class="col-md-4">
-            <EditForm method="post" Model="FavoriteListEntity" OnValidSubmit="UpdateFavoriteListEntity" FormName="edit" Enhance>
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nom :</label>
-                    <InputText id="name" @bind-Value="FavoriteListEntity.Name" class="form-control" />
-                    <ValidationMessage For="() => FavoriteListEntity.Name" class="text-danger" />
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (FavoriteListEntity is null)
+                    {
+                        <p><em>Chargement ...</em></p>
+                    }
+                    else
+                    {
+                        <EditForm method="post" Model="FavoriteListEntity" OnValidSubmit="UpdateFavoriteListEntity" FormName="edit" Enhance>
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nom :</label>
+                                <InputText id="name" @bind-Value="FavoriteListEntity.Name" class="form-control" />
+                                <ValidationMessage For="() => FavoriteListEntity.Name" class="text-danger" />
+                            </div>
+                            <input type="hidden" name="FavoriteListEntity.Id" value="@FavoriteListEntity.Id" />
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Commentaire :</label>
+                                <InputText id="comment" @bind-Value="FavoriteListEntity.Comment" class="form-control" />
+                                <ValidationMessage For="() => FavoriteListEntity.Comment" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="userid" class="form-label">Utilisateur :</label>
+                                <InputSelect id="userid" @bind-Value="FavoriteListEntity.UserId">
+                                    @foreach (var type in Users)
+                                    {
+                                        <option value="@type.Id">
+                                            @type.Name
+                                        </option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="mb-3">
+                                <label for="places" class="form-label">Lieux :</label>
+                                <select id="places" multiple>
+                                    @foreach (var type in Places)
+                                    {
+                                        if (FavoriteListEntity.PlaceFavorites?.Any(p => p.PlaceId == type.Id) == true)
+                                        {
+                                            <option selected value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </EditForm>
+                    }
                 </div>
-                <input type="hidden" name="FavoriteListEntity.Id" value="@FavoriteListEntity.Id" />
-                <div class="mb-3">
-                    <label for="comment" class="form-label">Commentaire :</label>
-                    <InputText id="comment" @bind-Value="FavoriteListEntity.Comment" class="form-control" />
-                    <ValidationMessage For="() => FavoriteListEntity.Comment" class="text-danger" />
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/favoritelist">Liste des favoris</a>
+                    </p>
                 </div>
-                <div class="mb-3">
-                    <label for="userid" class="form-label">Utilisateur :</label>
-                    <InputSelect id="userid" @bind-Value="FavoriteListEntity.UserId">
-                        @foreach (var type in Users)
-                        {
-                            <option value="@type.Id">
-                                @type.Name
-                            </option>
-                        }
-                    </InputSelect>
-                </div>
-                <div class="mb-3">
-                    <label for="places" class="form-label">Lieux :</label>
-                    <select id="places" multiple>
-                        @foreach (var type in Places)
-                        {
-                            if (FavoriteListEntity.PlaceFavorites?.Any(p => p.PlaceId == type.Id) == true)
-                            {
-                                <option selected value="@type.Id">
-                                    @type.Name
-                                </option>
-                            }
-                            else
-                            {
-                                <option value="@type.Id">
-                                    @type.Name
-                                </option>
-                            }
-                        }
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </EditForm>
+            </div>
         </div>
     </div>
-}
-
-<div>
-    <a href="/favoritelist">Liste des favoris</a>
 </div>
 
 @code {
@@ -113,26 +117,26 @@ else
             Places = await DB.Places
                 .OrderBy(p => p.Name)
                 .Select(p => new PlaceEntity
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Address = string.Empty,
-                    City = string.Empty,
-                    PostalCode = string.Empty,
-                    Country = string.Empty,
-                    Description = string.Empty,
-                    CreatedBy = string.Empty
-                })
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Address = string.Empty,
+                        City = string.Empty,
+                        PostalCode = string.Empty,
+                        Country = string.Empty,
+                        Description = string.Empty,
+                        CreatedBy = string.Empty
+                    })
                 .ToListAsync();
             Users = await DB.Users
                 .OrderBy(p => p.Name)
                 .Select(p => new UserEntity
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Email = string.Empty,
-                    CreatedBy = string.Empty
-                })
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Email = string.Empty,
+                        CreatedBy = string.Empty
+                    })
                 .ToListAsync();
         }
     }
@@ -157,7 +161,7 @@ else
         {
             FavoriteListEntity.UpdatedAt = DateTimeOffset.UtcNow;
             FavoriteListEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
-            
+
             if (FavoriteListEntity.PlaceFavorites?.Count > 0)
             {
                 var removing = FavoriteListEntity.PlaceFavorites
@@ -180,10 +184,10 @@ else
                         .Select(id =>
                         {
                             var add = new PlaceFavoriteEntity
-                            {
-                                PlaceId = id,
-                                FavoriteList = FavoriteListEntity
-                            };
+                                {
+                                    PlaceId = id,
+                                    FavoriteList = FavoriteListEntity
+                                };
                             FavoriteListEntity.PlaceFavorites.Add(add);
                             return add;
                         })
@@ -198,14 +202,14 @@ else
             {
                 FavoriteListEntity.PlaceFavorites = PlacesIds
                     .Select(id => new PlaceFavoriteEntity
-                    {
-                        PlaceId = id,
-                        FavoriteList = FavoriteListEntity
-                    })
+                        {
+                            PlaceId = id,
+                            FavoriteList = FavoriteListEntity
+                        })
                     .ToList();
                 await DB.PlaceFavorites.AddRangeAsync(FavoriteListEntity.PlaceFavorites);
             }
-            
+
             await DB.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)

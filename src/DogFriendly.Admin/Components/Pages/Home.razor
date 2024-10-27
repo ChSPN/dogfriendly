@@ -2,21 +2,27 @@
 @using DogFriendly.Admin.Services
 @inject AuthenticationService Authentication
 
-<PageTitle>Administration DogFriendly</PageTitle>
+<PageTitle>Administration Dog Friendly</PageTitle>
 
-<h1>Administration DogFriendly</h1>
-<p>Bienvenue dans l'application DogFriendly Admin.</p>
+<NavBar Title="Administration Dog Friendly" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <p>Bienvenue dans l'application Dog Friendly Admin.</p>
 
-@if (Authentication.IsAdmin)
-{
-    <p>Vous pouvez administrer l'application DogFriendly.</p>
-}
-else if (Authentication.IsAuthenticated)
-{
-    <p>Vous n'avez pas les droits pour administrer l'application.</p>
-}
-else
-{
-    <p>Veuillez-vous connecter pour administrer l'application.</p>
-    <p><a href="/login">Se connecter.</a></p>
-}
+            @if (Authentication.IsAdmin)
+            {
+                <p>Vous pouvez administrer l'application Dog Friendly.</p>
+            }
+            else if (Authentication.IsAuthenticated)
+            {
+                <p>Vous n'avez pas les droits pour administrer l'application.</p>
+            }
+            else
+            {
+                <p>Veuillez-vous connecter pour administrer l'application.</p>
+                <p><a href="/login">Se connecter.</a></p>
+            }
+        </div>
+    </div>
+</div>

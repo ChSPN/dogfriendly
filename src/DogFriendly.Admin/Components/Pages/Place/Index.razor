@@ -8,31 +8,43 @@
 
 <PageTitle>Liste des lieux</PageTitle>
 
-<h1>Liste des lieux</h1>
-
-<p>
-    <a href="place/create">Ajouter un lieu</a>
-</p>
-
-<QuickGrid Class="table" Pagination=@Pagination Items="DB.Places.Include(p => p.PlaceType)">
-    <PropertyColumn Title="Nom" Sortable="true" Property="placeentity => placeentity.Name" />
-    <PropertyColumn Title="Adresse" Sortable="true" Property="placeentity => placeentity.Address" />
-    <PropertyColumn Title="Ville" Sortable="true" Property="placeentity => placeentity.City" />
-    <PropertyColumn Title="Code postal" Sortable="true" Property="placeentity => placeentity.PostalCode" />
-    <PropertyColumn Title="Pays" Sortable="true" Property="placeentity => placeentity.Country" />
-    <PropertyColumn Title="Type" Sortable="true" Property="placeentity => placeentity.PlaceType.Name" />
-    <TemplateColumn Context="placeentity">
-        <a href="@($"place/edit?id={placeentity.Id}")">Modifier</a> |
-        <a href="@($"place/details?id={placeentity.Id}")">Détails</a> |
-        <a href="@($"place/delete?id={placeentity.Id}")">Supprimer</a>
-    </TemplateColumn>
-</QuickGrid>
-<Paginator State=@Pagination />
+<NavBar Title="Liste des lieux" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="place/create">Ajouter un lieu</a>
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <QuickGrid Class="table" Pagination=@Pagination Items="DB.Places.Include(p => p.PlaceType)">
+                            <PropertyColumn Title="Nom" Sortable="true" Property="placeentity => placeentity.Name" />
+                            <PropertyColumn Title="Adresse" Sortable="true" Property="placeentity => placeentity.Address" />
+                            <PropertyColumn Title="Ville" Sortable="true" Property="placeentity => placeentity.City" />
+                            <PropertyColumn Title="Code postal" Sortable="true" Property="placeentity => placeentity.PostalCode" />
+                            <PropertyColumn Title="Pays" Sortable="true" Property="placeentity => placeentity.Country" />
+                            <PropertyColumn Title="Type" Sortable="true" Property="placeentity => placeentity.PlaceType.Name" />
+                            <TemplateColumn Context="placeentity">
+                                <a href="@($"place/edit?id={placeentity.Id}")">Modifier</a> |
+                                <a href="@($"place/details?id={placeentity.Id}")">Détails</a> |
+                                <a href="@($"place/delete?id={placeentity.Id}")">Supprimer</a>
+                            </TemplateColumn>
+                        </QuickGrid>
+                        <Paginator State=@Pagination />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code
 {
     protected PaginationState Pagination = new PaginationState
-        {
-            ItemsPerPage = 10
-        };
+    {
+        ItemsPerPage = 10
+    };
 }

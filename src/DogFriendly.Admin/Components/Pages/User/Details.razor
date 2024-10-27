@@ -8,37 +8,48 @@
 
 <PageTitle>Détails de l'utilisateur</PageTitle>
 
-<h1>Détails</h1>
-
-<div>
-    <h4>Utilisateur</h4>
-    <hr />
-    @if (userentity is null)
-    {
-        <p><em>Chargement de l'utilisateur ...</em></p>
-    }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Nom</dt>
-            <dd class="col-sm-10">@userentity.Name</dd>
-            <dt class="col-sm-2">Email</dt>
-            <dd class="col-sm-10">@userentity.Email</dd>
-            <dt class="col-sm-2">Administrateur</dt>
-            <dd class="col-sm-10">@userentity.IsAdmin</dd>
-            <dt class="col-sm-2">Créé à</dt>
-            <dd class="col-sm-10">@userentity.CreatedAt</dd>
-            <dt class="col-sm-2">Créé le</dt>
-            <dd class="col-sm-10">@userentity.CreatedBy</dd>
-            <dt class="col-sm-2">Modifié à</dt>
-            <dd class="col-sm-10">@userentity.UpdatedAt</dd>
-            <dt class="col-sm-2">Modifié le</dt>
-            <dd class="col-sm-10">@userentity.UpdatedBy</dd>
-        </dl>
-        <div>
-            <a href="@($"/user/edit?id={userentity.Id}")">Modifier</a> |
-            <a href="@($"/users")">Liste des utilisateurs</a>
+<NavBar Title="Détails de l'utilisateur" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (userentity is null)
+                    {
+                        <p><em>Chargement de l'utilisateur ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Nom</dt>
+                            <dd class="col-sm-10">@userentity.Name</dd>
+                            <dt class="col-sm-2">Email</dt>
+                            <dd class="col-sm-10">@userentity.Email</dd>
+                            <dt class="col-sm-2">Administrateur</dt>
+                            <dd class="col-sm-10">@userentity.IsAdmin</dd>
+                            <dt class="col-sm-2">Créé à</dt>
+                            <dd class="col-sm-10">@userentity.CreatedAt</dd>
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@userentity.CreatedBy</dd>
+                            <dt class="col-sm-2">Modifié à</dt>
+                            <dd class="col-sm-10">@userentity.UpdatedAt</dd>
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@userentity.UpdatedBy</dd>
+                        </dl>
+                    }
+                </div>
+                <div class="card-header">
+                    @if (userentity is not null)
+                    {
+                        <p class="card-category">
+                            <a href="@($"/user/edit?id={userentity.Id}")">Modifier</a> |
+                            <a href="@($"/users")">Liste des utilisateurs</a>
+                        </p>
+                    }
+                </div>
+            </div>
         </div>
-    }
+    </div>
 </div>
 
 @code {

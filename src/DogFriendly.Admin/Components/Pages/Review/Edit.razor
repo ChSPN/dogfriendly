@@ -12,80 +12,84 @@
 
 <PageTitle>Modifier un avis</PageTitle>
 
-<h1>Modification</h1>
-
-<h4>Avis d'un place</h4>
-<hr />
-@if (ReviewEntity is null)
-{
-    <p><em>Chargement de l'avis ...</em></p>
-}
-else
-{
+<NavBar Title="Modifier un avis" />
+<div class="content">
     <div class="row">
-        <div class="col-md-4">
-            <EditForm method="post" Model="ReviewEntity" OnValidSubmit="UpdateReviewEntity" FormName="edit" Enhance>
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <input type="hidden" name="ReviewEntity.Id" value="@ReviewEntity.Id" />
-                <div class="mb-3">
-                    <label for="comment" class="form-label">Commentaire :</label>
-                    <InputText id="comment" @bind-Value="ReviewEntity.Comment" class="form-control" />
-                    <ValidationMessage For="() => ReviewEntity.Comment" class="text-danger" />
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (ReviewEntity is null)
+                    {
+                        <p><em>Chargement de l'avis ...</em></p>
+                    }
+                    else
+                    {
+                        <EditForm method="post" Model="ReviewEntity" OnValidSubmit="UpdateReviewEntity" FormName="edit" Enhance>
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <input type="hidden" name="ReviewEntity.Id" value="@ReviewEntity.Id" />
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Commentaire :</label>
+                                <InputText id="comment" @bind-Value="ReviewEntity.Comment" class="form-control" />
+                                <ValidationMessage For="() => ReviewEntity.Comment" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Note :</label>
+                                <InputNumber id="rating" @bind-Value="ReviewEntity.Rating" class="form-control" />
+                                <ValidationMessage For="() => ReviewEntity.Rating" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="placeid" class="form-label">Lieu :</label>
+                                <InputSelect id="placeid" @bind-Value="ReviewEntity.PlaceId">
+                                    @foreach (var type in Places)
+                                    {
+                                        @if (ReviewEntity.PlaceId == type.Id)
+                                        {
+                                            <option selected value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="mb-3">
+                                <label for="userid" class="form-label">Utilisateur :</label>
+                                <InputSelect id="userid" @bind-Value="ReviewEntity.UserId">
+                                    @foreach (var type in Users)
+                                    {
+                                        @if (ReviewEntity.UserId == type.Id)
+                                        {
+                                            <option selected value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </EditForm>
+                    }
                 </div>
-                <div class="mb-3">
-                    <label for="rating" class="form-label">Note :</label>
-                    <InputNumber id="rating" @bind-Value="ReviewEntity.Rating" class="form-control" />
-                    <ValidationMessage For="() => ReviewEntity.Rating" class="text-danger" />
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/reviews">Liste des avis</a>
+                    </p>
                 </div>
-                <div class="mb-3">
-                    <label for="placeid" class="form-label">Lieu :</label>
-                    <InputSelect id="placeid" @bind-Value="ReviewEntity.PlaceId">
-                        @foreach (var type in Places)
-                        {
-                            @if (ReviewEntity.PlaceId == type.Id)
-                            {
-                                <option selected value="@type.Id">
-                                    @type.Name
-                                </option>
-                            }
-                            else
-                            {
-                                <option value="@type.Id">
-                                    @type.Name
-                                </option>
-                            }
-                        }
-                    </InputSelect>
-                </div>
-                <div class="mb-3">
-                    <label for="userid" class="form-label">Utilisateur :</label>
-                    <InputSelect id="userid" @bind-Value="ReviewEntity.UserId">
-                        @foreach (var type in Users)
-                        {
-                            @if (ReviewEntity.UserId == type.Id)
-                            {
-                                <option selected value="@type.Id">
-                                    @type.Name
-                                </option>
-                            }
-                            else
-                            {
-                                <option value="@type.Id">
-                                    @type.Name
-                                </option>
-                            }
-                        }
-                    </InputSelect>
-                </div>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </EditForm>
+            </div>
         </div>
     </div>
-}
-
-<div>
-    <a href="/reviews">Liste des avis</a>
 </div>
 
 @code {

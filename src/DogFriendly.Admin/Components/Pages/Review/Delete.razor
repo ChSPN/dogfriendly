@@ -8,54 +8,64 @@
 
 <PageTitle>Supprimer un avis</PageTitle>
 
-<h1>Suppression</h1>
-
-<h3>Etes-vous sur de vouloir cet avis ?</h3>
-<div>
-    <h4>Avis sur le lieu</h4>
-    <hr />
-    @if (reviewentity is null)
-    {
-        <p><em>Chargement de l'avis ...</em></p>
-    }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Commentaire</dt>
-            <dd class="col-sm-10">@reviewentity.Comment</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Note</dt>
-            <dd class="col-sm-10">@reviewentity.Rating</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Lieu</dt>
-            <dd class="col-sm-10">@reviewentity.Place.Name</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Utilisateur</dt>
-            <dd class="col-sm-10">@reviewentity.User.Name</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Créé le</dt>
-            <dd class="col-sm-10">@reviewentity.CreatedAt</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Créé par</dt>
-            <dd class="col-sm-10">@reviewentity.CreatedBy</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Modifié le</dt>
-            <dd class="col-sm-10">@reviewentity.UpdatedAt</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Modifié par</dt>
-            <dd class="col-sm-10">@reviewentity.UpdatedBy</dd>
-        </dl>
-        <EditForm method="post" Model="reviewentity" OnValidSubmit="DeleteReviewEntity" FormName="delete" Enhance>
-            <button type="submit" class="btn btn-danger" disabled="@(reviewentity is null)">Supprimer</button> |
-            <a href="/reviews">Liste des avis</a>
-        </EditForm>
-    }
+<NavBar Title="Suppresion d'un avis" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        Etes-vous sur de vouloir supprimer cet avis ?
+                    </p>
+                </div>
+                <div class="card-body">
+                    @if (reviewentity is null)
+                    {
+                        <p><em>Chargement de l'avis ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Commentaire</dt>
+                            <dd class="col-sm-10">@reviewentity.Comment</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Note</dt>
+                            <dd class="col-sm-10">@reviewentity.Rating</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Lieu</dt>
+                            <dd class="col-sm-10">@reviewentity.Place.Name</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Utilisateur</dt>
+                            <dd class="col-sm-10">@reviewentity.User.Name</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@reviewentity.CreatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé par</dt>
+                            <dd class="col-sm-10">@reviewentity.CreatedBy</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@reviewentity.UpdatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié par</dt>
+                            <dd class="col-sm-10">@reviewentity.UpdatedBy</dd>
+                        </dl>
+                        <EditForm method="post" Model="reviewentity" OnValidSubmit="DeleteReviewEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(reviewentity is null)">Supprimer</button> |
+                            <a href="/reviews">Liste des avis</a>
+                        </EditForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {

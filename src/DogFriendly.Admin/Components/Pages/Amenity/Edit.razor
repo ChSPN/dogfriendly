@@ -11,40 +11,44 @@
 
 <PageTitle>Modifier l'équipement</PageTitle>
 
-<h1>Modifier</h1>
-
-<h4>Equipement</h4>
-<hr />
-@if (AmenityEntity is null)
-{
-    <p><em>Chargement de l'équipement ...</em></p>
-}
-else
-{
+<NavBar Title="Modifier un équipement" />
+<div class="content">
     <div class="row">
-        <div class="col-md-4">
-            <EditForm method="post" Model="AmenityEntity" OnValidSubmit="UpdateAmenityEntity" FormName="edit" Enhance>
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <input type="hidden" name="AmenityEntity.Id" value="@AmenityEntity.Id" />
-                <div class="mb-3">
-                    <label for="iconuri" class="form-label">Icone :</label>
-                    <InputText id="iconuri" @bind-Value="AmenityEntity.IconUri" class="form-control" />
-                    <ValidationMessage For="() => AmenityEntity.IconUri" class="text-danger" />
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                @if (AmenityEntity is null)
+                {
+                    <p><em>Chargement de l'équipement ...</em></p>
+                }
+                else
+                {
+                    <EditForm method="post" Model="AmenityEntity" OnValidSubmit="UpdateAmenityEntity" FormName="edit" Enhance>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <input type="hidden" name="AmenityEntity.Id" value="@AmenityEntity.Id" />
+                        <div class="mb-3">
+                            <label for="iconuri" class="form-label">Icone :</label>
+                            <InputText id="iconuri" @bind-Value="AmenityEntity.IconUri" class="form-control" />
+                            <ValidationMessage For="() => AmenityEntity.IconUri" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom :</label>
+                            <InputText id="name" @bind-Value="AmenityEntity.Name" class="form-control" />
+                            <ValidationMessage For="() => AmenityEntity.Name" class="text-danger" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </EditForm>
+                }
                 </div>
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nom :</label>
-                    <InputText id="name" @bind-Value="AmenityEntity.Name" class="form-control" />
-                    <ValidationMessage For="() => AmenityEntity.Name" class="text-danger" />
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/amenities">Liste des équipements</a>
+                    </p>
                 </div>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </EditForm>
+            </div>
         </div>
     </div>
-}
-
-<div>
-    <a href="/amenities">Liste des équipements</a>
 </div>
 
 @code {
@@ -64,7 +68,7 @@ else
         }
     }
 
-    public async Task UpdateAmenityEntity()
+    protected async Task UpdateAmenityEntity()
     {
         DB.Attach(AmenityEntity!).State = EntityState.Modified;
 
@@ -89,7 +93,7 @@ else
         NavigationManager.NavigateTo("/amenities");
     }
 
-    bool AmenityEntityExists(int id)
+    protected bool AmenityEntityExists(int id)
     {
         return DB.Amenities.Any(e => e.Id == id);
     }

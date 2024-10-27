@@ -12,54 +12,58 @@
 
 <PageTitle>Créer un avis</PageTitle>
 
-<h1>Création</h1>
-
-<h4>Avis sur un lieu</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <EditForm method="post" Model="ReviewEntity" OnValidSubmit="AddReviewEntity" FormName="create" Enhance>
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" />
-            <div class="mb-3">
-                <label for="comment" class="form-label">Commentaire :</label> 
-                <InputText id="comment" @bind-Value="ReviewEntity.Comment" class="form-control" /> 
-                <ValidationMessage For="() => ReviewEntity.Comment" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="rating" class="form-label">Note :</label> 
-                <InputNumber id="rating" @bind-Value="ReviewEntity.Rating" class="form-control" /> 
-                <ValidationMessage For="() => ReviewEntity.Rating" class="text-danger" /> 
+<NavBar Title="Créer un avis" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <EditForm method="post" Model="ReviewEntity" OnValidSubmit="AddReviewEntity" FormName="create" Enhance>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Commentaire :</label>
+                            <InputText id="comment" @bind-Value="ReviewEntity.Comment" class="form-control" />
+                            <ValidationMessage For="() => ReviewEntity.Comment" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Note :</label>
+                            <InputNumber id="rating" @bind-Value="ReviewEntity.Rating" class="form-control" />
+                            <ValidationMessage For="() => ReviewEntity.Rating" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="placeid" class="form-label">Lieu :</label>
+                            <InputSelect id="placeid" @bind-Value="ReviewEntity.PlaceId">
+                                @foreach (var type in Places)
+                                {
+                                    <option value="@type.Id">
+                                        @type.Name
+                                    </option>
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userid" class="form-label">Utilisateur :</label>
+                            <InputSelect id="userid" @bind-Value="ReviewEntity.UserId">
+                                @foreach (var type in Users)
+                                {
+                                    <option value="@type.Id">
+                                        @type.Name
+                                    </option>
+                                }
+                            </InputSelect>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </EditForm>
+                </div>
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/reviews">Liste des avis</a>
+                    </p>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="placeid" class="form-label">Lieu :</label>
-                <InputSelect id="placeid" @bind-Value="ReviewEntity.PlaceId">
-                    @foreach (var type in Places)
-                    {
-                        <option value="@type.Id">
-                            @type.Name
-                        </option>
-                    }
-                </InputSelect>
-            </div>
-            <div class="mb-3">
-                <label for="userid" class="form-label">Utilisateur :</label>
-                <InputSelect id="userid" @bind-Value="ReviewEntity.UserId">
-                    @foreach (var type in Users)
-                    {
-                        <option value="@type.Id">
-                            @type.Name
-                        </option>
-                    }
-                </InputSelect>
-            </div>
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </EditForm>
+        </div>
     </div>
-</div>
-
-<div>
-    <a href="/reviews">Liste des avis</a>
 </div>
 
 @code
@@ -74,33 +78,33 @@
     protected override async Task OnInitializedAsync()
     {
         ReviewEntity = new ReviewEntity
-        {
-            CreatedAt = DateTimeOffset.UtcNow,
-            CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
-        };
+            {
+                CreatedAt = DateTimeOffset.UtcNow,
+                CreatedBy = Authentication?.Identity?.FindFirst(ClaimTypes.Email)?.Value,
+            };
         Places = await DB.Places
             .OrderBy(p => p.Name)
             .Select(p => new PlaceEntity
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Address = string.Empty,
-                City = string.Empty,
-                PostalCode = string.Empty,
-                Country = string.Empty,
-                Description = string.Empty,
-                CreatedBy = string.Empty
-            })
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Address = string.Empty,
+                    City = string.Empty,
+                    PostalCode = string.Empty,
+                    Country = string.Empty,
+                    Description = string.Empty,
+                    CreatedBy = string.Empty
+                })
             .ToListAsync();
         Users = await DB.Users
             .OrderBy(p => p.Name)
             .Select(p => new UserEntity
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Email = string.Empty,
-                CreatedBy = string.Empty
-            })
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Email = string.Empty,
+                    CreatedBy = string.Empty
+                })
             .ToListAsync();
     }
 
