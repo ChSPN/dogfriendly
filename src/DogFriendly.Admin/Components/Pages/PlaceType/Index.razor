@@ -1,4 +1,4 @@
-@page "/placetypes"
+ï»¿@page "/placetypes"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
@@ -23,11 +23,11 @@
                             <PropertyColumn Title="Nom" Sortable="true" Property="placetypeentity => placetypeentity.Name" />
                             <PropertyColumn Title="Icone" Sortable="true" Property="placetypeentity => placetypeentity.IconUri" />
                             <PropertyColumn Title="Couleur" Sortable="true" Property="placetypeentity => placetypeentity.Color" />
-                            <PropertyColumn Title="Créé le" Sortable="true" Property="placetypeentity => placetypeentity.CreatedAt" />
-                            <PropertyColumn Title="Modifié le" Sortable="true" Property="placetypeentity => placetypeentity.UpdatedAt" />
+                            <PropertyColumn Title="CrÃ©Ã© le" Sortable="true" Property="placetypeentity => placetypeentity.CreatedAt" />
+                            <PropertyColumn Title="ModifiÃ© le" Sortable="true" Property="placetypeentity => placetypeentity.UpdatedAt" />
                             <TemplateColumn Context="placetypeentity">
                                 <a href="@($"placetype/edit?id={placetypeentity.Id}")">Modifier</a> |
-                                <a href="@($"placetype/details?id={placetypeentity.Id}")">Détails</a> |
+                                <a href="@($"placetype/details?id={placetypeentity.Id}")">DÃ©tails</a> |
                                 <a href="@($"placetype/delete?id={placetypeentity.Id}")">Supprimer</a>
                             </TemplateColumn>
                         </QuickGrid>

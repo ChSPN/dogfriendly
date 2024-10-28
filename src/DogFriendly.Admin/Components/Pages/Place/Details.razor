@@ -1,4 +1,4 @@
-@page "/place/details"
+ï»¿@page "/place/details"
 @using DogFriendly.Domain.Entitites
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Authorization
@@ -6,9 +6,9 @@
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
 
-<PageTitle>Détails du lieu</PageTitle>
+<PageTitle>DÃ©tails du lieu</PageTitle>
 
-<NavBar Title="Détails du lieu" />
+<NavBar Title="DÃ©tails du lieu" />
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -50,19 +50,19 @@
                             <dd class="col-sm-10">@placeentity.Longitude</dd>
                             <dt class="col-sm-2">Horaires</dt>
                             <dd class="col-sm-10">@placeentity.OpeningHours</dd>
-                            <dt class="col-sm-2">Téléphone</dt>
+                            <dt class="col-sm-2">TÃ©lÃ©phone</dt>
                             <dd class="col-sm-10">@placeentity.Phone</dd>
                             <dt class="col-sm-2">Photos</dt>
                             <dd class="col-sm-10">@placeentity.Photos</dd>
                             <dt class="col-sm-2">Site web</dt>
                             <dd class="col-sm-10">@placeentity.Website</dd>
-                            <dt class="col-sm-2">Créé le</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© le</dt>
                             <dd class="col-sm-10">@placeentity.CreatedAt</dd>
-                            <dt class="col-sm-2">Créé par</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© par</dt>
                             <dd class="col-sm-10">@placeentity.CreatedBy</dd>
-                            <dt class="col-sm-2">Modifié le</dt>
+                            <dt class="col-sm-2">ModifiÃ© le</dt>
                             <dd class="col-sm-10">@placeentity.UpdatedAt</dd>
-                            <dt class="col-sm-2">Modifié par</dt>
+                            <dt class="col-sm-2">ModifiÃ© par</dt>
                             <dd class="col-sm-10">@placeentity.UpdatedBy</dd>
                         </dl>
                     }

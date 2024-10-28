@@ -1,20 +1,20 @@
-@page "/amenities"
+ï»¿@page "/amenities"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 
-<PageTitle>Liste des équipements</PageTitle>
+<PageTitle>Liste des Ã©quipements</PageTitle>
 
-<NavBar Title="Liste des équipements" />
+<NavBar Title="Liste des Ã©quipements" />
 <div class="content">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <p class="card-category">
-                        <a href="amenity/create">Ajouter un équipement</a>
+                        <a href="amenity/create">Ajouter un Ã©quipement</a>
                     </p>
                 </div>
                 <div class="card-body">
@@ -22,11 +22,11 @@
                         <QuickGrid Class="table" Pagination=@Pagination Items="DB.Amenities">
                             <PropertyColumn Title="Nom" Sortable="true" Property="amenityentity => amenityentity.Name" />
                             <PropertyColumn Title="Icone" Sortable="true" Property="amenityentity => amenityentity.IconUri" />
-                            <PropertyColumn Title="Créé le" Sortable="true" Property="amenityentity => amenityentity.CreatedAt" />
-                            <PropertyColumn Title="Modifié le" Sortable="true" Property="amenityentity => amenityentity.UpdatedAt" />
+                            <PropertyColumn Title="CrÃ©Ã© le" Sortable="true" Property="amenityentity => amenityentity.CreatedAt" />
+                            <PropertyColumn Title="ModifiÃ© le" Sortable="true" Property="amenityentity => amenityentity.UpdatedAt" />
                             <TemplateColumn Context="amenityentity">
                                 <a href="@($"amenity/edit?id={amenityentity.Id}")">Modifier</a> |
-                                <a href="@($"amenity/details?id={amenityentity.Id}")">Détails</a> |
+                                <a href="@($"amenity/details?id={amenityentity.Id}")">DÃ©tails</a> |
                                 <a href="@($"amenity/delete?id={amenityentity.Id}")">Supprimer</a>
                             </TemplateColumn>
                         </QuickGrid>

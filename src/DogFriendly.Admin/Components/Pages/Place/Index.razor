@@ -1,4 +1,4 @@
-@page "/places"
+﻿@page "/places"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
@@ -29,7 +29,7 @@
                             <PropertyColumn Title="Type" Sortable="true" Property="placeentity => placeentity.PlaceType.Name" />
                             <TemplateColumn Context="placeentity">
                                 <a href="@($"place/edit?id={placeentity.Id}")">Modifier</a> |
-                                <a href="@($"place/details?id={placeentity.Id}")">D�tails</a> |
+                                <a href="@($"place/details?id={placeentity.Id}")">Détails</a> |
                                 <a href="@($"place/delete?id={placeentity.Id}")">Supprimer</a>
                             </TemplateColumn>
                         </QuickGrid>
