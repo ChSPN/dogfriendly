@@ -1,4 +1,4 @@
-@page "/placetype/details"
+ï»¿@page "/placetype/details"
 @using DogFriendly.Domain.Entitites
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Authorization
@@ -6,9 +6,9 @@
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
 
-<PageTitle>Détails du type de lieu</PageTitle>
+<PageTitle>DÃ©tails du type de lieu</PageTitle>
 
-<NavBar Title="Détails du type de lieu" />
+<NavBar Title="DÃ©tails du type de lieu" />
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -27,13 +27,13 @@
                             <dd class="col-sm-10">@placetypeentity.IconUri</dd>
                             <dt class="col-sm-2">Couleur</dt>
                             <dd class="col-sm-10">@placetypeentity.Color</dd>
-                            <dt class="col-sm-2">Créé à</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© Ã </dt>
                             <dd class="col-sm-10">@placetypeentity.CreatedAt</dd>
-                            <dt class="col-sm-2">Créé le</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© le</dt>
                             <dd class="col-sm-10">@placetypeentity.CreatedBy</dd>
-                            <dt class="col-sm-2">Modifié à</dt>
+                            <dt class="col-sm-2">ModifiÃ© Ã </dt>
                             <dd class="col-sm-10">@placetypeentity.UpdatedAt</dd>
-                            <dt class="col-sm-2">Modifié par</dt>
+                            <dt class="col-sm-2">ModifiÃ© par</dt>
                             <dd class="col-sm-10">@placetypeentity.UpdatedBy</dd>
                         </dl>
                     }

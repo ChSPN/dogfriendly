@@ -1,4 +1,4 @@
-@page "/place/edit"
+ï»¿@page "/place/edit"
 @using DogFriendly.Admin.Services
 @using DogFriendly.Domain.Entitites
 @using DogFriendly.Domain.Options
@@ -105,7 +105,7 @@
                                 <InputText id="country" @bind-Value="PlaceEntity.Country" class="form-control" />
                                 <ValidationMessage For="() => PlaceEntity.Country" class="text-danger" />
                             </div>
-                            <a class="btn btn-primary" @onclick="OnGeoClick">Géolocaliser l'adresse</a>
+                            <a class="btn btn-primary" @onclick="OnGeoClick">GÃ©olocaliser l'adresse</a>
                             <div class="mb-3">
                                 <label for="latitude" class="form-label">Latitude :</label>
                                 <InputNumber id="latitude" @bind-Value="PlaceEntity.Latitude" class="form-control" />
@@ -132,7 +132,7 @@
                                 <ValidationMessage For="() => PlaceEntity.OpeningHours" class="text-danger" />
                             </div>
                             <div class="mb-3">
-                                <label for="phone" class="form-label">Téléphone :</label>
+                                <label for="phone" class="form-label">TÃ©lÃ©phone :</label>
                                 <InputText id="phone" @bind-Value="PlaceEntity.Phone" class="form-control" />
                                 <ValidationMessage For="() => PlaceEntity.Phone" class="text-danger" />
                             </div>

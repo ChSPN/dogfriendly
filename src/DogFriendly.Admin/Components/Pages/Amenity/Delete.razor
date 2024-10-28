@@ -1,4 +1,4 @@
-@page "/amenity/delete"
+ï»¿@page "/amenity/delete"
 @using DogFriendly.Domain.Entitites
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Authorization
@@ -6,22 +6,22 @@
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
 
-<PageTitle>Suppression d'un équipement</PageTitle>
+<PageTitle>Suppression d'un Ã©quipement</PageTitle>
 
-<NavBar Title="Suppresion d'un équipement" />
+<NavBar Title="Suppresion d'un Ã©quipement" />
 <div class="content">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <p class="card-category">
-                        Etes-vous sur de vouloir supprimer cet équipement ?
+                        Etes-vous sur de vouloir supprimer cet Ã©quipement ?
                     </p>
                 </div>
                 <div class="card-body">
                     @if (amenityentity is null)
                     {
-                        <p><em>Chargement de l'équipement ...</em></p>
+                        <p><em>Chargement de l'Ã©quipement ...</em></p>
                     }
                     else
                     {
@@ -34,24 +34,24 @@
                             <dd class="col-sm-10">@amenityentity.Name</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-2">Créé le</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© le</dt>
                             <dd class="col-sm-10">@amenityentity.CreatedAt</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-2">Créé par</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© par</dt>
                             <dd class="col-sm-10">@amenityentity.CreatedBy</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-2">Modifié le</dt>
+                            <dt class="col-sm-2">ModifiÃ© le</dt>
                             <dd class="col-sm-10">@amenityentity.UpdatedAt</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-2">Modifié par</dt>
+                            <dt class="col-sm-2">ModifiÃ© par</dt>
                             <dd class="col-sm-10">@amenityentity.UpdatedBy</dd>
                         </dl>
                         <EditForm method="post" Model="amenityentity" OnValidSubmit="DeleteAmenityEntity" FormName="delete" Enhance>
                             <button type="submit" class="btn btn-danger" disabled="@(amenityentity is null)">Supprimer</button> |
-                            <a href="/amenities">Liste des équipements</a>
+                            <a href="/amenities">Liste des Ã©quipements</a>
                         </EditForm>
                     }
                 </div>

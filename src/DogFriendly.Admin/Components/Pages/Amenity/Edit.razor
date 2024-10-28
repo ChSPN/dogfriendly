@@ -1,4 +1,4 @@
-@page "/amenity/edit"
+ï»¿@page "/amenity/edit"
 @using DogFriendly.Admin.Services
 @using Microsoft.EntityFrameworkCore
 @using DogFriendly.Domain.Entitites
@@ -9,9 +9,9 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationService Authentication
 
-<PageTitle>Modifier l'équipement</PageTitle>
+<PageTitle>Modifier l'Ã©quipement</PageTitle>
 
-<NavBar Title="Modifier un équipement" />
+<NavBar Title="Modifier un Ã©quipement" />
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -19,7 +19,7 @@
                 <div class="card-body">
                 @if (AmenityEntity is null)
                 {
-                    <p><em>Chargement de l'équipement ...</em></p>
+                    <p><em>Chargement de l'Ã©quipement ...</em></p>
                 }
                 else
                 {
@@ -43,7 +43,7 @@
                 </div>
                 <div class="card-header">
                     <p class="card-category">
-                        <a href="/amenities">Liste des équipements</a>
+                        <a href="/amenities">Liste des Ã©quipements</a>
                     </p>
                 </div>
             </div>

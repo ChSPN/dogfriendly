@@ -1,4 +1,4 @@
-@page "/reviews"
+﻿@page "/reviews"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
@@ -28,7 +28,7 @@
                             <PropertyColumn Title="Utilisateur" Sortable="true" Property="reviewentity => reviewentity.User.Name" />
                             <TemplateColumn Context="reviewentity">
                                 <a href="@($"review/edit?id={reviewentity.Id}")">Modifier</a> |
-                                <a href="@($"review/details?id={reviewentity.Id}")">D�tails</a> |
+                                <a href="@($"review/details?id={reviewentity.Id}")">Détails</a> |
                                 <a href="@($"review/delete?id={reviewentity.Id}")">Supprimer</a>
                             </TemplateColumn>
                         </QuickGrid>

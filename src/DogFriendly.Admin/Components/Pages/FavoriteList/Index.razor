@@ -1,4 +1,4 @@
-@page "/favoritelist"
+ï»¿@page "/favoritelist"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
@@ -24,11 +24,11 @@
                             <PropertyColumn Title="Nom" Sortable="true" Property="favoritelistentity => favoritelistentity.Name" />
                             <PropertyColumn Title="Utilisateur" Sortable="true" Property="favoritelistentity => favoritelistentity.User.Name" />
                             <PropertyColumn Title="Nombre de lieux" Sortable="true" Property="favoritelistentity => favoritelistentity.PlaceFavorites == null ? 0 : favoritelistentity.PlaceFavorites.Count" />
-                            <PropertyColumn Title="Créé le" Sortable="true" Property="favoritelistentity => favoritelistentity.CreatedAt" />
-                            <PropertyColumn Title="Modifié le" Sortable="true" Property="favoritelistentity => favoritelistentity.UpdatedAt" />
+                            <PropertyColumn Title="CrÃ©Ã© le" Sortable="true" Property="favoritelistentity => favoritelistentity.CreatedAt" />
+                            <PropertyColumn Title="ModifiÃ© le" Sortable="true" Property="favoritelistentity => favoritelistentity.UpdatedAt" />
                             <TemplateColumn Context="favoritelistentity">
                                 <a href="@($"favoritelist/edit?id={favoritelistentity.Id}")">Modifier</a> |
-                                <a href="@($"favoritelist/details?id={favoritelistentity.Id}")">Détails</a> |
+                                <a href="@($"favoritelist/details?id={favoritelistentity.Id}")">DÃ©tails</a> |
                                 <a href="@($"favoritelist/delete?id={favoritelistentity.Id}")">Supprimer</a>
                             </TemplateColumn>
                         </QuickGrid>

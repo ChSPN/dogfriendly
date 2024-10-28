@@ -1,4 +1,4 @@
-@page "/users"
+﻿@page "/users"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using DogFriendly.Domain.Entitites
 @using Microsoft.AspNetCore.Authorization
@@ -25,7 +25,7 @@
                             <PropertyColumn Title="Administrateur" Sortable="true" Property="userentity => userentity.IsAdmin" />
                             <TemplateColumn Context="userentity">
                                 <a href="@($"user/edit?id={userentity.Id}")">Modifier</a> |
-                                <a href="@($"user/details?id={userentity.Id}")">D�tails</a> |
+                                <a href="@($"user/details?id={userentity.Id}")">Détails</a> |
                                 <a href="@($"user/delete?id={userentity.Id}")">Supprimer</a>
                             </TemplateColumn>
                         </QuickGrid>

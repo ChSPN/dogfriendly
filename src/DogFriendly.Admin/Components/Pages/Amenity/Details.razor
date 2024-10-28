@@ -1,4 +1,4 @@
-@page "/amenity/details"
+ï»¿@page "/amenity/details"
 @using DogFriendly.Domain.Entitites
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Authorization
@@ -6,9 +6,9 @@
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
 
-<PageTitle>Détails de l'équipement</PageTitle>
+<PageTitle>DÃ©tails de l'Ã©quipement</PageTitle>
 
-<NavBar Title="Détails d'un équipement" />
+<NavBar Title="DÃ©tails d'un Ã©quipement" />
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -16,7 +16,7 @@
                 <div class="card-body">
                 @if (amenityentity is null)
                 {
-                    <p><em>Chargement de l'équipement ...</em></p>
+                    <p><em>Chargement de l'Ã©quipement ...</em></p>
                 }
                 else
                 {
@@ -25,13 +25,13 @@
                         <dd class="col-sm-10">@amenityentity.IconUri</dd>
                         <dt class="col-sm-2">Nom</dt>
                         <dd class="col-sm-10">@amenityentity.Name</dd>
-                        <dt class="col-sm-2">Créé le</dt>
+                        <dt class="col-sm-2">CrÃ©Ã© le</dt>
                         <dd class="col-sm-10">@amenityentity.CreatedAt</dd>
-                        <dt class="col-sm-2">Créé par</dt>
+                        <dt class="col-sm-2">CrÃ©Ã© par</dt>
                         <dd class="col-sm-10">@amenityentity.CreatedBy</dd>
-                        <dt class="col-sm-2">Modifié le</dt>
+                        <dt class="col-sm-2">ModifiÃ© le</dt>
                         <dd class="col-sm-10">@amenityentity.UpdatedAt</dd>
-                        <dt class="col-sm-2">Modifié par</dt>
+                        <dt class="col-sm-2">ModifiÃ© par</dt>
                         <dd class="col-sm-10">@amenityentity.UpdatedBy</dd>
                     </dl>
                 }
@@ -41,7 +41,7 @@
                 {
                     <p class="card-category">
                         <a href="@($"/amenity/edit?id={amenityentity.Id}")">Modifier</a> |
-                        <a href="@($"/amenities")">Liste des équipements</a>
+                        <a href="@($"/amenities")">Liste des Ã©quipements</a>
                     </p>
                 }
                 </div>

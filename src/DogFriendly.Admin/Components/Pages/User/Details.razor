@@ -1,4 +1,4 @@
-@page "/user/details"
+ï»¿@page "/user/details"
 @using DogFriendly.Domain.Entitites
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Authorization
@@ -6,9 +6,9 @@
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
 @inject NavigationManager NavigationManager
 
-<PageTitle>Détails de l'utilisateur</PageTitle>
+<PageTitle>DÃ©tails de l'utilisateur</PageTitle>
 
-<NavBar Title="Détails de l'utilisateur" />
+<NavBar Title="DÃ©tails de l'utilisateur" />
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -27,13 +27,13 @@
                             <dd class="col-sm-10">@userentity.Email</dd>
                             <dt class="col-sm-2">Administrateur</dt>
                             <dd class="col-sm-10">@userentity.IsAdmin</dd>
-                            <dt class="col-sm-2">Créé à</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© Ã </dt>
                             <dd class="col-sm-10">@userentity.CreatedAt</dd>
-                            <dt class="col-sm-2">Créé le</dt>
+                            <dt class="col-sm-2">CrÃ©Ã© le</dt>
                             <dd class="col-sm-10">@userentity.CreatedBy</dd>
-                            <dt class="col-sm-2">Modifié à</dt>
+                            <dt class="col-sm-2">ModifiÃ© Ã </dt>
                             <dd class="col-sm-10">@userentity.UpdatedAt</dd>
-                            <dt class="col-sm-2">Modifié le</dt>
+                            <dt class="col-sm-2">ModifiÃ© le</dt>
                             <dd class="col-sm-10">@userentity.UpdatedBy</dd>
                         </dl>
                     }
