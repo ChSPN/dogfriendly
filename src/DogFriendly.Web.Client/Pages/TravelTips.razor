@@ -1,4 +1,5 @@
 ﻿@page "/travel-tips"
+@using Blazorise
 
 <PageTitle>Conseils pour bien voyager</PageTitle>
 
@@ -12,9 +13,145 @@
                         <i class="fa fa-times position-absolute popin-close" />
                     </a>
                     <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
-                    <p class="card-text">Conseils pour bien voyager</p>
+                    <h4>Comment bien voyager avec un chien ?</h4>
+                    <p>Voyager avec son chien peut être une expérience merveilleuse, mais cela demande un peu de préparation pour que tout se passe bien, tant pour vous que pour votre compagnon à quatre pattes. Voici quelques conseils essentiels pour vous aider à planifier et réussir votre prochain voyage avec votre chien.</p>
+                    <Accordion>
+                        <AccordionItem Visible="AccordionIndex == 1"
+                                       VisibleChanged="(v) => AccordionToggle(1, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        1. Planifiez à l’avance
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>La première étape pour un voyage réussi est la planification. Que vous partiez en voiture, en train ou en avion, il est essentiel de vous assurer que votre chien pourra voyager confortablement et en toute sécurité.</p>
+                                <ul>
+                                    <li><strong>Renseignez-vous sur les règlements</strong> : Avant de partir, vérifiez les règles concernant les animaux de compagnie, que ce soit pour les hôtels, les compagnies de transport ou les lieux que vous allez visiter.</li>
+                                    <li><strong>Identifiez des lieux adaptés</strong> : Utilisez des applications ou des sites comme <strong>Dog Friendly</strong> pour trouver des lieux acceptant les chiens, comme des parcs, des restaurants ou des hébergements.</li>
+                                    <li><strong>Préparez les documents nécessaires</strong> : Si vous voyagez à l’étranger, assurez-vous que votre chien est à jour sur ses vaccins et dispose de son passeport animalier. Certaines destinations exigent un certificat de bonne santé récent.</li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 2"
+                                       VisibleChanged="(v) => AccordionToggle(2, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        2. Préparez votre chien au voyage
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Voyager peut être stressant pour un chien qui n’y est pas habitué. Si c’est la première fois que vous voyagez ensemble, essayez de le préparer en amont :</p>
+                                <ul>
+                                    <li><strong>Faites de petits trajets d’entraînement</strong> : Si votre chien n’a pas l’habitude des longs trajets, commencez par des trajets plus courts en voiture pour l’acclimater.</li>
+                                    <li><strong>Apportez des objets familiers</strong> : Le panier ou la couverture préférée de votre chien peut aider à le rassurer en lui fournissant une odeur familière durant le voyage.</li>
+                                    <li><strong>Respectez ses besoins</strong> : Votre chien aura besoin de pauses régulières pour se dégourdir les pattes, faire ses besoins et boire. Prévoyez des arrêts toutes les 2 à 3 heures en voiture.</li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 3"
+                                       VisibleChanged="(v) => AccordionToggle(3, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        3. Transportez-le en toute sécurité
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Que vous voyagiez en voiture, en train ou en avion, la sécurité de votre chien doit être une priorité.</p>
+                                <ul>
+                                    <li><strong>En voiture</strong> : Ne laissez jamais votre chien en liberté dans la voiture. Utilisez une caisse de transport, un harnais de sécurité, ou une barrière pour assurer sa sécurité en cas de freinage brusque. Ne laissez jamais votre chien seul dans une voiture par temps chaud, même pour quelques minutes.</li>
+                                    <li><strong>En avion</strong> : Si vous devez voyager en avion, renseignez-vous bien à l&#39;avance sur les règles de la compagnie aérienne. Certaines autorisent les petits chiens en cabine, mais les plus grands devront voyager en soute. Assurez-vous que votre chien est à l’aise dans sa cage de transport avant le vol.</li>
+                                    <li><strong>En train</strong> : Beaucoup de trains acceptent les chiens, mais renseignez-vous sur les règles. Par exemple, en France, les chiens doivent généralement être tenus en laisse et parfois muselés dans les transports en commun.</li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 4"
+                                       VisibleChanged="(v) => AccordionToggle(4, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        4. Préparez ses affaires
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Votre chien aura aussi besoin d’une valise bien équipée ! Voici ce qu’il ne faut surtout pas oublier :</p>
+                                <ul>
+                                    <li><strong>Eau et gamelle</strong> : Un chien peut se déshydrater rapidement, surtout par temps chaud. Ayez toujours une bouteille d’eau et une gamelle pliable à portée de main.</li>
+                                    <li><strong>Nourriture</strong> : Emportez suffisamment de nourriture pour tout le voyage et prévoyez quelques friandises pour récompenser votre chien et le rassurer en cas de stress.</li>
+                                    <li><strong>Laisses et harnais</strong> : Une laisse solide et un harnais confortable sont indispensables. Pensez aussi à prendre une longe pour les pauses en pleine nature.</li>
+                                    <li><strong>Sacs à déjections</strong> : Il est essentiel de toujours nettoyer derrière son chien, que ce soit en ville ou à la campagne.</li>
+                                    <li><strong>Trousse de premiers secours</strong> : Une petite trousse de secours comprenant des bandages, des antiseptiques et un thermomètre peut être utile en cas de petits bobos.</li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 5"
+                                       VisibleChanged="(v) => AccordionToggle(5, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        5. Surveillez la santé de votre chien
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Voyager peut être fatigant pour votre chien, et il est essentiel de surveiller sa santé tout au long du voyage.</p>
+                                <ul>
+                                    <li><strong>Vérifiez les vaccins</strong> : Assurez-vous que votre chien est à jour sur ses vaccins, notamment contre la rage, surtout si vous voyagez à l’étranger.</li>
+                                    <li><strong>Protégez-le des parasites</strong> : Appliquez un traitement antiparasitaire avant de partir, surtout si vous partez dans une zone où les tiques et les puces sont répandues.</li>
+                                    <li><strong>Restez attentif à son bien-être</strong> : Si vous remarquez des signes de stress ou d’épuisement (halètement excessif, refus de manger, agressivité), faites une pause ou adaptez votre itinéraire pour lui permettre de se reposer.</li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 6"
+                                       VisibleChanged="(v) => AccordionToggle(6, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        6. Respectez les autres voyageurs et les lieux visités
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Voyager avec un chien implique de respecter les autres voyageurs ainsi que les lieux que vous visitez. Voici quelques conseils pour que tout se passe bien :</p>
+                                <ul>
+                                    <li><strong>Tenez votre chien en laisse</strong> : Même si votre chien est bien dressé, gardez-le en laisse dans les lieux publics pour éviter tout problème avec les autres personnes ou animaux.</li>
+                                    <li><strong>Ne laissez aucune trace</strong> : Assurez-vous de ramasser les déjections de votre chien et de le garder à l’écart des zones interdites aux animaux.</li>
+                                    <li><strong>Soyez courtois</strong> : Tous les gens n’apprécient pas les chiens, alors veillez à respecter la tranquillité des autres et à contrôler votre chien en toute circonstance.</li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 7"
+                                       VisibleChanged="(v) => AccordionToggle(7, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        Conclusion
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Voyager avec un chien peut renforcer vos liens tout en créant des souvenirs inoubliables. En suivant ces conseils, vous vous assurez que le voyage se déroulera dans les meilleures conditions, aussi bien pour vous que pour votre compagnon à quatre pattes. N&#39;oubliez pas de bien planifier, de respecter les règles et, surtout, de profiter du temps passé ensemble.</p>
+                            </AccordionBody>
+                        </AccordionItem>
+                    </Accordion>
                 </div>
             </div>
         </section>
     </div>
 </main>
+@code
+{
+    protected int AccordionIndex { get; set; } = 0;
+
+    protected void AccordionToggle(int index, bool isVisible)
+    {
+        AccordionIndex = isVisible ? index : 0;
+        StateHasChanged();
+    }
+}

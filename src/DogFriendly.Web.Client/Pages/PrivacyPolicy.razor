@@ -1,4 +1,5 @@
 ﻿@page "/privacy-policy"
+@using Blazorise
 
 <PageTitle>Politique de confidentialité</PageTitle>
 
@@ -12,9 +13,187 @@
                         <i class="fa fa-times position-absolute popin-close" />
                     </a>
                     <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
-                    <p class="card-text">Politique</p>
+                    <h4>Politique de sécurité</h4>
+                    <Accordion>
+                        <AccordionItem Visible="AccordionIndex == 1"
+                                       VisibleChanged="(v) => AccordionToggle(1, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        1. Objectif de la politique de sécurité
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>La sécurité des informations est une priorité pour <strong>Dog Friendly</strong>. Nous nous engageons à protéger les données personnelles de nos utilisateurs et à mettre en œuvre des mesures de sécurité pour garantir la confidentialité, l&#39;intégrité, et la disponibilité des informations qui nous sont confiées.</p>
+                                <p>Cette politique vise à décrire les pratiques suivies par <strong>Dog Friendly</strong> pour sécuriser les données de ses utilisateurs et protéger le site contre toute tentative d&#39;intrusion, d&#39;attaque ou de fuite de données.</p>
+
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 2"
+                                       VisibleChanged="(v) => AccordionToggle(2, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        2. Sécurité des données
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Nous mettons en place des protocoles pour assurer la protection des informations personnelles et des données de navigation collectées sur le site. Parmi ces mesures, nous utilisons notamment :</p>
+                                <ul>
+                                    <li>
+                                        <p><strong>Chiffrement des données</strong> : Toutes les données sensibles échangées entre l&#39;utilisateur et le site sont protégées par le protocole <strong>SSL/TLS</strong> (Secure Socket Layer/Transport Layer Security), garantissant la confidentialité des échanges via le cryptage.</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Protection des bases de données</strong> : Les bases de données contenant des informations personnelles sont sécurisées et stockées sur des serveurs protégés par des pare-feux (firewalls). Seules des personnes autorisées peuvent accéder à ces bases de données.</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Contrôle des accès</strong> : Les accès aux serveurs et aux informations sensibles sont restreints aux seuls utilisateurs autorisés, via des mécanismes d&#39;authentification forts, incluant des mots de passe complexes et, le cas échéant, une authentification multifactorielle.</p>
+                                    </li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 3"
+                                       VisibleChanged="(v) => AccordionToggle(3, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        3. Protection contre les menaces externes
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Nous prenons des mesures pour protéger le site <strong>Dog Friendly</strong> contre diverses menaces, telles que les attaques par déni de service (DDoS), les tentatives d&#39;intrusion, ou les logiciels malveillants.</p>
+                                <ul>
+                                    <li>
+                                        <p><strong>Pare-feu et protection DDoS</strong> : Nos serveurs sont protégés par des pare-feux et des solutions de protection DDoS pour prévenir toute tentative d&#39;attaque visant à surcharger le site ou compromettre la disponibilité des services.</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Mises à jour régulières</strong> : Les logiciels, bibliothèques et systèmes utilisés pour le site sont mis à jour régulièrement afin de corriger toute vulnérabilité de sécurité connue. Nous suivons les meilleures pratiques de sécurité pour maintenir un environnement de développement et de production sûr.</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Audit de sécurité</strong> : Des audits de sécurité internes sont effectués régulièrement pour identifier et corriger toute faille de sécurité potentielle dans nos systèmes.</p>
+                                    </li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 4"
+                                       VisibleChanged="(v) => AccordionToggle(4, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        4. Gestion des incidents de sécurité
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>En cas d&#39;incident de sécurité, <strong>Dog Friendly</strong> s&#39;engage à prendre les mesures suivantes :</p>
+                                <ul>
+                                    <li>
+                                        <p><strong>Notification des utilisateurs</strong> : En cas de violation de données personnelles, nous informerons les utilisateurs concernés dans les meilleurs délais, conformément aux exigences du <strong>Règlement Général sur la Protection des Données (RGPD)</strong> et des lois en vigueur.</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Analyse et réponse</strong> : Toute tentative de violation de la sécurité fait l’objet d’une analyse approfondie pour identifier les causes et prévenir toute récurrence. Nous prenons les mesures nécessaires pour atténuer l&#39;impact de l&#39;incident et renforcer nos protections.</p>
+                                    </li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 5"
+                                       VisibleChanged="(v) => AccordionToggle(5, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        5. Confidentialité des mots de passe
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Nous nous engageons à protéger les mots de passe des utilisateurs en suivant les meilleures pratiques de gestion des identifiants. Les mots de passe ne sont jamais stockés en clair et sont <strong>hachés</strong> à l’aide d’algorithmes de cryptographie robustes.</p>
+                                <p>Nous recommandons également à nos utilisateurs de choisir des mots de passe forts et uniques, de ne pas les partager avec des tiers, et de les mettre à jour régulièrement pour garantir la sécurité de leur compte.</p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 6"
+                                       VisibleChanged="(v) => AccordionToggle(6, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        6. Responsabilité de l&#39;utilisateur
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>La sécurité des informations est une responsabilité partagée. Nous encourageons les utilisateurs à suivre les recommandations suivantes pour renforcer la sécurité de leurs interactions sur le site :</p>
+                                <ul>
+                                    <li>Utilisez des mots de passe complexes et changez-les régulièrement.</li>
+                                    <li>Ne partagez pas vos identifiants de connexion avec d’autres personnes.</li>
+                                    <li>Assurez-vous que l&#39;appareil que vous utilisez pour accéder au site est protégé par des logiciels antivirus à jour.</li>
+                                    <li>Déconnectez-vous toujours de votre compte après utilisation, en particulier si vous utilisez un appareil partagé.</li>
+                                </ul>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 7"
+                                       VisibleChanged="(v) => AccordionToggle(7, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        7. Cookies et suivi
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Pour des raisons de sécurité et de performance, <strong>Dog Friendly</strong> utilise des <strong>cookies</strong> et des technologies de suivi. Ces technologies nous aident à :</p>
+                                <ul>
+                                    <li>Améliorer l’expérience utilisateur en enregistrant les préférences de l&#39;utilisateur.</li>
+                                    <li>Analyser les comportements des visiteurs pour identifier et corriger les éventuelles failles de sécurité.</li>
+                                </ul>
+                                <p>Les utilisateurs peuvent à tout moment configurer leur navigateur pour refuser l’utilisation de cookies. Cependant, certaines fonctionnalités du site pourraient être limitées en conséquence.</p>
+
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 8"
+                                       VisibleChanged="(v) => AccordionToggle(8, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        8. Évolution de la politique de sécurité
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Nous nous réservons le droit de modifier la présente <strong>Politique de sécurité</strong> à tout moment, notamment pour nous conformer aux évolutions réglementaires ou aux meilleures pratiques de sécurité. Toute modification importante sera annoncée sur le site, et nous encourageons nos utilisateurs à consulter régulièrement cette page.</p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 9"
+                                       VisibleChanged="(v) => AccordionToggle(9, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        9. Contact
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>
+                                    Pour toute question relative à notre <strong>Politique de sécurité</strong>, ou pour signaler une faille de sécurité, vous pouvez nous contacter à l’adresse suivante :<br>
+                                    <strong>Adresse e-mail</strong> : -<br>
+                                    <strong>Adresse postale</strong> : -
+                                </p>
+                            </AccordionBody>
+                        </AccordionItem>
+                    </Accordion>
                 </div>
             </div>
         </section>
     </div>
 </main>
+@code
+{
+    protected int AccordionIndex { get; set; } = 0;
+
+    protected void AccordionToggle(int index, bool isVisible)
+    {
+        AccordionIndex = isVisible ? index : 0;
+        StateHasChanged();
+    }
+}
