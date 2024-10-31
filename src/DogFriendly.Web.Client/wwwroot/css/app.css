@@ -1,0 +1,526 @@
+/* Désactiver la détection du thème du système */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Forcer les couleurs du thème clair même si l'utilisateur est en mode sombre */
+        --background-color: #ffffff;
+        --text-color: #000000;
+    }
+}
+
+/* Appliquer le thème clair par défaut */
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+}
+
+::selection {
+    background-color: #DF6452;
+    color: #ffffff;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Style de la scrollbar */
+::-webkit-scrollbar {
+    width: 8px; /* Largeur de la scrollbar */
+    height: 12px; /* Hauteur de la scrollbar */
+}
+
+/* Style de la piste de la scrollbar */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Couleur de fond de la piste */
+    border-radius: 10px; /* Arrondir les coins */
+}
+
+/* Style du pouce de la scrollbar */
+::-webkit-scrollbar-thumb {
+    background: #888; /* Couleur du pouce */
+    border-radius: 10px; /* Arrondir les coins */
+}
+
+    /* Style du pouce de la scrollbar au survol */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Couleur du pouce au survol */
+    }
+
+@-moz-document url-prefix() {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #c1c1c1 #f1f1f1;
+    }
+}
+
+.leaflet-tooltip {
+    white-space: normal!important;
+    width: 300px!important;
+}
+
+/* Overlay couvrant toute la page */
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Conteneur du spinner */
+.walking-dog {
+    position: relative;
+    width: 300px; /* Largeur pour simuler un chemin horizontal */
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Patte du chien */
+.paw {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: url('/img/pawprint.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0;
+}
+
+/* Patte 1 (à gauche) */
+.paw-1 {
+    left: 0;
+    animation: paw-step 2s infinite ease-in-out 0s;
+}
+
+/* Patte 2 */
+.paw-2 {
+    left: 50px;
+    animation: paw-step 2s infinite ease-in-out 0.4s;
+}
+
+/* Patte 3 */
+.paw-3 {
+    left: 100px;
+    animation: paw-step 2s infinite ease-in-out 0.8s;
+}
+
+/* Patte 4 (à droite) */
+.paw-4 {
+    left: 150px;
+    animation: paw-step 2s infinite ease-in-out 1.2s;
+}
+
+/* Animation des pattes - elles apparaissent et avancent horizontalement */
+@keyframes paw-step {
+    0% {
+        opacity: 0;
+        transform: translateX(0px);
+    }
+
+    25% {
+        opacity: 1;
+        transform: translateX(15px); /* Légère avancée */
+    }
+
+    75% {
+        opacity: 1;
+        transform: translateX(30px); /* Avance un peu plus */
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(45px); /* Disparait plus loin */
+    }
+}
+
+.axeptio_mount {
+    margin-top: -8px;
+    z-index: 200 !important;
+}
+
+    .axeptio_mount img {
+        display: none;
+    }
+
+    .axeptio_mount .AxeptioConsentButton {
+        padding-left: 12px;
+        color: #FFFCE9 !important;
+        background-color: #DF6452 !important;
+        border-color: #DF6452 !important;
+    }
+
+        .axeptio_mount .AxeptioConsentButton:hover {
+            color: white !important;
+            background-color: #DF6452 !important;
+            border-color: #DF6452 !important;
+        }
+
+.blazor-error-ui {
+    display: none;
+}
+
+header {
+    color: white;
+    background-color: #8E3837;
+}
+
+    header h1 {
+        font-family: Sacramento;
+    }
+
+
+footer {
+    color: white;
+    background-color: #8E3837;
+    padding: 20px 0;
+    padding-bottom: 28px !important;
+}
+
+    footer label {
+        font-family: Sacramento;
+        font-size: 36px;
+    }
+
+input:focus, textarea:focus, select:focus {
+    box-shadow: 0 0 5px 2px rgba(223, 100, 82, 0.5) !important;
+    border-color: #DF6452 !important;
+}
+
+.btn-outline-dark {
+    color: #FFFCE9 !important;
+    background-color: #8E3837 !important;
+    border-color: #8E3837 !important;
+}
+
+    .btn-outline-dark:hover {
+        color: white !important;
+        background-color: #DF6452 !important;
+        border-color: #DF6452 !important;
+    }
+
+
+.btn-logout {
+    background-color: #DF6452 !important;
+    border-color: #DF6452 !important;
+}
+
+.btn-primary {
+    color: #FFFCE9 !important;
+    background-color: #8E3837 !important;
+    border-color: #DF6452 !important;
+}
+
+    .btn-primary:hover {
+        color: white !important;
+        background-color: #DF6452 !important;
+        border-color: #8E3837 !important;
+    }
+
+.form-control, .form-select {
+    color: #903837;
+    background-color: #FFFCE9;
+    border-color: #903837;
+}
+
+    .form-control::placeholder, .form-select::placeholder {
+        color: #903837;
+    }
+
+.select2-selection--multiple {
+    background-color: #FFFCE9 !important;
+    border-color: #903837 !important;
+    border-color: #903837 !important;
+}
+
+.select2-search__field::placeholder {
+    color: #903837;
+}
+
+a {
+    color: #903837 !important;
+}
+
+    a:hover {
+        color: #E26553 !important;
+    }
+
+.custom-modal-footer {
+    height: 60px;
+    padding: 10px;
+}
+
+.custom-content-between {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+    .custom-content-between input {
+        width: 70%;
+    }
+
+/* Rendre Select2 plus cohérent avec Bootstrap */
+.select2-container .select2-selection--single {
+    height: calc(2.25rem + 2px); /* Hauteur du champ similaire à un input Bootstrap */
+    padding: 0.375rem 0.75rem; /* Padding similaire à Bootstrap */
+    font-size: 1rem; /* Taille du texte */
+    line-height: 1.5;
+    border: 1px solid #ced4da; /* Bordure similaire aux inputs Bootstrap */
+    border-radius: 0.375rem; /* Coins arrondis */
+}
+
+/* Bordure et ombre pour le focus */
+.select2-container--default .select2-selection--single:focus {
+    border-color: #80bdff; /* Couleur de la bordure au focus */
+    outline: 0;
+    box-shadow: 0; /* Ombre au focus */
+}
+
+/* Pour les champs multiple */
+.select2-container .select2-selection--multiple {
+    min-height: calc(2.25rem + 2px); /* Hauteur du champ multiple */
+    padding: 0.375em 0.75rem; /* Padding */
+    border: 1px solid #ced4da; /* Bordure Bootstrap */
+    border-radius: 0.375rem; /* Coins arrondis */
+}
+
+    .select2-container .select2-selection--multiple:focus {
+        border-color: #80bdff; /* Couleur de la bordure au focus */
+        outline: 0;
+        box-shadow: 0; /* Ombre au focus */
+    }
+
+/* Assurez-vous que la carte couvre tout l'arrière-plan */
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.leaflet-right {
+    display: none;
+}
+
+.map-section {
+    background-image: url('../img/map-image.jpg'); /* à remplacer par Mapbox */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 120vh;
+    left: 0;
+    width: 100%;
+}
+
+.map {
+    height: 120%;
+    width: 100%;
+    position: absolute;
+    z-index: 0;
+    overflow-y: hidden;
+}
+
+.search {
+    padding-bottom: 0 !important;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.popin-close {
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    position: absolute;
+    cursor: pointer !important;
+    font-weight: bold;
+    z-index: 1000;
+    border-radius: 5px;
+    background-color: white;
+    padding: 5px;
+}
+
+.favorite-place-add {
+    left: 38px;
+    cursor: pointer;
+    position: relative !important;
+    cursor: pointer !important;
+    z-index: 9500;
+}
+
+.img-place {
+    position: relative;
+}
+
+/* Styles uniformes pour tous les boutons */
+.button-overlay .btn {
+    background-color: #fff; /* Couleur de fond uniforme */
+    color: #000; /* Couleur du texte uniforme */
+    border: 1px solid #000; /* Couleur du cadre uniforme */
+    border-radius: 5px;
+    text-transform: uppercase; /* Texte en majuscule */
+    margin: 0 10px;
+    position: relative;
+    z-index: 1000;
+}
+
+    .button-overlay .btn:hover {
+        color: #fff;
+        background-color: #343a40;
+        border-color: #343a40;
+    }
+
+.button-overlay input {
+    border: 1px solid;
+}
+
+.button-background {
+    background-color: var(--button-color);
+}
+
+.result-image {
+    background-color: #ddd;
+}
+
+[data-isUserAuth] {
+    display: none;
+}
+
+[data-userName] {
+    display: block;
+}
+
+.btn-clear {
+    position: absolute;
+    right: 4px;
+    top: 48%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #8E3837;
+    z-index: 900;
+}
+
+    .btn-clear:hover {
+        color: #DF6452;
+    }
+
+#search {
+    border-radius: 10px;
+}
+
+#search::placeholder {
+    padding-left: 10px;
+}
+
+.result-list {
+    height: 610px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.result-details {
+    height: 705px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.card-title {
+    font-size: 1.5rem;
+}
+
+.card-text {
+    font-size: 1rem;
+}
+
+.review-item {
+    height: 200px;
+    max-height: 200px;
+    overflow-y: hidden;
+}
+
+.favorite-item {
+    height: 150px;
+    max-height: 150px;
+    width: 350px;
+    max-width: 350px;
+    overflow: hidden;
+}
+
+.favorite-container {
+    padding-left: 15px;
+}
+
+.favorite-place {
+    padding-left: 15px;
+}
+
+.review-details {
+    height: 200px;
+    max-height: 200px;
+    overflow-y: hidden;
+}
+
+.user-login {
+    text-align: center;
+}
+
+.user-reset-picture {
+    left: 123px;
+    position: relative;
+    top: 28px;
+    background-color: white;
+}
+
+.invalid {
+    border-color: red !important;
+}
+
+.suggestions {
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    z-index: 6000;
+    position: absolute;
+    margin-top: 37px;
+}
+
+    .suggestions li {
+        padding: 8px;
+        cursor: pointer;
+    }
+
+        .suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+
+/* La section News est maintenant transparente et superposée à la carte */
+.news-section {
+    background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent pour que la carte reste visible */
+    z-index: 2;
+}
+
+    .news-section .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+.newsletter label {
+    padding-bottom: 10px;
+}

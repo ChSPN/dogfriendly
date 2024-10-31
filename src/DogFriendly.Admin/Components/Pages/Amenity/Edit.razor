@@ -1,0 +1,100 @@
+﻿@page "/amenity/edit"
+@using DogFriendly.Admin.Services
+@using Microsoft.EntityFrameworkCore
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Modifier l'équipement</PageTitle>
+
+<NavBar Title="Modifier un équipement" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                @if (AmenityEntity is null)
+                {
+                    <p><em>Chargement de l'équipement ...</em></p>
+                }
+                else
+                {
+                    <EditForm method="post" Model="AmenityEntity" OnValidSubmit="UpdateAmenityEntity" FormName="edit" Enhance>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <input type="hidden" name="AmenityEntity.Id" value="@AmenityEntity.Id" />
+                        <div class="mb-3">
+                            <label for="iconuri" class="form-label">Icone :</label>
+                            <InputText id="iconuri" @bind-Value="AmenityEntity.IconUri" class="form-control" />
+                            <ValidationMessage For="() => AmenityEntity.IconUri" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom :</label>
+                            <InputText id="name" @bind-Value="AmenityEntity.Name" class="form-control" />
+                            <ValidationMessage For="() => AmenityEntity.Name" class="text-danger" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </EditForm>
+                }
+                </div>
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/amenities">Liste des équipements</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public AmenityEntity? AmenityEntity { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AmenityEntity ??= await DB.Amenities.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (AmenityEntity is null)
+        {
+            NavigationManager.NavigateTo("/amenities");
+        }
+    }
+
+    protected async Task UpdateAmenityEntity()
+    {
+        DB.Attach(AmenityEntity!).State = EntityState.Modified;
+
+        try
+        {
+            AmenityEntity.UpdatedAt = DateTimeOffset.UtcNow;
+            AmenityEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!AmenityEntityExists(AmenityEntity!.Id))
+            {
+                NavigationManager.NavigateTo("/amenities");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/amenities");
+    }
+
+    protected bool AmenityEntityExists(int id)
+    {
+        return DB.Amenities.Any(e => e.Id == id);
+    }
+}

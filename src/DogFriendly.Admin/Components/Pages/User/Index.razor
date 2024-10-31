@@ -1,0 +1,46 @@
+﻿@page "/users"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des utilisateurs</PageTitle>
+
+<NavBar Title="Liste des utilisateurs" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="user/create">Ajouter un utilisateur</a>
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <QuickGrid Class="table" Pagination=@Pagination Items="DB.Users">
+                            <PropertyColumn Title="Pseudo" Sortable="true" Property="userentity => userentity.Name" />
+                            <PropertyColumn Title="Email" Sortable="true" Property="userentity => userentity.Email" />
+                            <PropertyColumn Title="Administrateur" Sortable="true" Property="userentity => userentity.IsAdmin" />
+                            <TemplateColumn Context="userentity">
+                                <a href="@($"user/edit?id={userentity.Id}")">Modifier</a> |
+                                <a href="@($"user/details?id={userentity.Id}")">Détails</a> |
+                                <a href="@($"user/delete?id={userentity.Id}")">Supprimer</a>
+                            </TemplateColumn>
+                        </QuickGrid>
+                        <Paginator State=@Pagination />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+        {
+            ItemsPerPage = 10
+        };
+}

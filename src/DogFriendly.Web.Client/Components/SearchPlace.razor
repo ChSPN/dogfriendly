@@ -1,0 +1,49 @@
+﻿@using Blazorise
+<div class="map" id="map">
+    <RealTimeMap Parameters="@Parameters" height="300%" width="100%" @ref="Map"
+                 OnMouseUpMap="OnMouseUpMap" 
+                 OnZoomLevelEndChange="OnZoomLevelEndChange"
+                 OnAfterMapLoaded="OnAfterMapLoaded">
+    </RealTimeMap>
+</div>
+<!-- Superposition des boutons sur la carte -->
+<div class="button-overlay">
+    <!-- Search Bar and Navigation -->
+    <section class="py-3 search">
+        <div class="container">
+            <div class="input-group mb-3">
+                <InputText class="form-control" id="search" placeholder="Je recherche ..."
+                           @bind-Value="SearchQuery"
+                           @onkeypress="OnSearchKeyPress"
+                           @oninput="OnSearchChanged" />
+                <button type="button" class="btn-clear" @onclick="() => SearchQuery = null">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                </button>
+                @if (Suggestions.Any())
+                {
+                    <ul class="suggestions">
+                        @foreach (var suggestion in Suggestions)
+                        {
+                            <li @onclick="() => SelectSuggestion(suggestion)">
+                                @suggestion.DisplayName
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            @foreach (var placeType in PlaceTypes)
+            {
+                <a href="/search/@placeType.Id"
+                    class="btn btn-outline-dark col-4 col-sm-3 col-lg-2 mb-2 button-background"
+                    style="--button-color:@placeType.Color;">
+                    <i class="@placeType.IconUri"></i>
+                    @placeType.Name
+                </a>
+            }
+        </div>
+    </div>
+</div>

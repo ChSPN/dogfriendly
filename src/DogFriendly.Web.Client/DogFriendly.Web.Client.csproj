@@ -9,7 +9,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\charl\.nuget\packages\leafletforblazor\2.2.0.4\contentFiles\any\net7.0\map_color.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazorise" Version="1.6.0" />
+    <PackageReference Include="Blazorise.Bootstrap5" Version="1.6.0" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.6.0" />
+    <PackageReference Include="LeafletForBlazor" Version="2.2.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Persilsoft.Nominatim.Geolocation.Blazor" Version="1.0.8" />
+    <PackageReference Include="Refit" Version="7.2.1" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="7.2.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DogFriendly.Domain\DogFriendly.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,19 @@
+.firebaseui-provider-sign-in-footer {
+    display: none;
+}
+
+.firebaseui-auth-container {
+    width: 720px !important;
+}
+
+.firebaseui-container {
+    max-width: 720px !important;
+}
+
+.firebaseui-idp-list li {
+    display: inline;
+}
+
+#sign-out {
+    display: none;
+}

@@ -20,6 +20,91 @@ A **Blazor** front-end project that interacts with **DogFriendly.API**.
 ### DogFriendly.Web
 This project is responsible for hosting the **DogFriendly.Web.Client** with **server-side prerendering**. It delivers a faster initial page load by rendering the front-end on the server and then passing control to the client-side **Blazor** application.
 
+### Add a Migration to **DogFriendly.Infrastructure** project
+
+1. **Define the Connection String**:
+   Make sure the connection string for your database is correctly configured in the `appsettings.json` file or your `DbContext` constructor.
+
+2. **Add a Migration**:
+   Open the **Package Manager Console** or a terminal and navigate to the **Infrastructure** project directory. Run the following command to add a migration:
+   ```bash
+   Add-Migration <MigrationName> -Project DogFriendly.Infrastructure -StartupProject DogFriendly.API
+   ```
+
+3. **Update the Database**:
+   After creating the migration, apply the changes to the database with the following command:
+   ```bash
+   Update-Database -Project DogFriendly.Infrastructure -StartupProject DogFriendly.API
+   ```
+
+### Firebase Configuration
+
+To use Firebase in the **DogFriendly.API** and **DogFriendly.Web** projects, you need to add the Firebase configurations in the `appsettings.json` files of both projects. Follow these steps:
+
+#### Step 1: Retrieve Your Firebase Keys
+
+1. Go to the Firebase console at the following address: [https://console.firebase.google.com/](https://console.firebase.google.com/).
+2. Select your project or create a new one.
+3. Go to the **project settings** in Firebase, and find the following information in the **Firebase SDK** section:
+   - **ApiKey**
+   - **AuthDomain**
+   - **ProjectId**
+   - **AppId**
+
+#### Step 2: Add the Configuration to `appsettings.json`
+
+In the **DogFriendly.API** and **DogFriendly.Web** projects, open the `appsettings.json` file and add the following section with your own Firebase values.
+
+##### Section to Add in `appsettings.json`:
+
+```json
+"Firebase": {
+  "ApiKey": "YOUR_API_KEY",
+  "AuthDomain": "YOUR_AUTH_DOMAIN",
+  "ProjectId": "YOUR_PROJECT_ID",
+  "AppId": "YOUR_APP_ID"
+}
+```
+
+##### Example:
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "Firebase": {
+    "ApiKey": "AIzaSyD...1234",
+    "AuthDomain": "myapp.firebaseapp.com",
+    "ProjectId": "myapp",
+    "AppId": "1:1234567890:web:abcdef123456"
+  }
+}
+```
+
+#### Step 3: Use in Your Application
+
+In both projects (**DogFriendly.API** and **DogFriendly.Web**), the Firebase configuration will be automatically retrieved from the `appsettings.json` file.
+Ensure that the Firebase service is properly set up to use these parameters in your application's code.
+
+### FileStorage Configuration for Cloudflare R2
+
+The `FileStorage` section in the `appsettings.json` is designed to configure the connection to Cloudflare R2 storage using the AWS S3 SDK. Each setting is crucial for secure access and proper functionality. Below is a breakdown of the key properties:
+
+- **AccountId**: Your Cloudflare account identifier. It uniquely identifies your Cloudflare account for all API interactions.
+- **AccessKey**: The access key provided by Cloudflare, which acts as the public credential for authenticating API requests.
+- **SecretKey**: The corresponding secret key, used together with the access key to securely authenticate with Cloudflare R2.
+- **DomainUri**: The base URL for accessing the R2 storage domain, usually formatted as `https://<account_id>.r2.cloudflarestorage.com/`.
+- **UsersUri**: The URI for accessing the users’ storage bucket or endpoint, which may hold profile images or user-specific files.
+- **PlacesUri**: The URI for accessing place-related files, such as images and media associated with locations in your application.
+- **NewsUri**: The URI used to store or retrieve files related to news content in your application.
+- **AmenitiesUri**: The URI for storing files related to amenities, such as images or additional media associated with your entities.
+- **BucketName**: The name of the bucket where your application’s files are stored within the R2 service.
+
 ## How to Build and Run Docker Containers
 
 ### Front-End (DogFriendly.Web)
@@ -59,6 +144,10 @@ This project is responsible for hosting the **DogFriendly.Web.Client** with **se
 ### Step 4: Continuous Deployment (CI/CD)
 1. Enable automatic builds in Sliplane so that each push to GitHub triggers a new deployment.
 2. This ensures that any updates to `develop` or `main` branches are automatically compiled, built, and deployed.
+
+## GitFlow and CI/CD Pipeline
+
+This project follows the **GitFlow** workflow for source control management. In the CI/CD pipeline, GitHub Actions are configured to build and compile Docker images automatically for every **pull request**. This ensures that code is thoroughly tested and images are ready for deployment after review.
 
 ## How to Run the Test Project DogFriendly.Tests
 

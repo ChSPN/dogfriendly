@@ -1,0 +1,193 @@
+﻿@page "/review/edit"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Modifier un avis</PageTitle>
+
+<NavBar Title="Modifier un avis" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (ReviewEntity is null)
+                    {
+                        <p><em>Chargement de l'avis ...</em></p>
+                    }
+                    else
+                    {
+                        <EditForm method="post" Model="ReviewEntity" OnValidSubmit="UpdateReviewEntity" FormName="edit" Enhance>
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <input type="hidden" name="ReviewEntity.Id" value="@ReviewEntity.Id" />
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Commentaire :</label>
+                                <InputText id="comment" @bind-Value="ReviewEntity.Comment" class="form-control" />
+                                <ValidationMessage For="() => ReviewEntity.Comment" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Note :</label>
+                                <InputNumber id="rating" @bind-Value="ReviewEntity.Rating" class="form-control" />
+                                <ValidationMessage For="() => ReviewEntity.Rating" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="placeid" class="form-label">Lieu :</label>
+                                <InputSelect id="placeid" @bind-Value="ReviewEntity.PlaceId">
+                                    @foreach (var type in Places)
+                                    {
+                                        @if (ReviewEntity.PlaceId == type.Id)
+                                        {
+                                            <option selected value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="mb-3">
+                                <label for="userid" class="form-label">Utilisateur :</label>
+                                <InputSelect id="userid" @bind-Value="ReviewEntity.UserId">
+                                    @foreach (var type in Users)
+                                    {
+                                        @if (ReviewEntity.UserId == type.Id)
+                                        {
+                                            <option selected value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@type.Id">
+                                                @type.Name
+                                            </option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </EditForm>
+                    }
+                </div>
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/reviews">Liste des avis</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public ReviewEntity? ReviewEntity { get; set; }
+
+    protected List<PlaceEntity> Places { get; set; } = new List<PlaceEntity>();
+    protected List<UserEntity> Users { get; set; } = new List<UserEntity>();
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        ReviewEntity ??= await DB.Reviews.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (ReviewEntity is null)
+        {
+            NavigationManager.NavigateTo("/reviews");
+        }
+        else
+        {
+            Places = await DB.Places
+                .OrderBy(p => p.Name)
+                .Select(p => new PlaceEntity
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Address = string.Empty,
+                        City = string.Empty,
+                        PostalCode = string.Empty,
+                        Country = string.Empty,
+                        Description = string.Empty,
+                        CreatedBy = string.Empty
+                    })
+                .ToListAsync();
+            Users = await DB.Users
+                .OrderBy(p => p.Name)
+                .Select(p => new UserEntity
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Email = string.Empty,
+                        CreatedBy = string.Empty
+                    })
+                .ToListAsync();
+        }
+    }
+
+    /// <inheritdoc />
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            DotNetObjectReference<Edit> objRef = DotNetObjectReference.Create(this);
+            JSRuntime.InvokeVoidAsync("initSelect", objRef);
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    /// <summary>
+    /// Update the review entity.
+    /// </summary>
+    /// <returns></returns>
+    protected async Task UpdateReviewEntity()
+    {
+        DB.Attach(ReviewEntity!).State = EntityState.Modified;
+
+        try
+        {
+            ReviewEntity.UpdatedAt = DateTimeOffset.UtcNow;
+            ReviewEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ReviewEntityExists(ReviewEntity!.Id))
+            {
+                NavigationManager.NavigateTo("/reviews");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/reviews");
+    }
+
+    /// <summary>
+    /// Review entity exists.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    protected bool ReviewEntityExists(int id)
+    {
+        return DB.Reviews.Any(e => e.Id == id);
+    }
+}

@@ -1,13 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<TargetFramework>net8.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DogFriendly.Domain\DogFriendly.Domain.csproj" />
+	<PackageReference Include="EntityFrameworkCore.Data.QueryBuilder.Abstractions" Version="8.0.2" />
+	<PackageReference Include="EntityFrameworkCore.Data.Repository.Abstractions" Version="8.0.2" />
+	<PackageReference Include="EntityFrameworkCore.Data.UnitOfWork.Abstractions" Version="8.0.2" />
+	<PackageReference Include="MediatR" Version="12.4.1" />
+	<PackageReference Include="Npgsql" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\DogFriendly.Domain\DogFriendly.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\Favorites\" />
   </ItemGroup>
 
 </Project>

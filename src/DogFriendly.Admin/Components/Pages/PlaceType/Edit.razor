@@ -1,0 +1,105 @@
+﻿@page "/placetype/edit"
+@using DogFriendly.Admin.Services
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject AuthenticationService Authentication
+
+<PageTitle>Modifier un type de lieu</PageTitle>
+
+<NavBar Title="Modifier un type de lieu" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (PlaceTypeEntity is null)
+                    {
+                        <p><em>Chargement du type de lieu ...</em></p>
+                    }
+                    else
+                    {
+                        <EditForm method="post" Model="PlaceTypeEntity" OnValidSubmit="UpdatePlaceTypeEntity" FormName="edit" Enhance>
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <input type="hidden" name="PlaceTypeEntity.Id" value="@PlaceTypeEntity.Id" />
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nom :</label>
+                                <InputText id="name" @bind-Value="PlaceTypeEntity.Name" class="form-control" />
+                                <ValidationMessage For="() => PlaceTypeEntity.Name" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="iconuri" class="form-label">Icone :</label>
+                                <InputText id="iconuri" @bind-Value="PlaceTypeEntity.IconUri" class="form-control" />
+                                <ValidationMessage For="() => PlaceTypeEntity.IconUri" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="color" class="form-label">Couleur :</label>
+                                <InputText id="color" @bind-Value="PlaceTypeEntity.Color" class="form-control" />
+                                <ValidationMessage For="() => PlaceTypeEntity.Color" class="text-danger" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </EditForm>
+                    }
+                </div>
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="/placetypes">Liste des types de lieux</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public PlaceTypeEntity? PlaceTypeEntity { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PlaceTypeEntity ??= await DB.PlaceTypes.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (PlaceTypeEntity is null)
+        {
+            NavigationManager.NavigateTo("/placetypes");
+        }
+    }
+
+    public async Task UpdatePlaceTypeEntity()
+    {
+        DB.Attach(PlaceTypeEntity!).State = EntityState.Modified;
+
+        try
+        {
+            PlaceTypeEntity.UpdatedAt = DateTimeOffset.UtcNow;
+            PlaceTypeEntity.UpdatedBy = Authentication.Identity?.FindFirst(ClaimTypes.Email)?.Value;
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!PlaceTypeEntityExists(PlaceTypeEntity!.Id))
+            {
+                NavigationManager.NavigateTo("/placetypes");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/placetypes");
+    }
+
+    bool PlaceTypeEntityExists(int id)
+    {
+        return DB.PlaceTypes.Any(e => e.Id == id);
+    }
+}

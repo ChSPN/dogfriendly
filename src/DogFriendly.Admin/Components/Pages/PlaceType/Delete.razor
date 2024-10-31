@@ -1,0 +1,121 @@
+﻿@page "/placetype/delete"
+@using DogFriendly.Domain.Entitites
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+
+<PageTitle>Supprimer un type de lieu</PageTitle>
+
+<NavBar Title="Suppresion d'un type de lieu" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        Etes-vous sur de vouloir supprimer ce type de lieu ?
+                    </p>
+                </div>
+                <div class="card-body">
+                    @if (placetypeentity is null)
+                    {
+                        <p><em>Chargement du type de lieu ...</em></p>
+                    }
+                    else
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-2">Nom</dt>
+                            <dd class="col-sm-10">@placetypeentity.Name</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Icone</dt>
+                            <dd class="col-sm-10">@placetypeentity.IconUri</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Couleur</dt>
+                            <dd class="col-sm-10">@placetypeentity.Color</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé le</dt>
+                            <dd class="col-sm-10">@placetypeentity.CreatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Créé par</dt>
+                            <dd class="col-sm-10">@placetypeentity.CreatedBy</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié le</dt>
+                            <dd class="col-sm-10">@placetypeentity.UpdatedAt</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-2">Modifié par</dt>
+                            <dd class="col-sm-10">@placetypeentity.UpdatedBy</dd>
+                        </dl>
+                        <EditForm method="post" Model="placetypeentity" OnValidSubmit="DeletePlaceTypeEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(placetypeentity is null)">Supprimer</button> |
+                            <a href="/placetypes">Liste des type de lieux</a>
+                        </EditForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    PlaceTypeEntity? placetypeentity;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        placetypeentity = await DB.PlaceTypes.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (placetypeentity is null)
+        {
+            NavigationManager.NavigateTo("/placetypes");
+        }
+    }
+
+    public async Task DeletePlaceTypeEntity()
+    {
+        var placeFavorites = await DB.PlaceFavorites
+            .Where(x => x.Place.PlaceTypeId == placetypeentity.Id)
+            .ToListAsync();
+        if (placeFavorites.Count > 0)
+        {
+            DB.PlaceFavorites.RemoveRange(placeFavorites);
+        }
+
+        var placeAmenities = await DB.PlaceAmenities
+            .Where(p => p.Place.PlaceTypeId == placetypeentity.Id)
+            .ToListAsync();
+        if (placeAmenities.Count > 0)
+        {
+            DB.PlaceAmenities.RemoveRange(placeAmenities);
+        }
+
+        var places = await DB.Places
+            .Where(p => p.PlaceTypeId == placetypeentity.Id)
+            .ToListAsync();
+        if (places.Count > 0)
+        {
+            DB.Places.RemoveRange(places);
+        }
+
+        var reviews = await DB.Reviews
+            .Where(x => x.Place.PlaceTypeId == placetypeentity.Id)
+            .ToListAsync();
+        if (reviews.Count > 0)
+        {
+            DB.Reviews.RemoveRange(reviews);
+        }
+
+        DB.PlaceTypes.Remove(placetypeentity!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/placetypes");
+    }
+}

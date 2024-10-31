@@ -1,0 +1,253 @@
+﻿@page "/place/{PlaceId:int?}"
+@page "/search/{PlaceTypeId:int?}"
+
+<PageTitle>Carte de recherche</PageTitle>
+
+<!-- Main Content -->
+<main class="container py-4">
+    <div class="row">
+        <!-- Sidebar with Results -->
+        <aside class="col-sm-12 col-md-6 col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <a href="/">
+                        <i class="fa fa-times position-absolute popin-close" />
+                    </a>
+                    <div class="input-group mb-3">
+                        <InputText class="form-control" placeholder="Je recherche ..."
+                                   @bind-Value="SearchQuery"
+                                   @onkeypress="OnSearchKeyPress"
+                                   @oninput="OnSearchText" />
+                    </div>
+                    <div class="mb-3">
+                        <select id="amenities" multiple>
+                            @foreach (var amenity in Amenities)
+                            {
+                                <option value="@amenity.Id">
+                                    <i class="@amenity.IconUri" />
+                                    @amenity.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <select id="rating" class="form-select">
+                            <option value="">Note</option>
+                            <option value="1">dès 1 étoile</option>
+                            <option value="2">dès 2 étoiles</option>
+                            <option value="3">dès 3 étoiles</option>
+                            <option value="4">dès 4 étoiles</option>
+                            <option value="5">5 étoiles</option>
+                        </select>
+                    </div>
+                    <div class="result-list overflow-auto">
+                        @if (Places?.Any() == true)
+                        {
+                            @foreach (var place in Places)
+                            {
+                                <div class="media mb-3 pointer" @onclick="() => ViewResult(place)">
+                                    <div class="mr-3" style="width: 60px; height: 60px;">
+                                        <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@(place.Photo)" class="img-fluid img-place" alt="@place.Name" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="mt-0 d-flex align-items-center">
+                                            @place.Name
+                                            &nbsp;
+                                            @if (IsAuthenticated)
+                                            {
+                                                @if (place.Favorite == null)
+                                                {
+                                                    <Blazorise.Tooltip Text="Ajouter aux favoris">
+                                                        <i class="fa-regular fa-heart ml-2" @onclick="() => OnFavoriteChanged(place)" />
+                                                    </Blazorise.Tooltip>
+                                                }
+                                                else
+                                                {
+                                                    <Blazorise.Tooltip Text="Supprimer des favoris">
+                                                        <i class="fa-solid fa-heart ml-2" @onclick="() => OnFavoriteChanged(place)" />
+                                                    </Blazorise.Tooltip>
+                                                }
+                                            }
+                                        </h5>
+                                        <p>
+                                            <Rating Value="place.Rating" />
+                                        </p>
+                                        <p class="text-muted">
+                                            @(place.Description)
+                                        </p>
+                                        <p class="text-muted">
+                                            <a href="/place/@(place.Id)" @onclick:preventDefault="true" @onclick="() => OnPlaceClicked(place)">
+                                                Voir la fiche
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>Aucun résultat.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Detailed Information -->
+        @if (Place != null)
+        {
+            <section class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card result-details">
+                    <i class="fa fa-times position-absolute popin-close" @onclick="ClosePlace" />
+                    <Blazorise.Carousel Autoplay="false">
+                        @foreach (var photo in Place.Photos)
+                        {
+                            <Blazorise.CarouselSlide Name="@photo">
+                                <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover/@(photo)" class="d-block w-100" alt="@Place.Name" />
+                            </Blazorise.CarouselSlide>
+                        }
+                    </Blazorise.Carousel>
+                    <div class="card-body">
+                        <h2 class="card-title">@Place.Name</h2>
+                        <p class="card-text">
+                            <Rating Value="Place.Rating" />
+                            @if (Place.ReviewsCount > 0)
+                            {
+                                <span>(@Place.ReviewsCount review@(Place.ReviewsCount > 1 ? "s" : string.Empty))</span>
+                            }
+                        </p>
+                        <p class="card-text">
+                            @Place.Description
+                        </p>
+                        @if (Place.Amenities != null)
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var amenity in Place.Amenities)
+                                {
+                                    <li><i class="@amenity.IconUri" /> @amenity.Name</li>
+                                }
+                            </ul>
+                        }
+                        <p><i class="fa fa-map-pin" /> @Place.Address, @Place.PostalCode @Place.City</p>
+                        @if (!string.IsNullOrEmpty(Place.Phone))
+                        {
+                            <p><i class="fa fa-phone" /> @Place.Phone</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Place.Email))
+                        {
+                            <p><i class="fa fa-envelope" /> <a href="mailto:@Place.Email">@Place.Email</a></p>
+                        }
+                        @if (!string.IsNullOrEmpty(Place.Website))
+                        {
+                            <p><i class="fa fa-globe" /> <a href="@Place.Website">Site web</a></p>
+                        }
+                        @if (Place.OpeningHours != null)
+                        {
+                            <p><i class="fa fa-clock" /> Horaires: @Place.OpeningHours</p>
+                        }
+                        <div class="elfsight-app-8e4089cb-db22-4e67-8d59-d9d640f92ea2" data-elfsight-app-lazy></div>
+                        @if (!Place.HasUserReviewed && !ReviewSendInProgress && IsAuthenticated)
+                        {
+                            <p class="card-text">Donnez votre avis :</p>
+                            <p class="card-text">
+                                <Blazorise.Rating MaxValue="5" @bind-SelectedValue="@AddReview.Rating" />
+                            </p>
+                            <p class="card-text">
+                                <InputTextArea class="form-control" rows="3"
+                                               placeholder="Commentaire ..." @bind-Value="AddReview.Comment" />
+                            </p>
+                            <p class="card-text d-flex justify-content-end">
+                                <button class="btn btn-primary mb-3" @onclick="OnReviewSubmit">
+                                    Envoyez
+                                </button>
+                            </p>
+                        }
+                        @if (ReviewSendInProgress)
+                        {
+                            <div class="d-flex justify-content-center alert alert-info">
+                                Envoi de votre avis en cours...
+                            </div>
+                        }
+                        else if (ReviewSendState == true)
+                        {
+                            <div class="d-flex justify-content-center alert alert-success">
+                                Avis envoyé avec succès !
+                            </div>
+                        }
+                        else if (ReviewSendState == false)
+                        {
+                            <div class="d-flex justify-content-center alert alert-danger">
+                                Échec de l'envoi de l'avis. Veuillez réessayer.
+                            </div>
+                        }
+                        <div class="overflow-auto">
+                            @foreach (var review in Reviews)
+                            {
+                                <div class="media mb-3 pointer">
+                                    <div class="mr-3" style="width: 60px; height: 60px;">
+                                        <img src="@(Configuration["PhotoUrl"])width=60,height=60,quality=75,fit=cover/@review.UserPictureUri" class="img-fluid" alt="@review.UserName" />
+                                    </div>
+                                    <div class="media-body">
+                                        <h6 class="mt-0">
+                                            @review.UserName <Rating Value="review.Rating" />
+                                        </h6>
+                                        <p class="text-muted">
+                                            Le @review.CreatedAt.ToString("dd/MM/yyyy") :<br />
+                                            @review.Comment
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+    </div>
+</main>
+<!-- Modal add favorite -->
+<Blazorise.Modal @ref="_modal" Closed="PlaceFavoriteClosed">
+    <Blazorise.ModalContent Centered>
+        <Blazorise.ModalHeader>
+            <h4>Ajouter '@PlaceFavorite?.Name' dans vos favoris</h4>
+            <Blazorise.Button CloseButton @onclick="PlaceFavoriteClosed">
+                <i class="fa fa-times"></i>
+            </Blazorise.Button>
+        </Blazorise.ModalHeader>
+        <Blazorise.ModalBody>
+            <div>
+                <div class="row">
+                    @if (Favorites?.Any() == true)
+                    {
+                        @foreach (var favorite in Favorites)
+                        {
+                            <div class="col-6 col-md-4 mb-3">
+                                <div class="card pointer" @onclick="() => OnFavoriteClicked(favorite)">
+                                    @if (!string.IsNullOrEmpty(favorite.PhotoUri))
+                                    {
+                                        <img src="@(Configuration["PhotoUrl"])width=347,height=195,quality=75,fit=cover/@(favorite.PhotoUri)" class="card-img-top" alt="@favorite.Name" />
+                                    }
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">@favorite.Name</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Vous n'avez aucun favori.</p>
+                    }
+                </div>
+            </div>
+        </Blazorise.ModalBody>
+        <Blazorise.ModalFooter class="custom-modal-footer">
+            <div class="custom-content-between">
+                <InputText class="form-control" placeholder="Nom du nouveau favori"
+                           @bind-Value="FavoriteName" />
+                <Blazorise.Button Color="Blazorise.Color.Primary" @onclick="() => OnFavoriteClicked()">
+                    Créer le favori
+                </Blazorise.Button>
+            </div>
+        </Blazorise.ModalFooter>
+    </Blazorise.ModalContent>
+</Blazorise.Modal>

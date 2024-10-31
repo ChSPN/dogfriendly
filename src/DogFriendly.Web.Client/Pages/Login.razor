@@ -1,0 +1,39 @@
+﻿@page "/login"
+@using Blazorise
+
+<PageTitle>Connexion</PageTitle>
+
+<!-- Main Content -->
+<main class="container py-3">
+    <div class="row">
+        <section class="col-sm-12 col-md-6 col-lg-4 mx-auto">
+            <div class="card user-login">
+                <div class="card-body">
+                    <a href="/">
+                        <i class="fa fa-times position-absolute popin-close" />
+                    </a>
+                    <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
+                    @if (!string.IsNullOrEmpty(UserProfil?.UserName))
+                    {
+                        <p>Bonjour, <strong>@UserProfil?.UserName</strong>.</p>
+                        <p>
+                            Êtes-vous sûr de vouloir vous déconnecter ?
+                        </p>
+                        @if (!string.IsNullOrEmpty(UserProfil?.UserPicture))
+                        {
+                            <p>
+                                <img src="@UserProfil.UserPicture" alt="Profile" style="width: 150px;" />
+                            </p>
+                        }
+                        <Button Color="Color.Primary" @onclick="Confirm">Oui</Button>
+                        <Button Color="Color.Secondary" @onclick="Cancel">Non</Button>
+                    }
+                    else
+                    {
+                        <div id="firebaseui-auth-container"></div>
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

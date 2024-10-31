@@ -1,0 +1,147 @@
+﻿@page "/legals-terms"
+@using Blazorise
+
+<PageTitle>Mentions légales</PageTitle>
+
+<!-- Main Content -->
+<main class="container py-3">
+    <div class="row">
+        <section class="col-sm-12 col-md-6 col-lg-6 mx-auto">
+            <div class="card user-details">
+                <div class="card-body">
+                    <a href="/">
+                        <i class="fa fa-times position-absolute popin-close" />
+                    </a>
+                    <img src="img/logo.png" alt="Logo" class="img-fluid mb-3">
+                    <h4>Mentions légales</h4>
+                    <Accordion>
+                        <AccordionItem Visible="AccordionIndex == 1"
+                                       VisibleChanged="(v) => AccordionToggle(1, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        1. Éditeur du site
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Le site <strong>Dog Friendly</strong> (<a href="https://www.dogfriendly.com">https://www.dogfriendly.com</a>) est édité par :</p>
+                                <p>
+                                    <strong>Nom ou raison sociale</strong> : Dog Friendly<br>
+                                    <strong>Adresse</strong> : -<br>
+                                    <strong>Téléphone</strong> : -<br>
+                                    <strong>Adresse e-mail</strong> : -<br>
+                                    <strong>Numéro de SIRET</strong> : -<br>
+                                    <strong>Directeur de la publication</strong> : -<br>
+                                    <strong>Responsable de la rédaction</strong> : -
+                                </p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 2"
+                                       VisibleChanged="(v) => AccordionToggle(2, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        2. Hébergeur
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Le site <strong>Dog Friendly</strong> est hébergé par :</p>
+                                <p>
+                                    <strong>Nom de l&#39;hébergeur</strong> : Sliplane<br>
+                                    <strong>Adresse</strong> : -<br>
+                                    <strong>Téléphone</strong> : -
+                                </p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 3"
+                                       VisibleChanged="(v) => AccordionToggle(3, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        3. Propriété intellectuelle
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>L&#39;ensemble des contenus présents sur le site <strong>Dog Friendly</strong>, incluant, de manière non exhaustive, les textes, images, graphismes, logos, icônes, sons, logiciels, est la propriété exclusive de <strong>-</strong>, à l&#39;exception des marques, logos ou contenus appartenant à d&#39;autres sociétés partenaires ou auteurs mentionnés.</p>
+                                <p>Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces éléments est strictement interdite sans l&#39;accord exprès par écrit de <strong>-</strong>. Cette représentation ou reproduction, par quelque procédé que ce soit, constitue une contrefaçon sanctionnée par les articles L.335-2 et suivants du Code de la propriété intellectuelle.</p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 4"
+                                       VisibleChanged="(v) => AccordionToggle(4, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        4. Données personnelles
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Les informations collectées sur le site <strong>Dog Friendly</strong> (via les formulaires ou autres moyens) sont destinées à l&#39;usage exclusif de <strong>-</strong>. Ces informations ne seront en aucun cas partagées avec des tiers sans votre consentement préalable, sauf si la loi l&#39;exige.</p>
+                                <p>Conformément à la loi <strong>Informatique et Libertés</strong> du 6 janvier 1978 modifiée et au <strong>Règlement Général sur la Protection des Données (RGPD)</strong>, vous disposez d’un droit d’accès, de rectification, de suppression, d’opposition et de portabilité des informations qui vous concernent.</p>
+                                <p>Pour exercer ces droits, veuillez contacter :<br><strong>Adresse e-mail</strong> : -</p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 5"
+                                       VisibleChanged="(v) => AccordionToggle(5, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        5. Cookies
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Le site <strong>Dog Friendly</strong> utilise des cookies pour améliorer l’expérience utilisateur. Vous pouvez à tout moment refuser l’utilisation de ces cookies en configurant votre navigateur internet.</p>
+                                <p>Pour en savoir plus sur la gestion des cookies, veuillez consulter notre [Politique de Cookies] (ajouter un lien si tu en as une).</p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 6"
+                                       VisibleChanged="(v) => AccordionToggle(6, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        6. Responsabilité
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>Les informations fournies sur le site <strong>Dog Friendly</strong> le sont à titre informatif. <strong>-</strong> ne saurait garantir l’exactitude, la complétude ou l’actualité des informations diffusées sur le site.</p>
+                                <p>L&#39;utilisation des informations disponibles sur le site se fait sous la seule responsabilité de l&#39;utilisateur. <strong>-</strong> ne pourra être tenu responsable des dommages directs ou indirects résultant de l&#39;accès au site ou de son utilisation.</p>
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem Visible="AccordionIndex == 7"
+                                       VisibleChanged="(v) => AccordionToggle(7, v)">
+                            <AccordionHeader>
+                                <Heading Size="HeadingSize.Is5">
+                                    <AccordionToggle>
+                                        7. Contact
+                                    </AccordionToggle>
+                                </Heading>
+                            </AccordionHeader>
+                            <AccordionBody>
+                                <p>
+                                    Pour toute question ou demande d&#39;information concernant les mentions légales du site <strong>Dog Friendly</strong>, vous pouvez nous contacter à l&#39;adresse suivante :<br>
+                                    <strong>Adresse e-mail</strong> : -<br>
+                                    <strong>Adresse postale</strong> : -
+                                </p>
+                            </AccordionBody>
+                        </AccordionItem>
+                    </Accordion>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+@code
+{
+    protected int AccordionIndex { get; set; } = 0;
+
+    protected void AccordionToggle(int index, bool isVisible)
+    {
+        AccordionIndex = isVisible ? index : 0;
+        StateHasChanged();
+    }
+}

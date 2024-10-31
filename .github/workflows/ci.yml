@@ -27,3 +27,7 @@ jobs:
     - name: Build Back-End Docker image
       run: |
         docker build -f Back.Dockerfile -t dogfriendly-api .
+
+    - name: Build Admin Docker image
+      run: |
+        docker build -f Admin.Dockerfile -t dogfriendly-admin .

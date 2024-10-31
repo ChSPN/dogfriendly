@@ -1,0 +1,48 @@
+﻿@page "/placetypes"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DogFriendly.Domain.Entitites
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+
+<PageTitle>Liste des types de lieux</PageTitle>
+
+<NavBar Title="Liste des type de lieux" />
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-category">
+                        <a href="placetype/create">Ajouter un type de lieu</a>
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <QuickGrid Class="table" Pagination=@Pagination Items="DB.PlaceTypes">
+                            <PropertyColumn Title="Nom" Sortable="true" Property="placetypeentity => placetypeentity.Name" />
+                            <PropertyColumn Title="Icone" Sortable="true" Property="placetypeentity => placetypeentity.IconUri" />
+                            <PropertyColumn Title="Couleur" Sortable="true" Property="placetypeentity => placetypeentity.Color" />
+                            <PropertyColumn Title="Créé le" Sortable="true" Property="placetypeentity => placetypeentity.CreatedAt" />
+                            <PropertyColumn Title="Modifié le" Sortable="true" Property="placetypeentity => placetypeentity.UpdatedAt" />
+                            <TemplateColumn Context="placetypeentity">
+                                <a href="@($"placetype/edit?id={placetypeentity.Id}")">Modifier</a> |
+                                <a href="@($"placetype/details?id={placetypeentity.Id}")">Détails</a> |
+                                <a href="@($"placetype/delete?id={placetypeentity.Id}")">Supprimer</a>
+                            </TemplateColumn>
+                        </QuickGrid>
+                        <Paginator State=@Pagination />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected PaginationState Pagination = new PaginationState
+        {
+            ItemsPerPage = 10
+        };
+}
