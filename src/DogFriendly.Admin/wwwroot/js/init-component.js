@@ -30,5 +30,20 @@ window.initSelect = function (objRef) {
             var places = $('#places').val();
             await objRef.invokeMethodAsync('OnPlacesChange', places.map(a => Number.parseInt(a)));
         });
+
+        $('#placetypeid').on('change', async function () {
+            var placetypeid = $('#placetypeid').val();
+            await objRef.invokeMethodAsync('OnPlaceTypeChange', Number.parseInt(placetypeid));
+        });
+
+        $('#placeid').on('change', async function () {
+            var placeid = $('#placeid').val();
+            await objRef.invokeMethodAsync('OnPlaceChange', Number.parseInt(placeid));
+        });
+
+        $('#userid').on('change', async function () {
+            var userid = $('#userid').val();
+            await objRef.invokeMethodAsync('OnUserChange', Number.parseInt(userid));
+        });
     }, 500);
 };

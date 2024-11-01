@@ -34,6 +34,7 @@
                         <div class="mb-3">
                             <label for="placeid" class="form-label">Lieu :</label>
                             <InputSelect id="placeid" @bind-Value="ReviewEntity.PlaceId">
+                                <option value="0">Sélectionner un lieu</option>
                                 @foreach (var type in Places)
                                 {
                                     <option value="@type.Id">
@@ -45,6 +46,7 @@
                         <div class="mb-3">
                             <label for="userid" class="form-label">Utilisateur :</label>
                             <InputSelect id="userid" @bind-Value="ReviewEntity.UserId">
+                                <option value="0">Sélectionner un utilisateur</option>
                                 @foreach (var type in Users)
                                 {
                                     <option value="@type.Id">
@@ -125,5 +127,25 @@
         DB.Reviews.Add(ReviewEntity);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/reviews");
+    }
+
+    /// <summary>
+    /// On place change event.
+    /// </summary>
+    /// <param name="value">Value</param>
+    [JSInvokable]
+    public void OnPlaceChange(int value)
+    {
+        ReviewEntity.PlaceId = value;
+    }
+
+    /// <summary>
+    /// On user change event.
+    /// </summary>
+    /// <param name="value"></param>
+    [JSInvokable]
+    public void OnUserChange(int value)
+    {
+        ReviewEntity.UserId = value;
     }
 }
