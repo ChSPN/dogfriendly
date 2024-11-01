@@ -190,4 +190,24 @@
     {
         return DB.Reviews.Any(e => e.Id == id);
     }
+
+    /// <summary>
+    /// On place change event.
+    /// </summary>
+    /// <param name="value">Value</param>
+    [JSInvokable]
+    public void OnPlaceChange(int value)
+    {
+        ReviewEntity.PlaceId = value;
+    }
+
+    /// <summary>
+    /// On user change event.
+    /// </summary>
+    /// <param name="value"></param>
+    [JSInvokable]
+    public void OnUserChange(int value)
+    {
+        ReviewEntity.UserId = value;
+    }
 }

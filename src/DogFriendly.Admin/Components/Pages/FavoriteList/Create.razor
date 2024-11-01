@@ -34,6 +34,7 @@
                         <div class="mb-3">
                             <label for="userid" class="form-label">Utilisateur :</label>
                             <InputSelect id="userid" @bind-Value="FavoriteListEntity.UserId">
+                                <option value="0">Sélectionner un utilisateur</option>
                                 @foreach (var type in Users)
                                 {
                                     <option value="@type.Id">
@@ -150,5 +151,15 @@
         }
 
         NavigationManager.NavigateTo("/favoritelist");
+    }
+
+    /// <summary>
+    /// On user change event.
+    /// </summary>
+    /// <param name="value"></param>
+    [JSInvokable]
+    public void OnUserChange(int value)
+    {
+        FavoriteListEntity.UserId = value;
     }
 }
