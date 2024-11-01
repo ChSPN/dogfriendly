@@ -37,6 +37,7 @@
                         <div class="mb-3">
                             <label for="placetypeid" class="form-label">Type de lieu :</label>
                             <InputSelect id="placetypeid" @bind-Value="PlaceEntity.PlaceTypeId">
+                                <option value="0">Sélectionner un type de lieu</option>
                                 @foreach (var type in PlaceTypes)
                                 {
                                     <option value="@type.Id">
@@ -266,5 +267,15 @@
         {
             Photos.Remove(photo.Key);
         }
+    }
+
+    /// <summary>
+    /// On place type change event.
+    /// </summary>
+    /// <param name="value">Value</param>
+    [JSInvokable]
+    public void OnPlaceTypeChange(int value)
+    {
+        PlaceEntity.PlaceTypeId = value;
     }
 }

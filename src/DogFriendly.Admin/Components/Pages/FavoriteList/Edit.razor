@@ -231,4 +231,14 @@
     {
         return DB.Favorites.Any(e => e.Id == id);
     }
+
+    /// <summary>
+    /// On user change event.
+    /// </summary>
+    /// <param name="value"></param>
+    [JSInvokable]
+    public void OnUserChange(int value)
+    {
+        FavoriteListEntity.UserId = value;
+    }
 }
