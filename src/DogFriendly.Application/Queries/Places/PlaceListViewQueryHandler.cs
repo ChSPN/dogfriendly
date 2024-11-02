@@ -82,7 +82,9 @@ namespace DogFriendly.Application.Queries.Places
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Description = p.Description.Substring(0, p.Description.LastIndexOf(' ', 100)) + " ...",
+                    Description = p.Description != null && p.Description.Length > 100 
+                        ? p.Description.Substring(0, p.Description.LastIndexOf(' ', 100)) + " ..."
+                        : p.Description,
                     Kilometers = p.Kilometers,
                     PlaceTypeId = p.PlaceTypeId,
                     Latitude = p.Latitude,
