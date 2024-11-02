@@ -27,7 +27,7 @@ namespace DogFriendly.Web.Client.Components
                 latitude = 48.8575,
                 longitude = 2.3514,
             },
-            zoomLevel = 13
+            zoomLevel = 12
         };
 
         private EventHandler<List<PlaceListViewModel>> _onPlacesChanged;
@@ -141,8 +141,8 @@ namespace DogFriendly.Web.Client.Components
                 latitude = adjusted.Latitude,
                 longitude = adjusted.Longitude
             };
-            this.Map.View.setZoomLevel = 13;
-            SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 13);
+            this.Map.View.setZoomLevel = 12;
+            SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 12);
             this.Map.Geometric.Points.AppearanceOnType((item) => item.type == "place").pattern = new PointIcon
             {
                 iconUrl = "/img/point.png?v=1.0.1",
@@ -249,8 +249,8 @@ namespace DogFriendly.Web.Client.Components
                 latitude = adjusted.Latitude,
                 longitude = adjusted.Longitude
             };
-            this.Map.View.setZoomLevel = 13;
-            SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 13);
+            this.Map.View.setZoomLevel = 12;
+            SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 12);
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace DogFriendly.Web.Client.Components
         /// <returns></returns>
         private (double Latitude, double Longitude) AdjustCenter(double latitude, double longitude)
         {
-            double newLatitude = latitude - 0.08;
+            double newLatitude = latitude - 0.17;
             return (newLatitude, longitude);
         }
 
@@ -284,13 +284,8 @@ namespace DogFriendly.Web.Client.Components
                         value = p
                     })
                     .ToList());
-                await Task.Delay(500);
-                this.Map.View.setCenter = new Location
-                {
-                    latitude = SearchService.Latitude - 0.01,
-                    longitude = SearchService.Longitude - 0.03
-                };
-                this.Map.View.setZoomLevel = 13;
+                var place = places.First();
+                SearchService.SetView(place.Latitude - 0.10, place.Longitude, 12);
             }
         }
 
@@ -313,8 +308,8 @@ namespace DogFriendly.Web.Client.Components
                         latitude = adjusted.Latitude,
                         longitude = adjusted.Longitude
                     };
-                    this.Map.View.setZoomLevel = 13;
-                    SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 13);
+                    this.Map.View.setZoomLevel = 12;
+                    SearchService.SetSearch(adjusted.Latitude, adjusted.Longitude, 12);
                 }
             }
             else
@@ -355,7 +350,7 @@ namespace DogFriendly.Web.Client.Components
                 latitude = SearchService.Latitude,
                 longitude = SearchService.Longitude
             };
-            await Task.Delay(500);
+            await Task.Delay(1000);
             this.Map.View.setZoomLevel = SearchService.ZoomLevel;
             this.Map.View.setCenter = new Location
             {
