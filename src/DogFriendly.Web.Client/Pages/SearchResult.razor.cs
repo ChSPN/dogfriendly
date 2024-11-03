@@ -486,8 +486,8 @@ namespace DogFriendly.Web.Client.Pages
         /// <param name="place">The place.</param>
         protected async Task ViewResult(PlaceListViewModel place)
         {
-            var latitude = place.Latitude - 0.03;
-            var longitude = place.Longitude - 0.015;
+            var latitude = place.Latitude - 0.02;
+            var longitude = place.Longitude - 0.01;
             SearchService.SetView(latitude, longitude, 15);
             await Task.Delay(1000);
             SearchService.SetView(latitude, longitude, 15);
