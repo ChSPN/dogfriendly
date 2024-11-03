@@ -36,10 +36,12 @@
                         <dl class="row">
                             <dt class="col-sm-2">Equipements</dt>
                             <dd class="col-sm-10">
-                                @foreach (var placeAmenity in placeentity.PlaceAmenities)
-                                {
-                                    <span> @placeAmenity.Amenity.Name </span>
-                                }
+                                <ul>
+                                    @foreach (var placeAmenity in placeentity.PlaceAmenities)
+                                    {
+                                        <li> @placeAmenity.Amenity.Name </li>
+                                    }
+                                </ul>
                             </dd>
                         </dl>
                         <dl class="row">
