@@ -261,7 +261,7 @@ namespace DogFriendly.Web.Client.Components
         /// <returns></returns>
         private (double Latitude, double Longitude) AdjustCenter(double latitude, double longitude)
         {
-            double newLatitude = latitude - 0.17;
+            double newLatitude = latitude - 0.16;
             return (newLatitude, longitude);
         }
 
@@ -285,7 +285,7 @@ namespace DogFriendly.Web.Client.Components
                     })
                     .ToList());
                 var place = places.First();
-                SearchService.SetView(place.Latitude - 0.10, place.Longitude, 12);
+                SearchService.SetView(place.Latitude - 0.09, place.Longitude, 12);
             }
         }
 
