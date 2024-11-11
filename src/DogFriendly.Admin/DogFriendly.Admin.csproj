@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="EntityFrameworkCore.Data.QueryBuilder" Version="8.0.2" />
+	  <PackageReference Include="EntityFrameworkCore.Data.Repository" Version="8.0.2" />
+	  <PackageReference Include="EntityFrameworkCore.Data.UnitOfWork" Version="8.0.2" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.6.2" />
     <PackageReference Include="FirebaseAdmin" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.0" />
@@ -16,6 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">

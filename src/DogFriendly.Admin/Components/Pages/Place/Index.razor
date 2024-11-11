@@ -5,6 +5,8 @@
 @using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Roles = "Admin")]
 @inject DogFriendly.Infrastructure.Context.DogFriendlyContext DB
+@inject NavigationManager NavigationManager
+@inject DialogService DialogService
 
 <PageTitle>Liste des lieux</PageTitle>
 
@@ -16,7 +18,27 @@
                 <div class="card-header">
                     <p class="card-category">
                         <a href="place/create">Ajouter un lieu</a>
+                        <RadzenUpload ChooseText="Importer des lieux"
+                                      Multiple="false"
+                                      Accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                      Url="/api/upload/places/import"
+                                      Progress="OnUploadProgress"
+                                      Complete="OnUploadComplete"
+                                      Error="OnUploadError" />
+                        <RadzenUpload ChooseText="Importer des photos"
+                                      Multiple="true"
+                                      Accept="image/*"
+                                      Url="/api/upload/places/photos"
+                                      Progress="OnUploadProgress"
+                                      Complete="OnUploadComplete"
+                                      Error="OnUploadError" />
                     </p>
+                    <RadzenProgressBar 
+                        Value="100" 
+                        ShowValue="false" 
+                        Mode="ProgressBarMode.Indeterminate" 
+                        class="rz-mt-12" 
+                        Visible=@ShowProgress />
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -43,8 +65,39 @@
 
 @code
 {
+    protected bool ShowProgress { get; set; }
+
     protected PaginationState Pagination = new PaginationState
     {
         ItemsPerPage = 10
     };
+
+    /// <summary>
+    /// On upload progress event.
+    /// </summary>
+    /// <param name="args">Arguments.</param>
+    protected void OnUploadProgress(UploadProgressArgs args)
+    {
+        ShowProgress = true;
+    }
+
+    /// <summary>
+    /// On upload complete event.
+    /// </summary>
+    /// <param name="args">Arguments.</param>
+    protected void OnUploadComplete(UploadCompleteEventArgs args)
+    {
+        ShowProgress = false;
+        NavigationManager.Refresh(true);
+    }
+
+    /// <summary>
+    /// On upload error event.
+    /// </summary>
+    /// <param name="error">Errors.</param>
+    protected void OnUploadError(UploadErrorEventArgs error)
+    {
+        ShowProgress = false;
+        DialogService.Alert("Une erreur est survenue lors de l'import des lieux, veuillez retenter.", "Import des lieux", new AlertOptions { OkButtonText = "OK" });
+    }
 }
