@@ -18,6 +18,12 @@ using Newtonsoft.Json;
 using Refit;
 using Microsoft.AspNetCore.Identity;
 using Radzen;
+using DogFriendly.Application.Queries.Users;
+using DogFriendly.Domain.Enums;
+using System.Reflection;
+using EntityFrameworkCore.Repository.Interfaces;
+using EntityFrameworkCore.Repository;
+using EntityFrameworkCore.UnitOfWork.Extensions;
 
 // Create a new app builder.
 var builder = WebApplication.CreateBuilder(args);
@@ -78,6 +84,16 @@ builder.Services.AddControllersWithViews();
 builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddUnitOfWork<DogFriendlyContext>();
+builder.Services.AddUnitOfWork();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddMediatR(o =>
+{
+    o.Lifetime = ServiceLifetime.Scoped;
+    o.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    o.RegisterServicesFromAssembly(typeof(NewsType).Assembly);
+    o.RegisterServicesFromAssembly(typeof(UserEmailExistQueryHandler).Assembly);
+});
 
 // Build the app.
 var app = builder.Build();
