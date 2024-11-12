@@ -43,7 +43,6 @@ window.initFirebaseUi = async function () {
                 signInFlow: 'popup',
                 signInSuccessUrl: window.location.href,
                 signInOptions: [
-                    firebase.auth.EmailAuthProvider.PROVIDER_ID,
                     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                     {
                         provider: 'microsoft.com',
