@@ -48,7 +48,6 @@ $(document).ready(function () {
                 signInSuccessUrl: window.location.href,
                 signInOptions: [
                     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                    firebase.auth.EmailAuthProvider.PROVIDER_ID,
                     {
                         provider: 'microsoft.com',
                         providerName: 'Microsoft',
