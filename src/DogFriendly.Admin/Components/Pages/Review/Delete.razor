@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    @if (reviewentity is null)
+                    @if (ReviewEntity is null)
                     {
                         <p><em>Chargement de l'avis ...</em></p>
                     }
@@ -27,38 +27,38 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Commentaire</dt>
-                            <dd class="col-sm-10">@reviewentity.Comment</dd>
+                            <dd class="col-sm-10">@ReviewEntity.Comment</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Note</dt>
-                            <dd class="col-sm-10">@reviewentity.Rating</dd>
+                            <dd class="col-sm-10">@ReviewEntity.Rating</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Lieu</dt>
-                            <dd class="col-sm-10">@reviewentity.Place.Name</dd>
+                            <dd class="col-sm-10">@ReviewEntity.Place.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Utilisateur</dt>
-                            <dd class="col-sm-10">@reviewentity.User.Name</dd>
+                            <dd class="col-sm-10">@ReviewEntity.User.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@reviewentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@ReviewEntity.CreatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@reviewentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@ReviewEntity.CreatedBy</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@reviewentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@ReviewEntity.UpdatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@reviewentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@ReviewEntity.UpdatedBy</dd>
                         </dl>
-                        <EditForm method="post" Model="reviewentity" OnValidSubmit="DeleteReviewEntity" FormName="delete" Enhance>
-                            <button type="submit" class="btn btn-danger" disabled="@(reviewentity is null)">Supprimer</button> |
+                        <EditForm method="post" Model="ReviewEntity" OnValidSubmit="DeleteReviewEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(ReviewEntity is null)">Supprimer</button> |
                             <a href="/reviews">Liste des avis</a>
                         </EditForm>
                     }
@@ -69,27 +69,41 @@
 </div>
 
 @code {
-    ReviewEntity? reviewentity;
+    /// <summary>
+    /// Entity of the review to delete
+    /// </summary>
+    protected ReviewEntity? ReviewEntity;
 
+    /// <summary>
+    /// Id of the review to delete
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        reviewentity = await DB.Reviews
+        ReviewEntity = await DB.Reviews
             .Include(r => r.Place)
             .Include(r => r.User)
             .FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (reviewentity is null)
+        if (ReviewEntity is null)
         {
             NavigationManager.NavigateTo("/reviews");
         }
     }
 
+    /// <summary>
+    /// Delete the review entity
+    /// </summary>
+    /// <returns></returns>
     public async Task DeleteReviewEntity()
     {
-        DB.Reviews.Remove(reviewentity!);
+        DB.Reviews.Remove(ReviewEntity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/reviews");
     }

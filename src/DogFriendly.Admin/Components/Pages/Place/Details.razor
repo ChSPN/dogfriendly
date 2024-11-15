@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    @if (placeentity is null)
+                    @if (PlaceEntity is null)
                     {
                         <p><em>Chargement du lieu ...</em></p>
                     }
@@ -22,54 +22,54 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Nom</dt>
-                            <dd class="col-sm-10">@placeentity.Name</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Name</dd>
                             <dt class="col-sm-2">Type de lieu</dt>
-                            <dd class="col-sm-10">@placeentity.PlaceType.Name</dd>
+                            <dd class="col-sm-10">@PlaceEntity.PlaceType.Name</dd>
                             <dt class="col-sm-2">Equipements :</dt>
                             <dd class="col-sm-10">
                                 <ul>
-                                    @foreach (var placeAmenity in placeentity.PlaceAmenities)
+                                    @foreach (var placeAmenity in PlaceEntity.PlaceAmenities)
                                     {
                                         <li> @placeAmenity.Amenity.Name </li>
                                     }
                                 </ul>
                             </dd>
                             <dt class="col-sm-2">Adresse</dt>
-                            <dd class="col-sm-10">@placeentity.Address</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Address</dd>
                             <dt class="col-sm-2">Code postal</dt>
-                            <dd class="col-sm-10">@placeentity.PostalCode</dd>
+                            <dd class="col-sm-10">@PlaceEntity.PostalCode</dd>
                             <dt class="col-sm-2">Ville</dt>
-                            <dd class="col-sm-10">@placeentity.City</dd>
+                            <dd class="col-sm-10">@PlaceEntity.City</dd>
                             <dt class="col-sm-2">Pays</dt>
-                            <dd class="col-sm-10">@placeentity.Country</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Country</dd>
                             <dt class="col-sm-2">Description</dt>
-                            <dd class="col-sm-10">@placeentity.Description</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Description</dd>
                             <dt class="col-sm-2">Email</dt>
-                            <dd class="col-sm-10">@placeentity.Email</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Email</dd>
                             <dt class="col-sm-2">Latitude</dt>
-                            <dd class="col-sm-10">@placeentity.Latitude</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Latitude</dd>
                             <dt class="col-sm-2">Longitude</dt>
-                            <dd class="col-sm-10">@placeentity.Longitude</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Longitude</dd>
                             <dt class="col-sm-2">Horaires</dt>
-                            <dd class="col-sm-10">@placeentity.OpeningHours</dd>
+                            <dd class="col-sm-10">@PlaceEntity.OpeningHours</dd>
                             <dt class="col-sm-2">Téléphone</dt>
-                            <dd class="col-sm-10">@placeentity.Phone</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Phone</dd>
                             <dt class="col-sm-2">Site web</dt>
-                            <dd class="col-sm-10">@placeentity.Website</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Website</dd>
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@placeentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@PlaceEntity.CreatedAt</dd>
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@placeentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@PlaceEntity.CreatedBy</dd>
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@placeentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@PlaceEntity.UpdatedAt</dd>
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@placeentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@PlaceEntity.UpdatedBy</dd>
                             <dt class="col-sm-2">Photos :</dt>
                             <dd class="col-sm-10">
-                                @if (placeentity.Photos != null)
+                                @if (PlaceEntity.Photos != null)
                                 {
                                     <div class="rz-fileupload">
-                                        @foreach (var photo in placeentity.Photos)
+                                        @foreach (var photo in PlaceEntity.Photos)
                                         {
                                             var key = photo.Split('/').LastOrDefault();
                                             <div class="rz-fileupload-content rz-corner-bottom">
@@ -88,10 +88,10 @@
                     }
                 </div>
                 <div class="card-header">
-                    @if (placeentity is not null)
+                    @if (PlaceEntity is not null)
                     {
                         <p class="card-category">
-                            <a href="@($"/place/edit?id={placeentity.Id}")">Modifier</a> |
+                            <a href="@($"/place/edit?id={PlaceEntity.Id}")">Modifier</a> |
                             <a href="@($"/places")">Liste des lieux</a>
                         </p>
                     }
@@ -102,19 +102,29 @@
 </div>
 
 @code {
-    PlaceEntity? placeentity;
+    /// <summary>
+    /// Entity of the place
+    /// </summary>
+    protected PlaceEntity? PlaceEntity;
 
+    /// <summary>
+    /// Id of the place
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        placeentity = await DB.Places
+        PlaceEntity = await DB.Places
             .Include(p => p.PlaceAmenities)
             .ThenInclude(p => p.Amenity)
             .Include(p => p.PlaceType)
             .FirstOrDefaultAsync(m => m.Id == Id);
-        if (placeentity is null)
+        if (PlaceEntity is null)
         {
             NavigationManager.NavigateTo("/places");
         }

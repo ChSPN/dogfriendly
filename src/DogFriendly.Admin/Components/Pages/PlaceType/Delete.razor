@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    @if (placetypeentity is null)
+                    @if (PlaceTypeEntity is null)
                     {
                         <p><em>Chargement du type de lieu ...</em></p>
                     }
@@ -27,34 +27,34 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Nom</dt>
-                            <dd class="col-sm-10">@placetypeentity.Name</dd>
+                            <dd class="col-sm-10">@PlaceTypeEntity.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Icone</dt>
-                            <dd class="col-sm-10">@placetypeentity.IconUri</dd>
+                            <dd class="col-sm-10">@PlaceTypeEntity.IconUri</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Couleur</dt>
-                            <dd class="col-sm-10">@placetypeentity.Color</dd>
+                            <dd class="col-sm-10">@PlaceTypeEntity.Color</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@placetypeentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@PlaceTypeEntity.CreatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@placetypeentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@PlaceTypeEntity.CreatedBy</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@placetypeentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@PlaceTypeEntity.UpdatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@placetypeentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@PlaceTypeEntity.UpdatedBy</dd>
                         </dl>
-                        <EditForm method="post" Model="placetypeentity" OnValidSubmit="DeletePlaceTypeEntity" FormName="delete" Enhance>
-                            <button type="submit" class="btn btn-danger" disabled="@(placetypeentity is null)">Supprimer</button> |
+                        <EditForm method="post" Model="PlaceTypeEntity" OnValidSubmit="DeletePlaceTypeEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(PlaceTypeEntity is null)">Supprimer</button> |
                             <a href="/placetypes">Liste des type de lieux</a>
                         </EditForm>
                     }
@@ -65,25 +65,39 @@
 </div>
 
 @code {
-    PlaceTypeEntity? placetypeentity;
+    /// <summary>
+    /// Entity to delete
+    /// </summary>
+    protected PlaceTypeEntity? PlaceTypeEntity;
 
+    /// <summary>
+    /// Id of the entity to delete
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        placetypeentity = await DB.PlaceTypes.FirstOrDefaultAsync(m => m.Id == Id);
+        PlaceTypeEntity = await DB.PlaceTypes.FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (placetypeentity is null)
+        if (PlaceTypeEntity is null)
         {
             NavigationManager.NavigateTo("/placetypes");
         }
     }
 
+    /// <summary>
+    /// Delete the entity
+    /// </summary>
+    /// <returns></returns>
     public async Task DeletePlaceTypeEntity()
     {
         var placeFavorites = await DB.PlaceFavorites
-            .Where(x => x.Place.PlaceTypeId == placetypeentity.Id)
+            .Where(x => x.Place.PlaceTypeId == PlaceTypeEntity.Id)
             .ToListAsync();
         if (placeFavorites.Count > 0)
         {
@@ -91,7 +105,7 @@
         }
 
         var placeAmenities = await DB.PlaceAmenities
-            .Where(p => p.Place.PlaceTypeId == placetypeentity.Id)
+            .Where(p => p.Place.PlaceTypeId == PlaceTypeEntity.Id)
             .ToListAsync();
         if (placeAmenities.Count > 0)
         {
@@ -99,7 +113,7 @@
         }
 
         var places = await DB.Places
-            .Where(p => p.PlaceTypeId == placetypeentity.Id)
+            .Where(p => p.PlaceTypeId == PlaceTypeEntity.Id)
             .ToListAsync();
         if (places.Count > 0)
         {
@@ -107,14 +121,14 @@
         }
 
         var reviews = await DB.Reviews
-            .Where(x => x.Place.PlaceTypeId == placetypeentity.Id)
+            .Where(x => x.Place.PlaceTypeId == PlaceTypeEntity.Id)
             .ToListAsync();
         if (reviews.Count > 0)
         {
             DB.Reviews.RemoveRange(reviews);
         }
 
-        DB.PlaceTypes.Remove(placetypeentity!);
+        DB.PlaceTypes.Remove(PlaceTypeEntity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/placetypes");
     }

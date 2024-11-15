@@ -93,9 +93,15 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Id of the review entity.
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Entity of the review.
+    /// </summary>
     [SupplyParameterFromForm]
     public ReviewEntity? ReviewEntity { get; set; }
 

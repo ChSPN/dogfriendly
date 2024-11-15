@@ -84,9 +84,15 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Id of the favorite list.
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Entity of the favorite list.
+    /// </summary>
     [SupplyParameterFromForm]
     public FavoriteListEntity? FavoriteListEntity { get; set; }
 
@@ -104,6 +110,10 @@
         PlacesIds = placesIds;
     }
 
+    /// <summary>
+    /// Initialize the component.
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         FavoriteListEntity ??= await DB.Favorites.FirstOrDefaultAsync(m => m.Id == Id);
@@ -153,6 +163,10 @@
         return base.OnAfterRenderAsync(firstRender);
     }
 
+    /// <summary>
+    /// Update the favorite list entity.
+    /// </summary>
+    /// <returns></returns>
     protected async Task UpdateFavoriteListEntity()
     {
         DB.Attach(FavoriteListEntity!).State = EntityState.Modified;
@@ -227,6 +241,11 @@
         NavigationManager.NavigateTo("/favoritelist");
     }
 
+    /// <summary>
+    /// Exists favorite list entity.
+    /// </summary>
+    /// <param name="id">Id</param>
+    /// <returns></returns>
     protected bool FavoriteListEntityExists(int id)
     {
         return DB.Favorites.Any(e => e.Id == id);

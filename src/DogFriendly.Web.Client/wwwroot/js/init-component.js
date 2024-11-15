@@ -1,4 +1,5 @@
 window.searchResultInit = function (objRef) {
+    // Initialize the select2 plugin
     setTimeout(() => {
         function formatState(state) {
             if (!state.id) {
@@ -23,11 +24,13 @@ window.searchResultInit = function (objRef) {
         });
 
         $('#amenities').on('change', async function () {
+            // Get the value of the amenities input
             var amenities = $('#amenities').val();
             await objRef.invokeMethodAsync('OnAmenitiesChange', amenities.map(a => Number.parseInt(a)));
         });
 
         $('#rating').on('change', async function () {
+            // Get the value of the rating input
             var value = $('#rating').val();
             var rating = value ? Number.parseInt(value) : null;
             await objRef.invokeMethodAsync('OnRatingChange', rating);
@@ -36,11 +39,13 @@ window.searchResultInit = function (objRef) {
 };
 
 window.hideSpinner = function () {
+    // Hide the spinner after 500ms
     setTimeout(() => {
         $('#spinner').hide();
     }, 500);
 };
 
 window.showSpinner = function () {
+    // Show the spinner
     $('#spinner').show();
 };

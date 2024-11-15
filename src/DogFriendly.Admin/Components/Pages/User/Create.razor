@@ -50,9 +50,15 @@
 
 @code 
 {
+    /// <summary>
+    /// Entity to create
+    /// </summary>
     [SupplyParameterFromForm]
     public UserEntity UserEntity { get; set; }
 
+    /// <summary>
+    /// Initialize the entity
+    /// </summary>
     protected override void OnInitialized()
     {
         UserEntity = new UserEntity
@@ -64,6 +70,10 @@
         };
     }
 
+    /// <summary>
+    /// Add the user entity
+    /// </summary>
+    /// <returns></returns>
     public async Task AddUserEntity()
     {
         DB.Users.Add(UserEntity);
