@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    @if (favoritelistentity is null)
+                    @if (FavoriteListEntity is null)
                     {
                         <p><em>Chargement de la liste ...</em></p>
                     }
@@ -22,24 +22,24 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Nom</dt>
-                            <dd class="col-sm-10">@favoritelistentity.Name</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.Name</dd>
                             <dt class="col-sm-2">Commentaire</dt>
-                            <dd class="col-sm-10">@favoritelistentity.Comment</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.Comment</dd>
                             <dt class="col-sm-2">Utilisateur</dt>
-                            <dd class="col-sm-10">@favoritelistentity.User.Name</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.User.Name</dd>
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@favoritelistentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.CreatedAt</dd>
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@favoritelistentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.CreatedBy</dd>
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@favoritelistentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.UpdatedAt</dd>
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@favoritelistentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.UpdatedBy</dd>
                             <dt class="col-sm-2">Lieux</dt>
                             <dd class="col-sm-10">
-                                @if (favoritelistentity.PlaceFavorites?.Any() == true)
+                                @if (FavoriteListEntity.PlaceFavorites?.Any() == true)
                                 {
-                                    foreach (var place in favoritelistentity.PlaceFavorites)
+                                    foreach (var place in FavoriteListEntity.PlaceFavorites)
                                     {
                                         <span> @place.Place.Name </span>
                                     }
@@ -53,10 +53,10 @@
                     }
                 </div>
                 <div class="card-header">
-                    @if (favoritelistentity is not null)
+                    @if (FavoriteListEntity is not null)
                     {
                         <p class="card-category">
-                            <a href="@($"/favoritelist/edit?id={favoritelistentity.Id}")">Modifier</a> |
+                            <a href="@($"/favoritelist/edit?id={FavoriteListEntity.Id}")">Modifier</a> |
                             <a href="@($"/favoritelist")">Liste des favoris</a>
                         </p>
                     }
@@ -67,20 +67,30 @@
 </div>
 
 @code {
-    FavoriteListEntity? favoritelistentity;
+    //// <summary>
+    /// Entity of the favorite list
+    /// </summary>
+    protected FavoriteListEntity? FavoriteListEntity;
 
+    /// <summary>
+    /// Id of the favorite list
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        favoritelistentity = await DB.Favorites
+        FavoriteListEntity = await DB.Favorites
             .Include(f => f.User)
             .Include(f => f.PlaceFavorites)
             .ThenInclude(pf => pf.Place)
             .FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (favoritelistentity is null)
+        if (FavoriteListEntity is null)
         {
             NavigationManager.NavigateTo("/favoritelist");
         }

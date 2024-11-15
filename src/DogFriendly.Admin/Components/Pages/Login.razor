@@ -31,6 +31,11 @@
 
 @code 
 {
+    /// <summary>
+    /// After the first render, we call the JS function to initialize the Firebase UI.
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -40,6 +45,11 @@
         }
     }
 
+    /// <summary>
+    /// Login the user with the token.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     [JSInvokable]
     public async Task LoginUser(string token)
     {
@@ -47,6 +57,10 @@
         NavigationManager.NavigateTo("/");
     }
 
+    /// <summary>
+    /// Logout the user.
+    /// </summary>
+    /// <returns></returns>
     [JSInvokable]
     public async Task LogoutUser()
     {
@@ -55,6 +69,11 @@
         NavigationManager.NavigateTo("/");
     }
 
+    /// <summary>
+    /// Signin the user with the token.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     [JSInvokable]
     public async Task SigninUser(string token)
     {
@@ -62,6 +81,9 @@
         StateHasChanged();
     }
 
+    /// <summary>
+    /// Signout the user.
+    /// </summary>
     [JSInvokable]
     public void SignoutUser()
     {

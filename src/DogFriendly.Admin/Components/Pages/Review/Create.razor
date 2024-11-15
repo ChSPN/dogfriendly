@@ -70,6 +70,9 @@
 
 @code
 {
+    /// <summary>
+    /// Entity to create.
+    /// </summary>
     [SupplyParameterFromForm]
     public ReviewEntity ReviewEntity { get; set; }
 
@@ -122,6 +125,10 @@
         return base.OnAfterRenderAsync(firstRender);
     }
 
+    /// <summary>
+    /// Add the review entity.
+    /// </summary>
+    /// <returns></returns>
     protected async Task AddReviewEntity()
     {
         DB.Reviews.Add(ReviewEntity);

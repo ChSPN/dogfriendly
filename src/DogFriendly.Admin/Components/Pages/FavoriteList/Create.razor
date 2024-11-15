@@ -69,6 +69,9 @@
 
 @code 
 {
+    /// <summary>
+    /// Entity of favorite list.
+    /// </summary>
     [SupplyParameterFromForm]
     public FavoriteListEntity FavoriteListEntity { get; set; }
 
@@ -86,6 +89,10 @@
         PlacesIds = placesIds;
     }
 
+    /// <summary>
+    /// Initialize the component.
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         FavoriteListEntity = new FavoriteListEntity
@@ -132,6 +139,10 @@
         return base.OnAfterRenderAsync(firstRender);
     }
 
+    /// <summary>
+    /// Add favorite list entity.
+    /// </summary>
+    /// <returns></returns>
     protected async Task AddFavoriteListEntity()
     {
         DB.Favorites.Add(FavoriteListEntity);

@@ -43,10 +43,15 @@
 </div>
 
 @code {
-
+    /// <summary>
+    /// Entity of the amenity
+    /// </summary>
     [SupplyParameterFromForm]
     public AmenityEntity AmenityEntity { get; set; }
 
+    /// <summary>
+    /// Initialize the amenity entity
+    /// </summary>
     protected override void OnInitialized()
     {
         AmenityEntity = new AmenityEntity
@@ -57,6 +62,10 @@
             };
     }
 
+    /// <summary>
+    /// Add an amenity entity
+    /// </summary>
+    /// <returns></returns>
     public async Task AddAmenityEntity()
     {
         DB.Amenities.Add(AmenityEntity);

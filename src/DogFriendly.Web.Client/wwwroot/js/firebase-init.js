@@ -1,6 +1,7 @@
 var fb;
 
 window.getFirebaseAuthToken = async function () {
+    // Initialize Firebase
     if (fb == null)
         fb = firebase.initializeApp(firebaseConfig);
 
@@ -17,6 +18,7 @@ window.isFirebaseUserAuth = async function () {
 }
 
 window.updateFirebaseAuth = async function () {
+    // Update Firebase Auth State user
     if (fb == null) {
         fb = firebase.initializeApp(firebaseConfig);
         fb.auth().onAuthStateChanged(async function (user) {
@@ -35,6 +37,7 @@ window.updateFirebaseAuth = async function () {
 };
 
 window.initFirebaseUi = async function () {
+    // Initialize Firebase UI
     await window.updateFirebaseAuth();
     if ($('#firebaseui-auth-container').length > 0
         && !(await window.isFirebaseUserAuth())) {
@@ -69,6 +72,7 @@ window.initFirebaseUi = async function () {
 }
 
 window.logoutFirebaseAuth = async function () {
+    // Logout Firebase Auth
     if (fb != null) {
         fb.auth().signOut();
         window.location.reload();
