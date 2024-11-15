@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    @if (userentity is null)
+                    @if (UserEntity is null)
                     {
                         <p><em>Chargement de l'utilisateur ...</em></p>
                     }
@@ -27,34 +27,34 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Nom</dt>
-                            <dd class="col-sm-10">@userentity.Name</dd>
+                            <dd class="col-sm-10">@UserEntity.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Email</dt>
-                            <dd class="col-sm-10">@userentity.Email</dd>
+                            <dd class="col-sm-10">@UserEntity.Email</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Administrateur</dt>
-                            <dd class="col-sm-10">@userentity.IsAdmin</dd>
+                            <dd class="col-sm-10">@UserEntity.IsAdmin</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@userentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@UserEntity.CreatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@userentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@UserEntity.CreatedBy</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@userentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@UserEntity.UpdatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@userentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@UserEntity.UpdatedBy</dd>
                         </dl>
-                        <EditForm method="post" Model="userentity" OnValidSubmit="DeleteUserEntity" FormName="delete" Enhance>
-                            <button type="submit" class="btn btn-danger" disabled="@(userentity is null)">Supprimer</button> |
+                        <EditForm method="post" Model="UserEntity" OnValidSubmit="DeleteUserEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(UserEntity is null)">Supprimer</button> |
                             <a href="/users">Liste des utilisateurs</a>
                         </EditForm>
                     }
@@ -65,24 +65,38 @@
 </div>
 
 @code {
-    UserEntity? userentity;
+    /// <summary>
+    /// Entity of the user to delete.
+    /// </summary>
+    protected UserEntity? UserEntity;
 
+    /// <summary>
+    /// Id of the user to delete.
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component.
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        userentity = await DB.Users.FirstOrDefaultAsync(m => m.Id == Id);
+        UserEntity = await DB.Users.FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (userentity is null)
+        if (UserEntity is null)
         {
             NavigationManager.NavigateTo("/users");
         }
     }
 
+    /// <summary>
+    /// Delete the user entity.
+    /// </summary>
+    /// <returns></returns>
     public async Task DeleteUserEntity()
     {
-        DB.Users.Remove(userentity!);
+        DB.Users.Remove(UserEntity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/users");
     }

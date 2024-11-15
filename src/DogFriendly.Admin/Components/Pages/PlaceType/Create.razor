@@ -49,9 +49,15 @@
 
 @code
 {
+    /// <summary>
+    /// Entity of the place type
+    /// </summary>
     [SupplyParameterFromForm]
     public PlaceTypeEntity PlaceTypeEntity { get; set; }
 
+    //// <summary>
+    /// Initialize the entity
+    /// </summary>
     protected override void OnInitialized()
     {
         PlaceTypeEntity = new PlaceTypeEntity
@@ -63,6 +69,10 @@
             };
     }
 
+    /// <summary>
+    /// Add the place type entity
+    /// </summary>
+    /// <returns></returns>
     public async Task AddPlaceTypeEntity()
     {
         DB.PlaceTypes.Add(PlaceTypeEntity);

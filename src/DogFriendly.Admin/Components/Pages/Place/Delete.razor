@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    @if (placeentity is null)
+                    @if (PlaceEntity is null)
                     {
                         <p><em>Chargement du lieu ...</em></p>
                     }
@@ -27,17 +27,17 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Nom</dt>
-                            <dd class="col-sm-10">@placeentity.Name</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Type de lieu</dt>
-                            <dd class="col-sm-10">@placeentity.PlaceType.Name</dd>
+                            <dd class="col-sm-10">@PlaceEntity.PlaceType.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Equipements</dt>
                             <dd class="col-sm-10">
                                 <ul>
-                                    @foreach (var placeAmenity in placeentity.PlaceAmenities)
+                                    @foreach (var placeAmenity in PlaceEntity.PlaceAmenities)
                                     {
                                         <li> @placeAmenity.Amenity.Name </li>
                                     }
@@ -46,66 +46,66 @@
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Adresse</dt>
-                            <dd class="col-sm-10">@placeentity.Address</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Address</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Ville</dt>
-                            <dd class="col-sm-10">@placeentity.City</dd>
+                            <dd class="col-sm-10">@PlaceEntity.City</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Pays</dt>
-                            <dd class="col-sm-10">@placeentity.Country</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Country</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Description</dt>
-                            <dd class="col-sm-10">@placeentity.Description</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Description</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Email</dt>
-                            <dd class="col-sm-10">@placeentity.Email</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Email</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Latitude</dt>
-                            <dd class="col-sm-10">@placeentity.Latitude</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Latitude</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Longitude</dt>
-                            <dd class="col-sm-10">@placeentity.Longitude</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Longitude</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Horaires</dt>
-                            <dd class="col-sm-10">@placeentity.OpeningHours</dd>
+                            <dd class="col-sm-10">@PlaceEntity.OpeningHours</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Téléphone</dt>
-                            <dd class="col-sm-10">@placeentity.Phone</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Phone</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Code postal</dt>
-                            <dd class="col-sm-10">@placeentity.PostalCode</dd>
+                            <dd class="col-sm-10">@PlaceEntity.PostalCode</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Site web</dt>
-                            <dd class="col-sm-10">@placeentity.Website</dd>
+                            <dd class="col-sm-10">@PlaceEntity.Website</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@placeentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@PlaceEntity.CreatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@placeentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@PlaceEntity.CreatedBy</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@placeentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@PlaceEntity.UpdatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@placeentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@PlaceEntity.UpdatedBy</dd>
                         </dl>
-                        <EditForm method="post" Model="placeentity" OnValidSubmit="DeletePlaceEntity" FormName="delete" Enhance>
-                            <button type="submit" class="btn btn-danger" disabled="@(placeentity is null)">Supprimer</button> |
+                        <EditForm method="post" Model="PlaceEntity" OnValidSubmit="DeletePlaceEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(PlaceEntity is null)">Supprimer</button> |
                             <a href="/places">Liste de lieux</a>
                         </EditForm>
                     }
@@ -116,29 +116,43 @@
 </div>
 
 @code {
-    PlaceEntity? placeentity;
+    /// <summary>
+    /// Entity of the place to delete
+    /// </summary>
+    protected PlaceEntity? PlaceEntity;
 
+    /// <summary>
+    /// Id of the place to delete
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        placeentity = await DB.Places
+        PlaceEntity = await DB.Places
             .Include(p => p.PlaceAmenities)
             .ThenInclude(p => p.Amenity)
             .Include(p => p.PlaceType)
             .FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (placeentity is null)
+        if (PlaceEntity is null)
         {
             NavigationManager.NavigateTo("/places");
         }
     }
 
+    /// <summary>
+    /// Delete the place entity
+    /// </summary>
+    /// <returns></returns>
     public async Task DeletePlaceEntity()
     {
         var placeFavorites = await DB.PlaceFavorites
-            .Where(x => x.PlaceId == placeentity.Id)
+            .Where(x => x.PlaceId == PlaceEntity.Id)
             .ToListAsync();
         if (placeFavorites.Count > 0)
         {
@@ -146,7 +160,7 @@
         }
 
         var placeAmenities = await DB.PlaceAmenities
-            .Where(p => p.PlaceId == placeentity.Id)
+            .Where(p => p.PlaceId == PlaceEntity.Id)
             .ToListAsync();
         if (placeAmenities.Count > 0)
         {
@@ -154,14 +168,14 @@
         }
 
         var reviews = await DB.Reviews
-            .Where(x => x.PlaceId == placeentity.Id)
+            .Where(x => x.PlaceId == PlaceEntity.Id)
             .ToListAsync();
         if (reviews.Count > 0)
         {
             DB.Reviews.RemoveRange(reviews);
         }
 
-        DB.Places.Remove(placeentity!);
+        DB.Places.Remove(PlaceEntity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/places");
     }

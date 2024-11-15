@@ -8,12 +8,21 @@ using System.Security.Claims;
 
 namespace DogFriendly.Admin.Services
 {
+    /// <summary>
+    /// Service for managing user authentication.
+    /// </summary>
     public class AuthenticationService
     {
         private readonly FirebaseAuth _firebaseAuth;
         private readonly AuthenticationProvider _provider;
         private readonly IServiceProvider _serviceProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
+        /// </summary>
+        /// <param name="firebaseAuth">The firebase authentication.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         public AuthenticationService(FirebaseAuth firebaseAuth, 
             AuthenticationProvider provider,
             IServiceProvider serviceProvider)
@@ -23,13 +32,34 @@ namespace DogFriendly.Admin.Services
             _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// Gets the identity.
+        /// </summary>
+        /// <value>
+        /// The identity.
+        /// </value>
         public ClaimsPrincipal? Identity { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is admin.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is admin; otherwise, <c>false</c>.
+        /// </value>
         public bool IsAdmin => IsAuthenticated
             && Identity?.HasClaim(ClaimTypes.Role, "Admin") == true;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is authenticated.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is authenticated; otherwise, <c>false</c>.
+        /// </value>
         public bool IsAuthenticated => Identity != null;
 
+        /// <summary>
+        /// Loads the asynchronous.
+        /// </summary>
         public async Task LoadAsync()
         {
             if (Identity == null)
@@ -48,6 +78,10 @@ namespace DogFriendly.Admin.Services
             }
         }
 
+        /// <summary>
+        /// Login user.
+        /// </summary>
+        /// <param name="token">The token.</param>
         public async Task LogIn(string token)
         {
             var decodedToken = await _firebaseAuth.VerifyIdTokenAsync(token);
@@ -74,6 +108,9 @@ namespace DogFriendly.Admin.Services
             _provider.LoggedIn(Identity);
         }
 
+        /// <summary>
+        /// Logout the user.
+        /// </summary>
         public void LogOut()
         {
             Identity = null;

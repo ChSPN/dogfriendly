@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    @if (favoritelistentity is null)
+                    @if (FavoriteListEntity is null)
                     {
                         <p><em>Chargement de la liste ...</em></p>
                     }
@@ -27,38 +27,38 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Nom</dt>
-                            <dd class="col-sm-10">@favoritelistentity.Name</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Commentaire</dt>
-                            <dd class="col-sm-10">@favoritelistentity.Comment</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.Comment</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Utilisateur</dt>
-                            <dd class="col-sm-10">@favoritelistentity.User.Name</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.User.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@favoritelistentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.CreatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@favoritelistentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.CreatedBy</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@favoritelistentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.UpdatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@favoritelistentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@FavoriteListEntity.UpdatedBy</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Lieux</dt>
                             <dd class="col-sm-10">
-                                @if (favoritelistentity.PlaceFavorites?.Any() == true)
+                                @if (FavoriteListEntity.PlaceFavorites?.Any() == true)
                                 {
-                                    foreach (var place in favoritelistentity.PlaceFavorites)
+                                    foreach (var place in FavoriteListEntity.PlaceFavorites)
                                     {
                                         <span> @place.Place.Name </span>
                                     }
@@ -69,8 +69,8 @@
                                 }
                             </dd>
                         </dl>
-                        <EditForm method="post" Model="favoritelistentity" OnValidSubmit="DeleteFavoriteListEntity" FormName="delete" Enhance>
-                            <button type="submit" class="btn btn-danger" disabled="@(favoritelistentity is null)">Supprimer</button> |
+                        <EditForm method="post" Model="FavoriteListEntity" OnValidSubmit="DeleteFavoriteListEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(FavoriteListEntity is null)">Supprimer</button> |
                             <a href="/favoritelist">Liste des favoris</a>
                         </EditForm>
                     }
@@ -81,36 +81,50 @@
 </div>
 
 @code {
-    FavoriteListEntity? favoritelistentity;
+    /// <summary>
+    /// Entity of the favorite list
+    /// </summary>
+    protected FavoriteListEntity? FavoriteListEntity;
 
+    /// <summary>
+    /// Id of the favorite list
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        favoritelistentity = await DB.Favorites
+        FavoriteListEntity = await DB.Favorites
             .Include(f => f.User)
             .Include(f => f.PlaceFavorites)
             .ThenInclude(pf => pf.Place)
             .FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (favoritelistentity is null)
+        if (FavoriteListEntity is null)
         {
             NavigationManager.NavigateTo("/favoritelist");
         }
     }
 
+    /// <summary>
+    /// Delete the favorite list entity
+    /// </summary>
+    /// <returns></returns>
     protected async Task DeleteFavoriteListEntity()
     {
         var placeFavorites = await DB.PlaceFavorites
-            .Where(x => x.FavoriteListId == favoritelistentity.Id)
+            .Where(x => x.FavoriteListId == FavoriteListEntity.Id)
             .ToListAsync();
         if (placeFavorites.Count > 0)
         {
             DB.PlaceFavorites.RemoveRange(placeFavorites);
         }
 
-        DB.Favorites.Remove(favoritelistentity!);
+        DB.Favorites.Remove(FavoriteListEntity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/favoritelist");
     }

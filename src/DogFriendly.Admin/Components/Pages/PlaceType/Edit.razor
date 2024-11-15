@@ -57,12 +57,22 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Id of the PlaceTypeEntity to edit
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Entity to edit
+    /// </summary>
     [SupplyParameterFromForm]
     public PlaceTypeEntity? PlaceTypeEntity { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         PlaceTypeEntity ??= await DB.PlaceTypes.FirstOrDefaultAsync(m => m.Id == Id);
@@ -73,6 +83,10 @@
         }
     }
 
+    /// <summary>
+    /// Update the PlaceTypeEntity
+    /// </summary>
+    /// <returns></returns>
     public async Task UpdatePlaceTypeEntity()
     {
         DB.Attach(PlaceTypeEntity!).State = EntityState.Modified;
@@ -98,7 +112,12 @@
         NavigationManager.NavigateTo("/placetypes");
     }
 
-    bool PlaceTypeEntityExists(int id)
+    /// <summary>
+    /// Exists the PlaceTypeEntity
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    protected bool PlaceTypeEntityExists(int id)
     {
         return DB.PlaceTypes.Any(e => e.Id == id);
     }

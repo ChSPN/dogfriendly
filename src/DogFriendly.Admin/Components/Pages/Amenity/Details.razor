@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                @if (amenityentity is null)
+                @if (AmenityEntity is null)
                 {
                     <p><em>Chargement de l'équipement ...</em></p>
                 }
@@ -22,25 +22,25 @@
                 {
                     <dl class="row">
                         <dt class="col-sm-2">Icone</dt>
-                        <dd class="col-sm-10">@amenityentity.IconUri</dd>
+                        <dd class="col-sm-10">@AmenityEntity.IconUri</dd>
                         <dt class="col-sm-2">Nom</dt>
-                        <dd class="col-sm-10">@amenityentity.Name</dd>
+                        <dd class="col-sm-10">@AmenityEntity.Name</dd>
                         <dt class="col-sm-2">Créé le</dt>
-                        <dd class="col-sm-10">@amenityentity.CreatedAt</dd>
+                        <dd class="col-sm-10">@AmenityEntity.CreatedAt</dd>
                         <dt class="col-sm-2">Créé par</dt>
-                        <dd class="col-sm-10">@amenityentity.CreatedBy</dd>
+                        <dd class="col-sm-10">@AmenityEntity.CreatedBy</dd>
                         <dt class="col-sm-2">Modifié le</dt>
-                        <dd class="col-sm-10">@amenityentity.UpdatedAt</dd>
+                        <dd class="col-sm-10">@AmenityEntity.UpdatedAt</dd>
                         <dt class="col-sm-2">Modifié par</dt>
-                        <dd class="col-sm-10">@amenityentity.UpdatedBy</dd>
+                        <dd class="col-sm-10">@AmenityEntity.UpdatedBy</dd>
                     </dl>
                 }
                 </div>
                 <div class="card-header">
-                @if (amenityentity is not null)
+                @if (AmenityEntity is not null)
                 {
                     <p class="card-category">
-                        <a href="@($"/amenity/edit?id={amenityentity.Id}")">Modifier</a> |
+                        <a href="@($"/amenity/edit?id={AmenityEntity.Id}")">Modifier</a> |
                         <a href="@($"/amenities")">Liste des équipements</a>
                     </p>
                 }
@@ -52,16 +52,26 @@
 
 @code
 {
-    AmenityEntity? amenityentity;
+    /// <summary>
+    /// Entity of the amenity
+    /// </summary>
+    protected AmenityEntity? AmenityEntity;
 
+    /// <summary>
+    /// Id of the amenity
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        amenityentity = await DB.Amenities.FirstOrDefaultAsync(m => m.Id == Id);
+        AmenityEntity = await DB.Amenities.FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (amenityentity is null)
+        if (AmenityEntity is null)
         {
             NavigationManager.NavigateTo("/amenities");
         }

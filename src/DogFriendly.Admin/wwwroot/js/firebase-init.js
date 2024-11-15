@@ -1,6 +1,7 @@
 var fb;
 
 window.loginApplication = function (token, refresh) {
+    // Send token to server
     const formData = new FormData();
     formData.append('token', token);
     $.ajax({
@@ -18,6 +19,7 @@ window.loginApplication = function (token, refresh) {
 };
 
 window.logoutApplication = function (refresh) {
+    // Logout from server
     $.ajax({
         url: '/api/authentication/logout',
         type: 'POST',
@@ -30,6 +32,7 @@ window.logoutApplication = function (refresh) {
 };
 
 window.getFirebaseAuthToken = async function () {
+    // Initialize Firebase
     if (fb == null)
         fb = firebase.initializeApp(firebaseConfig);
 
@@ -46,6 +49,7 @@ window.isFirebaseUserAuth = async function () {
 };
 
 window.updateFirebaseAuth = async function (dotNetHelper) {
+    // Update Firebase Auth state user
     if (fb == null) {
         fb = firebase.initializeApp(firebaseConfig);
         fb.auth().onAuthStateChanged(async function (user) {
@@ -68,6 +72,7 @@ window.updateFirebaseAuth = async function (dotNetHelper) {
 };
 
 window.initFirebaseUi = async function (dotNetHelper) {
+    // Initialize Firebase UI
     await window.updateFirebaseAuth(dotNetHelper);
     if ($('#firebaseui-auth-container').length > 0
         && !(await window.isFirebaseUserAuth())) {
@@ -102,6 +107,7 @@ window.initFirebaseUi = async function (dotNetHelper) {
 };
 
 window.loginFirebaseAuth = async function (authResult, dotNetHelper) {
+    // Login Firebase Auth
     const user = authResult.user;
     const token = await user.getIdToken();
     await dotNetHelper.invokeMethodAsync('LoginUser', token);
@@ -109,6 +115,7 @@ window.loginFirebaseAuth = async function (authResult, dotNetHelper) {
 };
 
 window.logoutFirebaseAuth = async function () {
+    // Logout
     if (fb != null) {
         fb.auth().signOut();
         window.logoutApplication(true);

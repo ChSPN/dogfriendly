@@ -1,10 +1,15 @@
 using DogFriendly.Admin.Components;
 using DogFriendly.Admin.Services;
+using DogFriendly.Application.Queries.Users;
+using DogFriendly.Domain.Enums;
 using DogFriendly.Domain.Options;
 using DogFriendly.Domain.Repositories;
 using DogFriendly.Domain.Resources;
 using DogFriendly.Infrastructure.Context;
 using DogFriendly.Infrastructure.Repositories;
+using EntityFrameworkCore.Repository;
+using EntityFrameworkCore.Repository.Interfaces;
+using EntityFrameworkCore.UnitOfWork.Extensions;
 using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
@@ -15,15 +20,9 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json;
-using Refit;
-using Microsoft.AspNetCore.Identity;
 using Radzen;
-using DogFriendly.Application.Queries.Users;
-using DogFriendly.Domain.Enums;
+using Refit;
 using System.Reflection;
-using EntityFrameworkCore.Repository.Interfaces;
-using EntityFrameworkCore.Repository;
-using EntityFrameworkCore.UnitOfWork.Extensions;
 
 // Create a new app builder.
 var builder = WebApplication.CreateBuilder(args);

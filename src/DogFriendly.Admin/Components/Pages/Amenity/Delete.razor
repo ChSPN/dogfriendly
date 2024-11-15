@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    @if (amenityentity is null)
+                    @if (AmenityEntity is null)
                     {
                         <p><em>Chargement de l'équipement ...</em></p>
                     }
@@ -27,30 +27,30 @@
                     {
                         <dl class="row">
                             <dt class="col-sm-2">Icone</dt>
-                            <dd class="col-sm-10">@amenityentity.IconUri</dd>
+                            <dd class="col-sm-10">@AmenityEntity.IconUri</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Nom</dt>
-                            <dd class="col-sm-10">@amenityentity.Name</dd>
+                            <dd class="col-sm-10">@AmenityEntity.Name</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé le</dt>
-                            <dd class="col-sm-10">@amenityentity.CreatedAt</dd>
+                            <dd class="col-sm-10">@AmenityEntity.CreatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Créé par</dt>
-                            <dd class="col-sm-10">@amenityentity.CreatedBy</dd>
+                            <dd class="col-sm-10">@AmenityEntity.CreatedBy</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié le</dt>
-                            <dd class="col-sm-10">@amenityentity.UpdatedAt</dd>
+                            <dd class="col-sm-10">@AmenityEntity.UpdatedAt</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-2">Modifié par</dt>
-                            <dd class="col-sm-10">@amenityentity.UpdatedBy</dd>
+                            <dd class="col-sm-10">@AmenityEntity.UpdatedBy</dd>
                         </dl>
-                        <EditForm method="post" Model="amenityentity" OnValidSubmit="DeleteAmenityEntity" FormName="delete" Enhance>
-                            <button type="submit" class="btn btn-danger" disabled="@(amenityentity is null)">Supprimer</button> |
+                        <EditForm method="post" Model="AmenityEntity" OnValidSubmit="DeleteAmenityEntity" FormName="delete" Enhance>
+                            <button type="submit" class="btn btn-danger" disabled="@(AmenityEntity is null)">Supprimer</button> |
                             <a href="/amenities">Liste des équipements</a>
                         </EditForm>
                     }
@@ -62,31 +62,45 @@
 
 @code
 {
-    AmenityEntity? amenityentity;
+    /// <summary>
+    /// Entity of the amenity to delete
+    /// </summary>
+    protected AmenityEntity? AmenityEntity;
 
+    /// <summary>
+    /// Id of the amenity to delete
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        amenityentity = await DB.Amenities.FirstOrDefaultAsync(m => m.Id == Id);
+        AmenityEntity = await DB.Amenities.FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (amenityentity is null)
+        if (AmenityEntity is null)
         {
             NavigationManager.NavigateTo("/amenities");
         }
     }
 
+    /// <summary>
+    /// Delete the amenity entity
+    /// </summary>
+    /// <returns></returns>
     public async Task DeleteAmenityEntity()
     {
         var placeAmenities = await DB.PlaceAmenities
-        .Where(p => p.AmenityId == amenityentity.Id)
+        .Where(p => p.AmenityId == AmenityEntity.Id)
         .ToListAsync();
         if (placeAmenities.Count > 0)
         {
             DB.PlaceAmenities.RemoveRange(placeAmenities);
         }
-        DB.Amenities.Remove(amenityentity!);
+        DB.Amenities.Remove(AmenityEntity!);
         await DB.SaveChangesAsync();
         NavigationManager.NavigateTo("/amenities");
     }

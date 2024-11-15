@@ -52,12 +52,22 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Id of the amenity to edit
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Entity of the amenity to edit
+    /// </summary>
     [SupplyParameterFromForm]
     public AmenityEntity? AmenityEntity { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         AmenityEntity ??= await DB.Amenities.FirstOrDefaultAsync(m => m.Id == Id);
@@ -68,6 +78,10 @@
         }
     }
 
+    /// <summary>
+    /// Update the amenity entity
+    /// </summary>
+    /// <returns></returns>
     protected async Task UpdateAmenityEntity()
     {
         DB.Attach(AmenityEntity!).State = EntityState.Modified;
@@ -93,6 +107,11 @@
         NavigationManager.NavigateTo("/amenities");
     }
 
+    /// <summary>
+    /// Amenity entity exists
+    /// </summary>
+    /// <param name="id">Id of amenity</param>
+    /// <returns></returns>
     protected bool AmenityEntityExists(int id)
     {
         return DB.Amenities.Any(e => e.Id == id);

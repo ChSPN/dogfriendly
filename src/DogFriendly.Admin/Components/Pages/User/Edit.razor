@@ -58,12 +58,22 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Id of the user to edit
+    /// </summary>
     [SupplyParameterFromQuery]
     public int Id { get; set; }
 
+    /// <summary>
+    /// Entity to edit
+    /// </summary>
     [SupplyParameterFromForm]
     public UserEntity? UserEntity { get; set; }
 
+    /// <summary>
+    /// Initialize the component
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         UserEntity ??= await DB.Users.FirstOrDefaultAsync(m => m.Id == Id);
@@ -74,6 +84,10 @@
         }
     }
 
+    /// <summary>
+    /// Update the user entity
+    /// </summary>
+    /// <returns></returns>
     public async Task UpdateUserEntity()
     {
         DB.Attach(UserEntity!).State = EntityState.Modified;
@@ -99,7 +113,12 @@
         NavigationManager.NavigateTo("/users");
     }
 
-    bool UserEntityExists(int id)
+    /// <summary>
+    /// Exists the user entity
+    /// </summary>
+    /// <param name="id">Id</param>
+    /// <returns></returns>
+    protected bool UserEntityExists(int id)
     {
         return DB.Users.Any(e => e.Id == id);
     }
